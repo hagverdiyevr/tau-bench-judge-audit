@@ -8,7 +8,7 @@
 
 **Target under measurement:** `sierra-research/tau2-bench` @ tag `v1.0.1`,
 commit `fc0055dc4e0a316c3f83133267fbd6faaa770992`, MIT.
-**Cumulative API spend represented in this file: ~USD 0.47 of 75.00** — Phase A is entirely
+**Cumulative API spend represented in this file: ~USD 0.85 of 75.00** — Phase A is entirely
 static/replay (USD 0.00); all spend is Phase B gates.
 
 ---
@@ -215,6 +215,7 @@ Not yet filed — filing is a separate authorized action (see [CLAUDE.md](../CLA
 | 7 | Models-list endpoint advertises models the account cannot call (`gemini-2.5-flash-lite`, `gemini-3.1-flash-lite-preview`) — availability needs a real call | B-L1 |
 | 8 | **ACTION checker is order-sensitive on list arguments** — a call identical to gold except list order scores `action_match: false`. Sibling of #514; a false-negative mechanism wherever `ACTION` gates reward | B-L7 |
 | 9 | **Judge cost is entirely unaccounted** — no cost/usage field exists for the NL-assertion judge; measured ~40% understatement of true run cost on judge-gated tasks | B-L14 |
+| 10 | **Run-to-run noise floor for #540**, plus a determinism asymmetry: at temperature 0 one model family reproduces byte-identically across seeds and another does not | B-L15 |
 
 ---
 
@@ -550,9 +551,57 @@ understatement**.
 **Anyone reporting τ³ cost from tau2's own numbers understates it on judge-gated tasks** — including
 leaderboard submissions, where cost reporting is explicitly invited.
 
-### B9
+### B-L15 / Gate B9 — Run-to-run noise floor, and a determinism asymmetry between families
 
-*Run-to-run noise floor (upstream #540) — not yet measured.*
+**Upstream #540 asks what the run-to-run noise floor of τ³ baselines is. It has no published
+answer.** Measured here by re-running an identical configuration under different seeds as
+**separate invocations**.
+
+**Caching ruled out first:** `LLM_CACHE_ENABLED = False` (config.py:47), env unset,
+`litellm.cache = None`, and wall-clock durations differ across runs (129.5s / 130.9s / 133.8s).
+Every run performed real inference.
+
+#### Result — the two agent families behave oppositely at the same temperature 0.0
+
+| Agent | Seeds | Byte-identical conversations | Cost spread |
+| --- | --- | --- | --- |
+| `gemini/gemini-3.1-flash-lite` | 1001, 1002, 1003 | **5/5** | **$0.000000** |
+| `gpt-4.1-nano` | 2001, 2002 | **0/3** | up to **2.6×** on one task ($0.00476 → $0.01254) |
+
+The Gemini arm reproduced **byte-identical** conversations, identical message counts, identical
+rewards and identical costs to the cent across three independent runs. The OpenAI arm reproduced
+**none** of three, despite identical settings, identical simulator, and `temperature = 0.0` on both.
+
+Aggregate rewards were stable for both (Gemini 0.400 ×3; OpenAI 0.333 ×2), so the divergence is in
+*trajectories*, not in headline score — at this sample size.
+
+#### Consequences — these matter more than the number
+
+1. **Trials are informative for one arm and not the other.** With a deterministic arm, `pass^4`
+   equals `pass^1` **by construction**, and four trials produce four identical copies. Any
+   variance-based statistic computed across arms is comparing a structural zero against a real
+   quantity.
+2. **Published τ³ variation cannot come from seeds** for a deterministic arm. It must come from
+   temperature settings, model or provider drift, or harness changes. Note τ-bench v1 ran its user
+   simulator at **temperature 1.0**; τ³ defaults to **0.0** ([REFERENCE](REFERENCE.md) §3).
+3. **Cost forecasting is arm-dependent.** A 2.6× per-task cost swing on the OpenAI arm means
+   budget estimates for it need a range, not a point.
+
+#### Scope — do not overstate
+
+Two models, one domain, 5 tasks (Gemini) and 3 tasks (OpenAI), 3 and 2 runs respectively, inside a
+~15-minute window. This shows determinism **holds for one arm and fails for another under identical
+conditions**; it does not establish that either behaviour is stable over days, across domains, or
+across other models. Provider-side updates could change it at any time.
+
+#### Effect on the frozen design — **no deviation taken**
+
+[PREREGISTRATION](PREREGISTRATION.md) §4.1 specifies T = 4. It would be cheaper to drop to T = 1 on
+the deterministic arm, saving roughly USD 3. **We are not doing that.** Touching a frozen design to
+save 4% of a budget with USD 74 remaining is a bad trade against the integrity the freeze exists to
+protect. T = 4 is retained for both arms; the determinism is **reported as a result**, and `pass^4`
+for the Gemini arm is disclosed as trivially equal to `pass^1` rather than presented as a
+reliability measurement.
 
 
 *Not started. B5 (judge noise floor) and B6 (agent floor gate) are next and require spend.*

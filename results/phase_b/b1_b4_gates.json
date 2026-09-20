@@ -1,0 +1,18 @@
+{
+ "b1": {
+  "baseline_model": "gpt-4.1-2025-04-14",
+  "evaluator_patch_model": "PATCHED/judge-x",
+  "config_patch_model": "gpt-4.1-2025-04-14",
+  "positive_pass": true,
+  "negative_control_pass": true,
+  "pass": true,
+  "confirmed_patch_target": "tau2.evaluator.evaluator_nl_assertions.DEFAULT_LLM_NL_ASSERTIONS"
+ },
+ "b4": {
+  "tool NAME visible": false,
+  "tool ARGUMENTS visible": false,
+  "tool RESULT visible": true,
+  "empty assistant turn leaks as 'None'": true,
+  "judge_visible_text": "\n        conversation:\n        user: Please cancel my order.\nassistant: None\ntool: {\"order_id\": \"#W0000042\", \"status\": \"cancelled\"}\nassistant: Your order has been cancelled.\n        \n        expectedOutcomes:\n        ['probe']\n        "
+ }
+}

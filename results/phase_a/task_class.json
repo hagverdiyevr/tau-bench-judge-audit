@@ -1,0 +1,2144 @@
+[
+ {
+  "id": "0",
+  "mutating": true,
+  "n_actions": 5,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_order_details",
+   "get_product_details",
+   "get_product_details",
+   "exchange_delivered_order_items"
+  ]
+ },
+ {
+  "id": "1",
+  "mutating": true,
+  "n_actions": 5,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_order_details",
+   "get_product_details",
+   "get_product_details",
+   "exchange_delivered_order_items"
+  ]
+ },
+ {
+  "id": "2",
+  "mutating": true,
+  "n_actions": 11,
+  "n_ci": 1,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 1,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_product_details",
+   "get_product_details",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_product_details",
+   "return_delivered_order_items"
+  ]
+ },
+ {
+  "id": "3",
+  "mutating": true,
+  "n_actions": 12,
+  "n_ci": 1,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 1,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_product_details",
+   "get_product_details",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_product_details",
+   "get_user_details",
+   "modify_pending_order_items"
+  ]
+ },
+ {
+  "id": "4",
+  "mutating": true,
+  "n_actions": 13,
+  "n_ci": 1,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 1,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_product_details",
+   "get_product_details",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_product_details",
+   "get_user_details",
+   "modify_pending_order_items",
+   "modify_pending_order_items"
+  ]
+ },
+ {
+  "id": "5",
+  "mutating": true,
+  "n_actions": 5,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_product_details",
+   "return_delivered_order_items"
+  ]
+ },
+ {
+  "id": "6",
+  "mutating": true,
+  "n_actions": 6,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_product_details",
+   "get_product_details",
+   "exchange_delivered_order_items"
+  ]
+ },
+ {
+  "id": "7",
+  "mutating": true,
+  "n_actions": 6,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_product_details",
+   "get_product_details",
+   "exchange_delivered_order_items"
+  ]
+ },
+ {
+  "id": "8",
+  "mutating": true,
+  "n_actions": 6,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_product_details",
+   "get_product_details",
+   "exchange_delivered_order_items"
+  ]
+ },
+ {
+  "id": "9",
+  "mutating": true,
+  "n_actions": 6,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_product_details",
+   "get_product_details",
+   "exchange_delivered_order_items"
+  ]
+ },
+ {
+  "id": "10",
+  "mutating": false,
+  "n_actions": 5,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_email",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "transfer_to_human_agents"
+  ]
+ },
+ {
+  "id": "11",
+  "mutating": true,
+  "n_actions": 6,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_email",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "return_delivered_order_items",
+   "return_delivered_order_items"
+  ]
+ },
+ {
+  "id": "12",
+  "mutating": false,
+  "n_actions": 5,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_email",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "transfer_to_human_agents"
+  ]
+ },
+ {
+  "id": "13",
+  "mutating": true,
+  "n_actions": 5,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_email",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "return_delivered_order_items"
+  ]
+ },
+ {
+  "id": "14",
+  "mutating": true,
+  "n_actions": 6,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_email",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "return_delivered_order_items",
+   "return_delivered_order_items"
+  ]
+ },
+ {
+  "id": "15",
+  "mutating": true,
+  "n_actions": 7,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_product_details",
+   "modify_pending_order_items"
+  ]
+ },
+ {
+  "id": "16",
+  "mutating": true,
+  "n_actions": 9,
+  "n_ci": 1,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 1,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "calculate",
+   "cancel_pending_order",
+   "cancel_pending_order",
+   "return_delivered_order_items"
+  ]
+ },
+ {
+  "id": "17",
+  "mutating": true,
+  "n_actions": 6,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "modify_pending_order_address"
+  ]
+ },
+ {
+  "id": "18",
+  "mutating": true,
+  "n_actions": 5,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_product_details",
+   "exchange_delivered_order_items"
+  ]
+ },
+ {
+  "id": "19",
+  "mutating": true,
+  "n_actions": 7,
+  "n_ci": 2,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 2,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "get_product_details",
+   "get_product_details",
+   "return_delivered_order_items"
+  ]
+ },
+ {
+  "id": "20",
+  "mutating": true,
+  "n_actions": 10,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "get_product_details",
+   "get_product_details",
+   "get_product_details",
+   "get_product_details",
+   "modify_pending_order_items",
+   "get_order_details"
+  ]
+ },
+ {
+  "id": "21",
+  "mutating": true,
+  "n_actions": 12,
+  "n_ci": 1,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 1,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_item_details",
+   "get_item_details",
+   "get_product_details",
+   "get_item_details",
+   "get_product_details",
+   "calculate",
+   "modify_pending_order_items"
+  ]
+ },
+ {
+  "id": "22",
+  "mutating": true,
+  "n_actions": 7,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "modify_user_address",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "modify_pending_order_address",
+   "modify_user_address"
+  ]
+ },
+ {
+  "id": "23",
+  "mutating": true,
+  "n_actions": 12,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_product_details",
+   "exchange_delivered_order_items",
+   "get_product_details",
+   "exchange_delivered_order_items",
+   "get_product_details",
+   "modify_pending_order_items"
+  ]
+ },
+ {
+  "id": "24",
+  "mutating": false,
+  "n_actions": 0,
+  "n_ci": 2,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 1,
+  "env": 0,
+  "action_names": []
+ },
+ {
+  "id": "25",
+  "mutating": false,
+  "n_actions": 6,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details"
+  ]
+ },
+ {
+  "id": "26",
+  "mutating": true,
+  "n_actions": 8,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "return_delivered_order_items",
+   "transfer_to_human_agents"
+  ]
+ },
+ {
+  "id": "27",
+  "mutating": true,
+  "n_actions": 6,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "get_product_details",
+   "exchange_delivered_order_items"
+  ]
+ },
+ {
+  "id": "28",
+  "mutating": true,
+  "n_actions": 11,
+  "n_ci": 1,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 1,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "return_delivered_order_items",
+   "return_delivered_order_items",
+   "return_delivered_order_items",
+   "get_order_details",
+   "calculate"
+  ]
+ },
+ {
+  "id": "29",
+  "mutating": true,
+  "n_actions": 6,
+  "n_ci": 3,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 1,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_product_details",
+   "exchange_delivered_order_items",
+   "exchange_delivered_order_items"
+  ]
+ },
+ {
+  "id": "30",
+  "mutating": true,
+  "n_actions": 13,
+  "n_ci": 1,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_product_details",
+   "return_delivered_order_items",
+   "get_order_details",
+   "cancel_pending_order",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "return_delivered_order_items"
+  ]
+ },
+ {
+  "id": "31",
+  "mutating": true,
+  "n_actions": 12,
+  "n_ci": 1,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "cancel_pending_order",
+   "get_order_details",
+   "get_order_details",
+   "return_delivered_order_items"
+  ]
+ },
+ {
+  "id": "32",
+  "mutating": true,
+  "n_actions": 13,
+  "n_ci": 1,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "cancel_pending_order",
+   "get_order_details",
+   "cancel_pending_order",
+   "get_order_details",
+   "return_delivered_order_items"
+  ]
+ },
+ {
+  "id": "33",
+  "mutating": true,
+  "n_actions": 6,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "modify_user_address"
+  ]
+ },
+ {
+  "id": "34",
+  "mutating": true,
+  "n_actions": 6,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "modify_pending_order_address"
+  ]
+ },
+ {
+  "id": "35",
+  "mutating": true,
+  "n_actions": 7,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_email",
+   "find_user_id_by_email",
+   "get_user_details",
+   "get_order_details",
+   "get_product_details",
+   "return_delivered_order_items",
+   "modify_pending_order_items"
+  ]
+ },
+ {
+  "id": "36",
+  "mutating": true,
+  "n_actions": 1,
+  "n_ci": 2,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 2,
+  "env": 0,
+  "action_names": [
+   "modify_pending_order_items"
+  ]
+ },
+ {
+  "id": "37",
+  "mutating": true,
+  "n_actions": 4,
+  "n_ci": 2,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 2,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_email",
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "modify_pending_order_items"
+  ]
+ },
+ {
+  "id": "38",
+  "mutating": true,
+  "n_actions": 4,
+  "n_ci": 2,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 2,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_email",
+   "find_user_id_by_name_zip",
+   "calculate",
+   "cancel_pending_order"
+  ]
+ },
+ {
+  "id": "39",
+  "mutating": true,
+  "n_actions": 5,
+  "n_ci": 1,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 1,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "modify_user_address"
+  ]
+ },
+ {
+  "id": "40",
+  "mutating": true,
+  "n_actions": 4,
+  "n_ci": 2,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 2,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_email",
+   "get_user_details",
+   "get_order_details",
+   "modify_pending_order_payment"
+  ]
+ },
+ {
+  "id": "41",
+  "mutating": true,
+  "n_actions": 10,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "modify_pending_order_address",
+   "modify_pending_order_address",
+   "modify_user_address",
+   "get_product_details",
+   "get_order_details",
+   "modify_pending_order_items"
+  ]
+ },
+ {
+  "id": "42",
+  "mutating": true,
+  "n_actions": 10,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "modify_pending_order_address",
+   "modify_pending_order_address",
+   "modify_user_address",
+   "get_product_details",
+   "get_order_details",
+   "modify_pending_order_items"
+  ]
+ },
+ {
+  "id": "43",
+  "mutating": true,
+  "n_actions": 5,
+  "n_ci": 7,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 3,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "modify_user_address"
+  ]
+ },
+ {
+  "id": "44",
+  "mutating": true,
+  "n_actions": 5,
+  "n_ci": 1,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 1,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_order_details",
+   "get_product_details",
+   "calculate",
+   "modify_pending_order_items"
+  ]
+ },
+ {
+  "id": "45",
+  "mutating": true,
+  "n_actions": 5,
+  "n_ci": 1,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 1,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_order_details",
+   "get_product_details",
+   "calculate",
+   "exchange_delivered_order_items"
+  ]
+ },
+ {
+  "id": "46",
+  "mutating": true,
+  "n_actions": 7,
+  "n_ci": 2,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 2,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "calculate",
+   "return_delivered_order_items",
+   "calculate"
+  ]
+ },
+ {
+  "id": "47",
+  "mutating": true,
+  "n_actions": 7,
+  "n_ci": 2,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 2,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "calculate",
+   "return_delivered_order_items",
+   "calculate"
+  ]
+ },
+ {
+  "id": "48",
+  "mutating": true,
+  "n_actions": 6,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "return_delivered_order_items"
+  ]
+ },
+ {
+  "id": "49",
+  "mutating": true,
+  "n_actions": 10,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_product_details",
+   "calculate",
+   "exchange_delivered_order_items"
+  ]
+ },
+ {
+  "id": "50",
+  "mutating": false,
+  "n_actions": 1,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "transfer_to_human_agents"
+  ]
+ },
+ {
+  "id": "51",
+  "mutating": true,
+  "n_actions": 6,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_order_details",
+   "get_product_details",
+   "get_user_details",
+   "get_order_details",
+   "return_delivered_order_items"
+  ]
+ },
+ {
+  "id": "52",
+  "mutating": true,
+  "n_actions": 5,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_product_details",
+   "exchange_delivered_order_items"
+  ]
+ },
+ {
+  "id": "53",
+  "mutating": true,
+  "n_actions": 6,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "return_delivered_order_items"
+  ]
+ },
+ {
+  "id": "54",
+  "mutating": true,
+  "n_actions": 12,
+  "n_ci": 1,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 1,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_email",
+   "find_user_id_by_email",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "cancel_pending_order",
+   "cancel_pending_order",
+   "return_delivered_order_items"
+  ]
+ },
+ {
+  "id": "55",
+  "mutating": true,
+  "n_actions": 13,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_email",
+   "find_user_id_by_email",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "cancel_pending_order",
+   "cancel_pending_order",
+   "return_delivered_order_items",
+   "return_delivered_order_items"
+  ]
+ },
+ {
+  "id": "56",
+  "mutating": true,
+  "n_actions": 7,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_product_details",
+   "modify_pending_order_items"
+  ]
+ },
+ {
+  "id": "57",
+  "mutating": false,
+  "n_actions": 0,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": []
+ },
+ {
+  "id": "58",
+  "mutating": true,
+  "n_actions": 6,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_product_details",
+   "get_product_details",
+   "exchange_delivered_order_items"
+  ]
+ },
+ {
+  "id": "59",
+  "mutating": true,
+  "n_actions": 5,
+  "n_ci": 2,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 2,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_order_details",
+   "get_order_details",
+   "cancel_pending_order",
+   "modify_pending_order_address"
+  ]
+ },
+ {
+  "id": "60",
+  "mutating": true,
+  "n_actions": 4,
+  "n_ci": 1,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 1,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_order_details",
+   "get_product_details",
+   "modify_pending_order_items"
+  ]
+ },
+ {
+  "id": "61",
+  "mutating": true,
+  "n_actions": 5,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_order_details",
+   "get_product_details",
+   "calculate",
+   "modify_pending_order_items"
+  ]
+ },
+ {
+  "id": "62",
+  "mutating": false,
+  "n_actions": 5,
+  "n_ci": 2,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 2,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "get_product_details"
+  ]
+ },
+ {
+  "id": "63",
+  "mutating": true,
+  "n_actions": 7,
+  "n_ci": 3,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 3,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "get_product_details",
+   "calculate",
+   "modify_pending_order_items"
+  ]
+ },
+ {
+  "id": "64",
+  "mutating": true,
+  "n_actions": 8,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "get_order_details",
+   "get_product_details",
+   "exchange_delivered_order_items",
+   "modify_pending_order_items"
+  ]
+ },
+ {
+  "id": "65",
+  "mutating": false,
+  "n_actions": 3,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details"
+  ]
+ },
+ {
+  "id": "66",
+  "mutating": true,
+  "n_actions": 5,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "get_order_details",
+   "cancel_pending_order"
+  ]
+ },
+ {
+  "id": "67",
+  "mutating": false,
+  "n_actions": 5,
+  "n_ci": 1,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 1,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "find_user_id_by_name_zip",
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details"
+  ]
+ },
+ {
+  "id": "68",
+  "mutating": false,
+  "n_actions": 4,
+  "n_ci": 1,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 1,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details"
+  ]
+ },
+ {
+  "id": "69",
+  "mutating": true,
+  "n_actions": 4,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "find_user_id_by_name_zip",
+   "get_user_details",
+   "get_order_details",
+   "cancel_pending_order"
+  ]
+ },
+ {
+  "id": "70",
+  "mutating": true,
+  "n_actions": 1,
+  "n_ci": 1,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 1,
+  "env": 0,
+  "action_names": [
+   "exchange_delivered_order_items"
+  ]
+ },
+ {
+  "id": "71",
+  "mutating": true,
+  "n_actions": 2,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "modify_pending_order_address",
+   "modify_pending_order_items"
+  ]
+ },
+ {
+  "id": "72",
+  "mutating": true,
+  "n_actions": 2,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "modify_pending_order_address",
+   "modify_pending_order_items"
+  ]
+ },
+ {
+  "id": "73",
+  "mutating": true,
+  "n_actions": 1,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "return_delivered_order_items"
+  ]
+ },
+ {
+  "id": "74",
+  "mutating": true,
+  "n_actions": 2,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "cancel_pending_order",
+   "modify_pending_order_items"
+  ]
+ },
+ {
+  "id": "75",
+  "mutating": true,
+  "n_actions": 1,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "exchange_delivered_order_items"
+  ]
+ },
+ {
+  "id": "76",
+  "mutating": true,
+  "n_actions": 2,
+  "n_ci": 1,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 1,
+  "env": 0,
+  "action_names": [
+   "cancel_pending_order",
+   "cancel_pending_order"
+  ]
+ },
+ {
+  "id": "77",
+  "mutating": true,
+  "n_actions": 1,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "exchange_delivered_order_items"
+  ]
+ },
+ {
+  "id": "78",
+  "mutating": true,
+  "n_actions": 3,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "modify_pending_order_address",
+   "modify_pending_order_items",
+   "cancel_pending_order"
+  ]
+ },
+ {
+  "id": "79",
+  "mutating": true,
+  "n_actions": 1,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "modify_pending_order_items"
+  ]
+ },
+ {
+  "id": "80",
+  "mutating": true,
+  "n_actions": 1,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "exchange_delivered_order_items"
+  ]
+ },
+ {
+  "id": "81",
+  "mutating": true,
+  "n_actions": 2,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "cancel_pending_order",
+   "cancel_pending_order"
+  ]
+ },
+ {
+  "id": "82",
+  "mutating": true,
+  "n_actions": 1,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "return_delivered_order_items"
+  ]
+ },
+ {
+  "id": "83",
+  "mutating": true,
+  "n_actions": 1,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "return_delivered_order_items"
+  ]
+ },
+ {
+  "id": "84",
+  "mutating": true,
+  "n_actions": 1,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "return_delivered_order_items"
+  ]
+ },
+ {
+  "id": "85",
+  "mutating": true,
+  "n_actions": 1,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "modify_pending_order_items"
+  ]
+ },
+ {
+  "id": "86",
+  "mutating": true,
+  "n_actions": 2,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "modify_pending_order_items",
+   "modify_user_address"
+  ]
+ },
+ {
+  "id": "87",
+  "mutating": true,
+  "n_actions": 4,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "modify_pending_order_address",
+   "modify_pending_order_address",
+   "modify_pending_order_address",
+   "modify_user_address"
+  ]
+ },
+ {
+  "id": "88",
+  "mutating": true,
+  "n_actions": 1,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "cancel_pending_order"
+  ]
+ },
+ {
+  "id": "89",
+  "mutating": true,
+  "n_actions": 1,
+  "n_ci": 4,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 4,
+  "env": 0,
+  "action_names": [
+   "return_delivered_order_items"
+  ]
+ },
+ {
+  "id": "90",
+  "mutating": true,
+  "n_actions": 1,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "cancel_pending_order"
+  ]
+ },
+ {
+  "id": "91",
+  "mutating": true,
+  "n_actions": 2,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "return_delivered_order_items",
+   "exchange_delivered_order_items"
+  ]
+ },
+ {
+  "id": "92",
+  "mutating": true,
+  "n_actions": 2,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "return_delivered_order_items",
+   "return_delivered_order_items"
+  ]
+ },
+ {
+  "id": "93",
+  "mutating": true,
+  "n_actions": 1,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "exchange_delivered_order_items"
+  ]
+ },
+ {
+  "id": "94",
+  "mutating": true,
+  "n_actions": 1,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "exchange_delivered_order_items"
+  ]
+ },
+ {
+  "id": "95",
+  "mutating": true,
+  "n_actions": 2,
+  "n_ci": 3,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 3,
+  "env": 0,
+  "action_names": [
+   "exchange_delivered_order_items",
+   "exchange_delivered_order_items"
+  ]
+ },
+ {
+  "id": "96",
+  "mutating": true,
+  "n_actions": 2,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "modify_pending_order_address",
+   "modify_pending_order_items"
+  ]
+ },
+ {
+  "id": "97",
+  "mutating": true,
+  "n_actions": 2,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "modify_pending_order_address",
+   "modify_pending_order_items"
+  ]
+ },
+ {
+  "id": "98",
+  "mutating": true,
+  "n_actions": 3,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "exchange_delivered_order_items",
+   "exchange_delivered_order_items",
+   "cancel_pending_order"
+  ]
+ },
+ {
+  "id": "99",
+  "mutating": true,
+  "n_actions": 2,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "exchange_delivered_order_items",
+   "exchange_delivered_order_items"
+  ]
+ },
+ {
+  "id": "100",
+  "mutating": true,
+  "n_actions": 2,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "modify_pending_order_items",
+   "return_delivered_order_items"
+  ]
+ },
+ {
+  "id": "101",
+  "mutating": true,
+  "n_actions": 3,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "modify_pending_order_address",
+   "modify_pending_order_items",
+   "modify_pending_order_items"
+  ]
+ },
+ {
+  "id": "102",
+  "mutating": true,
+  "n_actions": 3,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "modify_pending_order_address",
+   "modify_pending_order_items",
+   "exchange_delivered_order_items"
+  ]
+ },
+ {
+  "id": "103",
+  "mutating": true,
+  "n_actions": 4,
+  "n_ci": 1,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 1,
+  "env": 0,
+  "action_names": [
+   "return_delivered_order_items",
+   "return_delivered_order_items",
+   "modify_pending_order_address",
+   "modify_pending_order_items"
+  ]
+ },
+ {
+  "id": "104",
+  "mutating": true,
+  "n_actions": 5,
+  "n_ci": 1,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 1,
+  "env": 0,
+  "action_names": [
+   "return_delivered_order_items",
+   "return_delivered_order_items",
+   "modify_pending_order_address",
+   "modify_pending_order_items",
+   "return_delivered_order_items"
+  ]
+ },
+ {
+  "id": "105",
+  "mutating": true,
+  "n_actions": 1,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 1,
+  "env": 0,
+  "action_names": [
+   "exchange_delivered_order_items"
+  ]
+ },
+ {
+  "id": "106",
+  "mutating": true,
+  "n_actions": 1,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 1,
+  "env": 0,
+  "action_names": [
+   "exchange_delivered_order_items"
+  ]
+ },
+ {
+  "id": "107",
+  "mutating": true,
+  "n_actions": 2,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 1,
+  "env": 0,
+  "action_names": [
+   "exchange_delivered_order_items",
+   "exchange_delivered_order_items"
+  ]
+ },
+ {
+  "id": "108",
+  "mutating": true,
+  "n_actions": 1,
+  "n_ci": 1,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 1,
+  "env": 0,
+  "action_names": [
+   "return_delivered_order_items"
+  ]
+ },
+ {
+  "id": "109",
+  "mutating": true,
+  "n_actions": 3,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 2,
+  "env": 0,
+  "action_names": [
+   "modify_pending_order_address",
+   "modify_user_address",
+   "modify_pending_order_items"
+  ]
+ },
+ {
+  "id": "110",
+  "mutating": true,
+  "n_actions": 3,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 3,
+  "env": 0,
+  "action_names": [
+   "modify_pending_order_address",
+   "modify_user_address",
+   "modify_pending_order_items"
+  ]
+ },
+ {
+  "id": "111",
+  "mutating": true,
+  "n_actions": 3,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 1,
+  "env": 0,
+  "action_names": [
+   "modify_pending_order_items",
+   "modify_pending_order_address",
+   "modify_pending_order_items"
+  ]
+ },
+ {
+  "id": "112",
+  "mutating": true,
+  "n_actions": 3,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 0,
+  "env": 0,
+  "action_names": [
+   "modify_pending_order_items",
+   "modify_pending_order_address",
+   "modify_pending_order_items"
+  ]
+ },
+ {
+  "id": "113",
+  "mutating": true,
+  "n_actions": 2,
+  "n_ci": 0,
+  "reward_basis": [
+   "DB",
+   "NL_ASSERTION"
+  ],
+  "nl": 1,
+  "env": 0,
+  "action_names": [
+   "cancel_pending_order",
+   "cancel_pending_order"
+  ]
+ }
+]

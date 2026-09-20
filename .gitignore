@@ -1,0 +1,28 @@
+# Secrets — never commit. See CLAUDE.md operating rules.
+.env
+.env.*
+!.env.example
+*.key
+credentials*.json
+
+# Virtualenvs / build
+.venv/
+vendor/**/.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Raw run data — large, may contain unreviewed provider payloads.
+# Committed aggregates live in results/ and are added explicitly.
+runs/
+data/simulations/
+*.db
+*.sqlite3
+
+# Local tooling
+.DS_Store
+.ruff_cache/
+.pytest_cache/
+.ipynb_checkpoints/

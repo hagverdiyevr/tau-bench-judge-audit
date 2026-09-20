@@ -1,0 +1,197 @@
+# PLAN — active implementation plan
+
+> **Role in the memory system:** what we are doing now and why, with phase gates and budget.
+> Frozen hypothesis and analysis: [PREREGISTRATION.md](PREREGISTRATION.md).
+> Evidence: [FINDINGS.md](FINDINGS.md). Rationale for each fork: [DECISIONS.md](DECISIONS.md).
+> External facts: [REFERENCE.md](REFERENCE.md). Current position: [STATUS.md](STATUS.md).
+> Binding rules: [CLAUDE.md](../CLAUDE.md).
+>
+> **Version 4.0** · 20 Sep 2026 · supersedes v3.0. All cost figures are now **measured**, not
+> estimated. v3.0's structure survives; its numbers do not.
+
+## Context
+
+The owner is an experienced AI engineer targeting senior retail/e-commerce AI roles in Germany.
+The deliverable that earns attention in this field is **a reusable tool plus one sharp finding** —
+not an explainer, not a long report ([REFERENCE](REFERENCE.md) §Reception).
+
+Three research passes and a hostile review eliminated the obvious angles
+([D-003](DECISIONS.md), [D-005](DECISIONS.md)). A zero-cost Phase A audit then **falsified the
+surviving thesis** ([D-004](DECISIONS.md)) and surfaced the current one. Phase B validated every
+mechanism the design depends on for **USD 0.47**.
+
+## Thesis
+
+> **τ³-retail's reward is gated on 40 of 114 tasks by an LLM judge hardcoded to one vendor's model.
+> Does that judge favour agents from its own family?**
+
+Measured support ([FINDINGS](FINDINGS.md)):
+
+- Reward is `DB × NL_ASSERTION`; `COMMUNICATE` runs on **zero** tasks (A1).
+- The judge is **`gpt-4.1-2025-04-14`**, hardcoded, no env override, marked *experimental / WIP* (A2).
+- It gates **40 of 114** tasks; the other 74 are effectively DB-only (A3).
+- In a **stock** run the same OpenAI model is agent, user simulator, *and* grader.
+- The judge is load-bearing: it catches genuine failures DB cannot see (B-L12, task 103), and
+  it prevents false positives DB admits (A5).
+- It is also fallible: it passed an agent that modified the **wrong order** (B-L12, task 109),
+  consistent with it being **unable to see tool calls** (B4).
+
+If verdicts depend on agent family, a component of every published τ³-retail score reflects vendor
+affinity rather than agent quality. Nobody has isolated agent↔judge bias on tau-bench
+([REFERENCE](REFERENCE.md) §Open).
+
+**Secondary result, free:** published retail scores silently pool 74 DB-only tasks with 40
+judge-gated ones (A3). No surveyed work separates them.
+
+## Method: measure by re-grading, not re-running
+
+Generate each trajectory **once**; score the *same saved trajectory* under multiple judges
+([D-009](DECISIONS.md)). The contrast is **within-trajectory and paired** — same agent, same
+simulator, same task, same conversation — so cross-arm variance and the capability confound vanish.
+
+**Validated, not assumed** ([B-L13](FINDINGS.md)): re-grading saved trajectories reproduced tau2's
+own recorded verdict on **11/11 assertions**, with every message rebuilt intact.
+
+The estimand is a **difference-in-differences** — see [PREREGISTRATION §3](PREREGISTRATION.md).
+The control term is mandatory; without it the quantity is judge *leniency*, not bias.
+
+### Verified mechanics
+
+| Mechanism | Status |
+| --- | --- |
+| Judge swap | **Works.** Patch `tau2.evaluator.evaluator_nl_assertions.DEFAULT_LLM_NL_ASSERTIONS`. Patching `tau2.config` is a **silent no-op** — verified both directions (B1) |
+| Re-grade saved runs | **Works**, 11/11 fidelity (B-L13) |
+| Call granularity | **One judge call per trajectory** — assertions batched in, verdicts batched out |
+| Judge input size | **3,409 tokens** mean (1,668–5,853), measured on real trajectories (B-L10) |
+| Judge input content | Trajectory as `f"{role}: {content}"` — **tool calls invisible**; 4–11 literal `content: None` lines per trajectory (B4, corroborated in production) |
+| Judge temperature | **0.0** (verified). Self-consistency 11/11; flip rate bounded **<9%** (B-L13) |
+| Judge cost | **Not accounted by tau2 at all** — ~40% understatement of true run cost (B-L14) |
+
+## Design
+
+Frozen in [PREREGISTRATION §4](PREREGISTRATION.md). Summary:
+
+| Factor | Levels |
+| --- | --- |
+| Agent family | 2 — `gpt-4.1-nano`, `gemini/gemini-3.1-flash-lite` |
+| Judge family × tier | **4** — 2 families × 2 tiers, to separate family from capability |
+| Task | 40 judge-gated, `base` split (entire population; hard cap) |
+| Trial | 4 |
+
+**320 trajectories · 1,280 judge evaluations.** Scaffold stays stock `llm_agent` ("standard").
+
+The four-judge grid is the key addition over v3.0: comparing a strong OpenAI judge against a small
+Gemini judge would confound **family** with **capability**. Because re-grading is offline and cheap,
+the 2×2 control costs ~USD 2.
+
+## Budget — measured
+
+USD 75 ceiling · **USD 0.47 spent** · **USD 74.53 remaining**.
+
+| Phase | Work | Status | Cost |
+| --- | --- | --- | ---: |
+| **A** | Evaluator audit (static/replay) | ✅ complete | **$0.00** |
+| **B** | 11 verification gates | ✅ complete | **$0.47** |
+| **B9** | Run-to-run noise floor (#540) | pending | ~$0.20 |
+| **C** | 320 trajectories | pending | ~$5.02 |
+| **D** | 1,280 judge evaluations + replicates | pending | ~$5.97 |
+| **E** | Analysis and release | pending | $0.00 |
+| | **Projected total** | | **~$11.66** |
+
+Per-trajectory cost **measured at $0.0212** (mean; 0.0137–0.0300) — the v3.0 estimate of $0.140 was
+**6.6× too high** ([B-L9](FINDINGS.md)). Cost tracks conversation length, not task complexity.
+
+> **Surplus is not a licence to widen scope.** Tasks are hard-capped at 40 by the benchmark.
+> Spare budget buys trials and judge replicates only. Resisting scope creep is what has kept this
+> project honest through two killed theses.
+
+---
+
+## Phases
+
+### Phase A — Evaluator audit · ✅ COMPLETE · $0.00
+
+Six findings; the stop-gate passed; the prior thesis falsified before any spend.
+Scripts: `scripts/phase_a/01`–`04`.
+
+### Phase B — Verification and calibration · ✅ COMPLETE · $0.47
+
+Every gate passed. Scripts: `scripts/phase_b/step1`–`step5`.
+
+| Gate | Result |
+| --- | --- |
+| B1 judge swappable | PASS — patch target confirmed, `tau2.config` proven a no-op |
+| B2 re-grade saved runs | PASS — 11/11 fidelity |
+| B3 judge pricing | $2.00 / $8.00 per 1M; Phase D sized from real trajectories |
+| B4 judge sees tool calls | **No** — became a finding and contribution #5 |
+| B5 judge noise floor | PASS — 11/11 stable; flip rate bounded <9% |
+| B6 agent floor gate | PASS — 0.857 on DB-only |
+| B6b study-population difficulty | **0.400** on judge-gated — headroom resolved |
+| B7 cost calibration | **$0.0212/trajectory** measured |
+| B8/B8b thought signatures | PASS on tau2's real path, 16-tool schema |
+| — | 5 further findings, contributions #5–#9 |
+
+### Phase B9 — Run-to-run noise floor · ~$0.20
+
+One configuration, run twice, different seeds. Upstream #540 is an **open question with no
+published answer**; measuring it is the cheapest credibility available and converts a threat into a
+contribution. This is the ruler every later claim is read against.
+
+### Phase C — Trajectory generation · ~$5.02
+
+320 trajectories per [PREREGISTRATION §4–5](PREREGISTRATION.md). Interleaved by a pre-drawn seeded
+permutation; per-invocation UTC recorded; resume-never-restart on partial failure; intention-to-treat
+primary. Cost read from persisted `agent_cost`/`user_cost` **plus our own judge accounting**, since
+tau2 omits the latter entirely.
+
+**Phase C must not begin until [PREREGISTRATION §9](PREREGISTRATION.md) is hashed and committed.**
+
+### Phase D — Judge re-grading · ~$5.97
+
+1,280 evaluations (320 × 4 judges), offline against saved trajectories, plus 3× replicates on a
+pre-specified random 20% for the noise floor.
+
+Also analyse the judge's `reasoning` field qualitatively on a stratified sample — justifications are
+persisted and independently checkable by a reviewer.
+
+### Phase E — Analysis and release · $0.00
+
+Analysis per [PREREGISTRATION §6](PREREGISTRATION.md).
+
+**Deliverables**, ordered by the traction ranking in [REFERENCE](REFERENCE.md) §Reception:
+
+1. **Evaluator audit suite** — Phase A, $0, reusable across languages and domains; scoop-proof.
+2. **Judge-swap re-grading harness** — run once, score under many judges. The primary tool.
+3. **The finding** — one sentence, with a CI and a stated MDE.
+4. **Nine upstream contributions** ([FINDINGS](FINDINGS.md) §Upstream) — filing is separately authorised.
+5. Reproduction path: `make verify` offline, zero API keys.
+
+## Verification
+
+Offline, no API keys — this is what makes the artifact reviewable by a stranger.
+
+| Test | Asserts |
+| --- | --- |
+| `test_upstream_pin.py` | Submodule SHA == `fc0055dc…`; refuse to run on drift |
+| `test_reward_composition.py` | Reproduces A1/A3 — COMMUNICATE in 0 bases; 74 DB-only / 40 judge-gated |
+| `test_gold_replay.py` | Replay failures == committed 15-task / 18-action allowlist (A4) |
+| `test_null_agent.py` | Null-agent DB pass set == committed 11-task list (A5) |
+| `test_judge_patch.py` | Patching the evaluator module changes the dispatched model; patching `tau2.config` does **not** (B1, both directions) |
+| `test_regrade_fidelity.py` | Re-grading a saved trajectory reproduces its recorded verdict (B-L13) |
+| `test_cost_integrity.py` | Unpriced model raises rather than accepting `0.0`; judge cost is counted |
+| `test_db_hash_order.py` | Documents #514 order-sensitivity; both hashes computed |
+| `test_action_order.py` | Documents B-L7 — list-order-only difference yields `action_match: false` |
+
+## Honest risks
+
+- **The bias may not exist.** A bounded null with a stated MDE is publishable and is accepted in
+  advance ([PREREGISTRATION §7](PREREGISTRATION.md)).
+- **n = 40 tasks and n = 2 agent families are hard caps.** No claim generalises beyond them.
+- **Family is confounded with vendor, tokenizer and training data.** The judge-tier grid separates
+  family from *capability*, not from vendor identity.
+- **The judge cannot see tool calls**, so any bias found may operate through narration style —
+  a mechanism, but one that constrains interpretation.
+- **The judge model may be replaced upstream**, dating the specific number. Mitigated: the method is
+  the contribution, and the harness re-runs against any judge.
+- **Deferred, not dead:** German localisation ([D-006](DECISIONS.md)). Revisit after the judge
+  result lands.

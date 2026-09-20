@@ -1,0 +1,140 @@
+{
+ "repeats": 3,
+ "n_assertions": 11,
+ "stable": 11,
+ "matches_original": 11,
+ "records": [
+  {
+   "task": "43",
+   "assertion": "Agent should tell the user the tracking number is 840887978435.",
+   "original": true,
+   "reps": [
+    true,
+    true,
+    true
+   ],
+   "stable": true,
+   "matches_original": true
+  },
+  {
+   "task": "43",
+   "assertion": "Agent should tell the user the order was shipped to 943 Maple Drive, Suite 356, Chicago, IL 60621.",
+   "original": true,
+   "reps": [
+    true,
+    true,
+    true
+   ],
+   "stable": true,
+   "matches_original": true
+  },
+  {
+   "task": "43",
+   "assertion": "Agent should tell the user the tablet storage is 64GB.",
+   "original": true,
+   "reps": [
+    true,
+    true,
+    true
+   ],
+   "stable": true,
+   "matches_original": true
+  },
+  {
+   "task": "76",
+   "assertion": "Agent should tell the user the total price of all grills is $1,939.05.",
+   "original": true,
+   "reps": [
+    true,
+    true,
+    true
+   ],
+   "stable": true,
+   "matches_original": true
+  },
+  {
+   "task": "89",
+   "assertion": "Agent should tell the user the cheapest mechanical keyboard costs $226.11.",
+   "original": true,
+   "reps": [
+    true,
+    true,
+    true
+   ],
+   "stable": true,
+   "matches_original": true
+  },
+  {
+   "task": "89",
+   "assertion": "Agent should tell the user the keyboard switch type is tactile.",
+   "original": true,
+   "reps": [
+    true,
+    true,
+    true
+   ],
+   "stable": true,
+   "matches_original": true
+  },
+  {
+   "task": "89",
+   "assertion": "Agent should tell the user the keyboard backlight is white.",
+   "original": true,
+   "reps": [
+    true,
+    true,
+    true
+   ],
+   "stable": true,
+   "matches_original": true
+  },
+  {
+   "task": "89",
+   "assertion": "Agent should tell the user the keyboard size is full.",
+   "original": true,
+   "reps": [
+    true,
+    true,
+    true
+   ],
+   "stable": true,
+   "matches_original": true
+  },
+  {
+   "task": "103",
+   "assertion": "Agent should provide the tracking number 286422338955.",
+   "original": false,
+   "reps": [
+    false,
+    false,
+    false
+   ],
+   "stable": true,
+   "matches_original": true
+  },
+  {
+   "task": "109",
+   "assertion": "Agent should make changes to address on order and user profile",
+   "original": true,
+   "reps": [
+    true,
+    true,
+    true
+   ],
+   "stable": true,
+   "matches_original": true
+  },
+  {
+   "task": "109",
+   "assertion": "Agent should modify the pending order.",
+   "original": true,
+   "reps": [
+    true,
+    true,
+    true
+   ],
+   "stable": true,
+   "matches_original": true
+  }
+ ]
+}

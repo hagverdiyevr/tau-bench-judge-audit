@@ -1,0 +1,85 @@
+{
+ "model": "gemini/gemini-3.1-flash-lite",
+ "turns": [
+  {
+   "turn": 1,
+   "n_tool_calls": 1,
+   "has_signature": true,
+   "sig_len": 804,
+   "completion_tokens": 176,
+   "content_len": 0,
+   "content_preview": ""
+  },
+  {
+   "turn": 2,
+   "n_tool_calls": 1,
+   "has_signature": true,
+   "sig_len": 644,
+   "completion_tokens": 122,
+   "content_len": 0,
+   "content_preview": ""
+  },
+  {
+   "turn": 3,
+   "n_tool_calls": 1,
+   "has_signature": true,
+   "sig_len": 616,
+   "completion_tokens": 121,
+   "content_len": 0,
+   "content_preview": ""
+  },
+  {
+   "turn": 4,
+   "n_tool_calls": 1,
+   "has_signature": true,
+   "sig_len": 560,
+   "completion_tokens": 111,
+   "content_len": 0,
+   "content_preview": ""
+  },
+  {
+   "turn": 5,
+   "n_tool_calls": 1,
+   "has_signature": true,
+   "sig_len": 560,
+   "completion_tokens": 111,
+   "content_len": 0,
+   "content_preview": ""
+  },
+  {
+   "turn": 6,
+   "n_tool_calls": 1,
+   "has_signature": true,
+   "sig_len": 560,
+   "completion_tokens": 111,
+   "content_len": 0,
+   "content_preview": ""
+  },
+  {
+   "turn": 7,
+   "n_tool_calls": 1,
+   "has_signature": true,
+   "sig_len": 544,
+   "completion_tokens": 109,
+   "content_len": 0,
+   "content_preview": ""
+  },
+  {
+   "turn": 8,
+   "n_tool_calls": 1,
+   "has_signature": true,
+   "sig_len": 576,
+   "completion_tokens": 114,
+   "content_len": 0,
+   "content_preview": ""
+  }
+ ],
+ "checks": {
+  "all 8 turns produced a tool call": true,
+  "signatures present on tool calls": true,
+  "signatures present on EVERY tool-calling turn": true,
+  "no silent degradation detected": true,
+  "late turns (>=4) still call tools": true
+ },
+ "pass": true
+}

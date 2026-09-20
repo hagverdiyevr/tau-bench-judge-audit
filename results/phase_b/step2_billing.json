@@ -1,0 +1,21 @@
+{
+ "model_requested": "gemini/gemini-3.1-flash-lite",
+ "model_returned": "gemini-3.1-flash-lite",
+ "prompt_tokens": 8,
+ "completion_tokens": 190,
+ "reasoning_tokens": 189,
+ "litellm_cost": 0.000287,
+ "tau2_cost": 0.000287,
+ "our_cost": 0.000287,
+ "checks": {
+  "call returned content": true,
+  "returned model matches request": true,
+  "usage present and non-zero": true,
+  "litellm cost is not None": true,
+  "litellm cost > 0 (NOT the silent-zero bug)": true,
+  "tau2 cost > 0 (NOT the silent-zero bug)": true,
+  "tau2 usage dict populated": true,
+  "our table agrees with litellm (<1%)": true
+ },
+ "pass": true
+}

@@ -1,0 +1,92 @@
+{
+ "model": "gemini/gemini-3.1-flash-lite",
+ "turns": [
+  {
+   "turn": 1,
+   "n_tool_calls": 1,
+   "tool": "get_order_details",
+   "sig_in_id": true,
+   "has_psf_field": false,
+   "id_len": 604,
+   "content_len": 0,
+   "content_preview": ""
+  },
+  {
+   "turn": 2,
+   "n_tool_calls": 1,
+   "tool": "get_order_details",
+   "sig_in_id": true,
+   "has_psf_field": false,
+   "id_len": 496,
+   "content_len": 0,
+   "content_preview": ""
+  },
+  {
+   "turn": 3,
+   "n_tool_calls": 1,
+   "tool": "get_order_details",
+   "sig_in_id": true,
+   "has_psf_field": false,
+   "id_len": 372,
+   "content_len": 0,
+   "content_preview": ""
+  },
+  {
+   "turn": 4,
+   "n_tool_calls": 1,
+   "tool": "get_order_details",
+   "sig_in_id": true,
+   "has_psf_field": false,
+   "id_len": 372,
+   "content_len": 0,
+   "content_preview": ""
+  },
+  {
+   "turn": 5,
+   "n_tool_calls": 1,
+   "tool": "get_order_details",
+   "sig_in_id": true,
+   "has_psf_field": false,
+   "id_len": 372,
+   "content_len": 0,
+   "content_preview": ""
+  },
+  {
+   "turn": 6,
+   "n_tool_calls": 1,
+   "tool": "get_order_details",
+   "sig_in_id": true,
+   "has_psf_field": false,
+   "id_len": 448,
+   "content_len": 0,
+   "content_preview": ""
+  },
+  {
+   "turn": 7,
+   "n_tool_calls": 1,
+   "tool": "get_order_details",
+   "sig_in_id": true,
+   "has_psf_field": false,
+   "id_len": 544,
+   "content_len": 0,
+   "content_preview": ""
+  },
+  {
+   "turn": 8,
+   "n_tool_calls": 1,
+   "tool": "get_order_details",
+   "sig_in_id": true,
+   "has_psf_field": false,
+   "id_len": 448,
+   "content_len": 0,
+   "content_preview": ""
+  }
+ ],
+ "checks": {
+  "all 8 turns produced a tool call (tau2 path)": true,
+  "no silent degradation after turn 3": true,
+  "tool names are real retail tools": true
+ },
+ "id_carries_sig": true,
+ "pass": true
+}

@@ -1,0 +1,6 @@
+{
+ "sha256": "a917984e48d16f28ea0280c5e7a2cb9b6e4a786a123a43efc989f09a972c3906",
+ "frozen_utc": "2026-09-20T10:54:29Z",
+ "file": "docs/PREREGISTRATION.md",
+ "method": "sha256 of the final frozen file with the S9 fenced block replaced by '<<FREEZE BLOCK CANONICALISED FOR HASHING>>'"
+}

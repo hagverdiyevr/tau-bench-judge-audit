@@ -4,7 +4,7 @@
 > **before** Phase C generates any confirmatory data. It is the answer to the reviewer objection
 > that a result was selected after seeing the data.
 >
-> **Status: DRAFT — not yet frozen.** It becomes binding when hashed and committed (§9).
+> **Status: FROZEN 2026-09-20T10:54:29Z.** Binding. Changes are deviations (§10), not edits.
 > Once frozen, this file is **immutable**. Deviations are not edits; they are appended to §10
 > with a reason and a date.
 
@@ -199,11 +199,14 @@ This document is frozen by recording the SHA-256 of its own content, committed *
 Phase C invocation.
 
 ```
-SHA-256: <computed at freeze time — see results/preregistration.sha256>
-Frozen:  <UTC timestamp>
+SHA-256 : a917984e48d16f28ea0280c5e7a2cb9b6e4a786a123a43efc989f09a972c3906
+Frozen  : 2026-09-20T10:54:29Z
+Method  : sha256 of this file with the fenced block in S9 replaced by the literal line
+          <<FREEZE BLOCK CANONICALISED FOR HASHING>> (the hash cannot cover itself).
+          Verify with: python scripts/verify_preregistration.py
 ```
 
-Phase C must not begin until this section is filled and committed.
+Phase C is unblocked. Any departure from S2-S6 is appended to S10, never edited in.
 
 ## 10. Deviation log
 

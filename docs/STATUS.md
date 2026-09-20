@@ -6,8 +6,9 @@
 > [PLAN.md](PLAN.md).
 
 **Last updated:** 20 September 2026 (commit `24aa218`)
-**Phase:** A complete · **B complete except B9** — B1-B8b ALL PASSED
-**Cumulative API spend: ~USD 0.47 of 75.00** ($74.53 remaining)
+**Phase:** A ✅ · B ✅ (all 11 gates + B9) · pre-registration **FROZEN** · **Phase C is next**
+**Cumulative API spend: USD 0.89 of 75.00** — USD 74.11 remaining
+**Ledger of record:** `results/spend_ledger.json` (regenerated from run artifacts)
 
 ---
 
@@ -31,13 +32,15 @@ t-bench/
 ├── docs/
 │   ├── STATUS.md                  ← you are here
 │   ├── PLAN.md                    v4.0, active (measured budget)
-│   ├── PREREGISTRATION.md         DRAFT — freeze before Phase C
+│   ├── PREREGISTRATION.md         FROZEN a917984e, 2026-09-20T10:54:29Z
 │   ├── FINDINGS.md                Phase A + B evidence, append-only
-│   ├── DECISIONS.md               D-001..D-017, append-only
+│   ├── DECISIONS.md               D-001..D-018, append-only
 │   └── REFERENCE.md               upstream API, pricing, prior art
 ├── scripts/phase_a/               01..04, reproduce every Phase A number
 ├── scripts/phase_b/               step1..step5, all Phase B gates
-├── results/                       phase_a/, phase_b/ raw outputs
+├── results/                       phase_a/, phase_b/, spend_ledger.json
+├── scripts/check_docs.py          doc alignment — run every iteration
+├── scripts/verify_preregistration.py  tamper check for the freeze
 └── vendor/tau2-bench/             pinned v1.0.1 @ fc0055dc, .venv on 3.12.9
 ```
 
@@ -63,21 +66,23 @@ and `scripts/phase_a/01` regenerates the headline Phase A numbers with **no setu
 
 ## Next executable task
 
-**Freeze the pre-registration.** [PREREGISTRATION.md](PREREGISTRATION.md) is complete but §9 is
-unfilled, and **Phase C is blocked until it is hashed and committed**.
+**Phase C — generate 320 confirmatory trajectories** (~USD 3.50).
+Unblocked: the pre-registration is frozen and verified.
 
-Requires owner review of §2 (hypothesis), §4.2 (the six exact model IDs) and §6.5 (inference
-discipline). After freezing, changes become logged deviations in §10, not edits — that property is
-the whole point.
+Per [PREREGISTRATION §4–5](PREREGISTRATION.md): 2 agents × 40 judge-gated `base` tasks × 4 trials,
+one invocation per (agent × trial index), interleaved by a pre-drawn seeded permutation,
+resume-never-restart, intention-to-treat primary.
 
-Then, in order:
-1. **B9** — run-to-run noise floor (upstream #540, no published answer) · ~USD 0.20
-2. **Phase C** — 320 trajectories · ~USD 5.02
-3. **Phase D** — 1,280 judge evaluations + replicates · ~USD 5.97
-4. **Phase E** — analysis and release · USD 0.00
+**Carry into Phase C:**
+- `pass^k` is a **structural constant** for the Gemini arm ([B-L15](FINDINGS.md)) — four trials
+  produce four identical copies. Disclose; never present as a reliability measurement.
+- Judge cost is **not tracked by tau2** ([B-L14](FINDINGS.md)) — our ledger must add it.
+- OpenAI-arm cost varies up to **2.6× per task between runs** — budget a range, not a point.
 
-**Parallel, non-blocking:** nine upstream contributions are prepared and unfiled. Filing is a
-separately authorised action and does not depend on the judge study's outcome.
+Then **Phase D** (1,280 judge evaluations, ~USD 5.97) and **Phase E** (analysis, USD 0.00).
+
+**Parallel, non-blocking:** ten upstream contributions are prepared and unfiled. Filing is a
+separately authorised action and does not depend on the study's outcome.
 
 ## Blockers
 
@@ -111,3 +116,4 @@ separately authorised action and does not depend on the judge study's outcome.
 | 2026-09-20 | **Step 4**: B6 floor gate PASS (6/7, reward 0.857), B7 cost calibration — measured **$0.0212/traj, 6.6x below plan**. New defect B-L7: ACTION checker order-sensitive (contribution #8) | ~$0.16 |
 | 2026-09-20 | OpenAI key added. **Phase B complete**: B2/B3/B5/B6b PASS. Judge-gated tasks measured far harder (0.400 vs 0.857 — headroom resolved). DB/judge disagree on 3/5. Contribution #9: tau2 does not account for judge cost (~40% understatement) | ~$0.29 |
 | 2026-09-20 | **Initial commit `24aa218`** — 33 files. Upstream converted to a submodule (pin now git-enforced). Restored upstream to pristine after an earlier overwrite; `uv sync --frozen` now required. A0 nuanced, A0b added. Fresh-clone reproducibility verified | $0.00 |
+| 2026-09-20 | Pre-registration **FROZEN** (`a917984e`, tamper-tested) + verifier. **B9 complete** — answered #540; found determinism asymmetry between families (contribution #10). Docs realigned; spend ledger automated | ~$0.42 |

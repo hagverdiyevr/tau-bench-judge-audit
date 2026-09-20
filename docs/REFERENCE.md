@@ -107,7 +107,7 @@ non-editable installs.
 | **#499** | 18 retail golden actions raise during gold replay, silently swallowed | Reproduced and characterized — [FINDINGS A4](FINDINGS.md); contribution ready |
 | **#514** | DB hash order-sensitive on lists | Confirmed [A6](FINDINGS.md); **do not fix** (D-011), report both hashes |
 | **#384 / #327** | No-op / missing reward checks permit false-positive rewards | Quantified via null-agent baseline [A5](FINDINGS.md) |
-| **#540** | Run-to-run noise floor of published baselines unknown | Phase B measures it |
+| **#540** | Run-to-run noise floor of published baselines unknown | **Answered** by [B-L15](FINDINGS.md): not one number — determinism differs by model family at temperature 0 |
 | **#224** | "Airline domain may NOT be a reliable benchmark" | Context only; we use retail |
 | — | Py3.13 import failure | Ours, [A0](FINDINGS.md); not yet filed |
 | — | Judge cannot see tool calls | Ours, [B4](FINDINGS.md) |

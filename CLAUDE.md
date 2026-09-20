@@ -27,8 +27,11 @@ Two distinctions that keep this system honest:
 
 ## Current state
 
-**Phase A and Phase B are complete. USD 0.47 spent of 75.00.** Every mechanism the study depends on
-is verified. Nothing is committed to git yet, and no confirmatory data has been generated.
+**Phase A and Phase B are complete (including B9). USD 0.89 spent of 75.00; USD 74.11 remaining.**
+Every mechanism the study depends on is verified. The pre-registration is **frozen**
+(`a917984e…`, 2026-09-20T10:54:29Z). **Phase C is unblocked**; no confirmatory data exists yet.
+
+Spend is tracked in `results/spend_ledger.json`, regenerated from run artifacts — never by hand.
 
 Upstream is checked out at `vendor/tau2-bench`, pinned to **v1.0.1**
 (`fc0055dc4e0a316c3f83133267fbd6faaa770992`), MIT, with a working venv on Python 3.12.9.
@@ -77,6 +80,16 @@ All measured and cited. Do not re-derive or contradict without new evidence.
 - **tau2 does not account for judge cost at all** — ~40% understatement of true run cost on
   judge-gated tasks. Our ledger must add it. [B-L14](docs/FINDINGS.md)
 
+**Reproducibility — the two arms differ**
+- **At temperature 0, `gemini-3.1-flash-lite` is deterministic and `gpt-4.1-nano` is not.** Across
+  seeds the Gemini arm reproduced **5/5 byte-identical** trajectories with zero cost spread; the
+  OpenAI arm reproduced **0/3**, with up to **2.6×** per-task cost variation. Caching ruled out.
+  [B-L15](docs/FINDINGS.md)
+- **Therefore `pass^k` is a structural constant for the Gemini arm** — four trials yield four
+  identical copies, so `pass^4 = pass^1` by construction, not by measurement. Disclose it; never
+  present it as reliability, and never compare a variance-based statistic across arms without
+  stating the asymmetry. [D-018](docs/DECISIONS.md)
+
 **Known defects — document, do not patch**
 - **#514**: DB hash is order-sensitive on lists. [D-011](docs/DECISIONS.md)
 - **B-L7**: the ACTION checker is order-sensitive on list arguments — a call identical to gold except
@@ -119,11 +132,12 @@ Inherited from v1.0 §1 and still binding:
 
 ## Phases
 
-**A** evaluator audit ($0.00, ✅) → **B** 11 verification gates ($0.47, ✅) → **B9** run-to-run noise
-floor (~$0.20) → **C** 320 trajectories (~$5.02) → **D** 1,280 judge evaluations (~$5.97) →
-**E** analysis and release ($0.00). **Projected total ~$11.66.**
+**A** evaluator audit ($0.00 ✅) → **B** 11 gates ($0.47 ✅) → **B9** noise floor ($0.42 ✅) →
+**C** 320 trajectories (~$3.50, **next**) → **D** 1,280 judge evaluations (~$5.97) →
+**E** analysis and release ($0.00). **Spent $0.89 · projected remaining ~$9.47.**
 
-**Phase C must not begin until [PREREGISTRATION §9](docs/PREREGISTRATION.md) is hashed and committed.**
+The pre-registration is frozen and Phase C is unblocked. Verify the freeze any time with
+`python scripts/verify_preregistration.py`.
 
 Surplus budget buys trials and judge replicates only. Tasks are hard-capped at 40 by the benchmark;
 spare money is not a licence to widen scope.
@@ -141,16 +155,43 @@ spare money is not a licence to widen scope.
 - Results are a custom subset, not an official τ³ score. Declare the scaffold **"standard"** vs
   **"custom"**; never claim leaderboard comparability without it.
 
-## Session discipline
+## Maintenance protocol — run after EVERY iteration
 
-End every session by updating [docs/STATUS.md](docs/STATUS.md): phase, what changed, verification
-actually performed, **actual cumulative spend**, blockers, next executable task. Append evidence to
-FINDINGS and forks to DECISIONS.
+Documentation drifts silently. This is mechanical on purpose.
+
+| If this happened | Update |
+| --- | --- |
+| Measured anything | **FINDINGS** — append a new entry with method and numbers. Never rewrite an old one; supersede it |
+| Chose between options | **DECISIONS** — append `D-NNN` with context, decision, rationale, consequence |
+| Spent money | Regenerate the ledger, then sync the figures in **STATUS** and **PLAN** |
+| Finished a phase or gate | **STATUS** (phase line + next task) and **PLAN** (phase table + budget) |
+| Learned an external fact | **REFERENCE** — with the date it was verified |
+| Changed direction | **PLAN** — bump the version, state what it supersedes |
+| Departed from the frozen design | **PREREGISTRATION §10 only.** Never edit §1–§9. The verifier will catch it |
+| Ended a session | **STATUS** — session log row, blockers, next executable task |
+
+Then, always:
+
+```bash
+python scripts/check_docs.py          # links, frozen hash, spend agreement, stale claims
+```
+
+It must print **DOCS ALIGNED** before moving on. A failure is drift, not noise — fix the document,
+do not silence the check. If a check is wrong rather than the docs, fix the *check* and say so.
+
+**Two invariants that outrank convenience:**
+- **FINDINGS and DECISIONS are append-only.** History is the artifact; rewriting it destroys the
+  record of how conclusions were reached — including the two theses we killed.
+- **The frozen pre-registration is immutable.** Deviations are logged, never edited in. Its first
+  real test came when determinism made T = 4 wasteful; we kept the design and logged
+  [D-018](docs/DECISIONS.md) instead of saving USD 3.
 
 ## Commands
 
 ```bash
-cd vendor/tau2-bench && uv sync                                  # pinned harness, Python 3.12.9
+python scripts/check_docs.py                                     # doc alignment (run every iteration)
+python scripts/verify_preregistration.py                         # freeze integrity
+cd vendor/tau2-bench && uv sync --frozen                         # pinned harness, Python 3.12.9
 uv run python ../../scripts/phase_a/03_replay_and_null_agent.py  # reproduce Phase A
 uv run python ../../scripts/phase_b/step5_judge_noise.py         # re-grade saved trajectories
 ```

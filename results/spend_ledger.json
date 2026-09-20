@@ -1,0 +1,36 @@
+{
+ "total_usd": 0.8945,
+ "remaining_usd": 74.11,
+ "trajectories": 29,
+ "judge_calls": 36,
+ "runs": {
+  "b9_openai_seed2001": {
+   "sims": 3,
+   "agent_user_usd": 0.02001
+  },
+  "b9_openai_seed2002": {
+   "sims": 3,
+   "agent_user_usd": 0.0343
+  },
+  "b9_seed1002": {
+   "sims": 5,
+   "agent_user_usd": 0.11233
+  },
+  "b9_seed1003": {
+   "sims": 5,
+   "agent_user_usd": 0.11233
+  },
+  "step4_calibration": {
+   "sims": 7,
+   "agent_user_usd": 0.14819
+  },
+  "step4_floor_gate": {
+   "sims": 1,
+   "agent_user_usd": 0.01061
+  },
+  "step5_judge_gated": {
+   "sims": 5,
+   "agent_user_usd": 0.11233
+  }
+ }
+}

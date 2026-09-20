@@ -286,3 +286,25 @@ comparability with official v1.0.1 numbers. Instead: document it, add a regressi
 **Note.** Retail does not gate on `ACTION`, so within this study it is a misleading *diagnostic*
 only. It becomes a false-negative mechanism in any domain that does gate on it — which is why it is
 worth reporting even though it does not affect our numbers.
+
+## D-018 — Retain T = 4 rather than deviate after the determinism finding · `ACTIVE` · 20 Sep 2026
+
+**Context.** [B-L15](FINDINGS.md) showed `gemini-3.1-flash-lite` reproduces **byte-identical**
+trajectories across seeds at temperature 0, while `gpt-4.1-nano` reproduces none. For the
+deterministic arm, the frozen T = 4 buys four identical copies — roughly **USD 3 of pure waste**.
+
+**Decision.** **Keep T = 4 for both arms.** No deviation is entered in
+[PREREGISTRATION §10](PREREGISTRATION.md); §10 remains empty.
+
+**Rationale.** The pre-registration was frozen specifically so that post-hoc design changes cannot
+be made once data starts arriving. Amending it to save 4% of a budget with USD 74 remaining would
+spend the exact credibility the freeze was created to buy — on its first test, which is when
+precedent is set. Symmetric T across arms also keeps the paired analysis simple.
+
+**What changes instead — reporting, not design.** `pass^4` for the deterministic arm is disclosed
+as **trivially equal to `pass^1`**, never presented as a reliability measurement, and no
+variance-based statistic is compared across arms without stating the asymmetry.
+
+**Precedent.** A deviation is warranted when the frozen design would produce an *invalid* result.
+It is not warranted to reduce cost or tidy an inefficiency. This entry is the reference for future
+deviation requests.

@@ -6,8 +6,8 @@
 > External facts: [REFERENCE.md](REFERENCE.md). Current position: [STATUS.md](STATUS.md).
 > Binding rules: [CLAUDE.md](../CLAUDE.md).
 >
-> **Version 4.0** · 20 Sep 2026 · supersedes v3.0. All cost figures are now **measured**, not
-> estimated. v3.0's structure survives; its numbers do not.
+> **Version 4.1** · 20 Sep 2026 · Phase B closed including B9; pre-registration frozen.
+> All cost figures are **measured**. Ledger of record: `results/spend_ledger.json`.
 
 ## Context
 
@@ -18,7 +18,7 @@ not an explainer, not a long report ([REFERENCE](REFERENCE.md) §Reception).
 Three research passes and a hostile review eliminated the obvious angles
 ([D-003](DECISIONS.md), [D-005](DECISIONS.md)). A zero-cost Phase A audit then **falsified the
 surviving thesis** ([D-004](DECISIONS.md)) and surfaced the current one. Phase B validated every
-mechanism the design depends on for **USD 0.47**.
+mechanism the design depends on for **USD 0.89**.
 
 ## Thesis
 
@@ -86,20 +86,28 @@ the 2×2 control costs ~USD 2.
 
 ## Budget — measured
 
-USD 75 ceiling · **USD 0.47 spent** · **USD 74.53 remaining**.
+USD 75 ceiling · **USD 0.89 spent** · **USD 74.11 remaining**. Source of truth:
+`results/spend_ledger.json` (regenerated from run artifacts, not maintained by hand).
 
 | Phase | Work | Status | Cost |
 | --- | --- | --- | ---: |
 | **A** | Evaluator audit (static/replay) | ✅ complete | **$0.00** |
 | **B** | 11 verification gates | ✅ complete | **$0.47** |
-| **B9** | Run-to-run noise floor (#540) | pending | ~$0.20 |
-| **C** | 320 trajectories | pending | ~$5.02 |
+| **B9** | Run-to-run noise floor (#540) | ✅ complete | **$0.42** |
+| **C** | 320 trajectories | **next** | ~$3.50 |
 | **D** | 1,280 judge evaluations + replicates | pending | ~$5.97 |
 | **E** | Analysis and release | pending | $0.00 |
-| | **Projected total** | | **~$11.66** |
+| | **Spent to date** | | **$0.89** |
+| | **Projected remaining** | | **~$9.47** |
 
-Per-trajectory cost **measured at $0.0212** (mean; 0.0137–0.0300) — the v3.0 estimate of $0.140 was
-**6.6× too high** ([B-L9](FINDINGS.md)). Cost tracks conversation length, not task complexity.
+Per-trajectory cost **measured at $0.0212** (mean; 0.0137–0.0300) for the Gemini arm — the v3.0
+estimate of $0.140 was **6.6× too high** ([B-L9](FINDINGS.md)). Cost tracks conversation length, not
+task complexity.
+
+The OpenAI arm is **substantially cheaper** (~$0.007–0.011/trajectory measured in B9) because
+`gpt-4.1-nano` emits no reasoning tokens, where `gemini-3.1-flash-lite` spends ~28% of cost on
+thinking that **cannot be disabled** ([B-L4](FINDINGS.md)). But its cost **varies up to 2.6× per
+task between runs** ([B-L15](FINDINGS.md)), so its budget needs a range, not a point.
 
 > **Surplus is not a licence to widen scope.** Tasks are hard-capped at 40 by the benchmark.
 > Spare budget buys trials and judge replicates only. Resisting scope creep is what has kept this
@@ -131,11 +139,24 @@ Every gate passed. Scripts: `scripts/phase_b/step1`–`step5`.
 | B8/B8b thought signatures | PASS on tau2's real path, 16-tool schema |
 | — | 5 further findings, contributions #5–#9 |
 
-### Phase B9 — Run-to-run noise floor · ~$0.20
+### Phase B9 — Run-to-run noise floor · ✅ COMPLETE · $0.42
 
-One configuration, run twice, different seeds. Upstream #540 is an **open question with no
-published answer**; measuring it is the cheapest credibility available and converts a threat into a
-contribution. This is the ruler every later claim is read against.
+Answered upstream #540, which had **no published answer**. The result is not one number — the two
+agent families behave **oppositely at the same temperature 0.0** ([B-L15](FINDINGS.md)):
+
+| Arm | Byte-identical across seeds | Cost spread |
+| --- | --- | --- |
+| `gemini/gemini-3.1-flash-lite` | **5/5** (3 seeds) | **$0.000000** |
+| `gpt-4.1-nano` | **0/3** (2 seeds) | up to **2.6×** |
+
+Caching ruled out first (`LLM_CACHE_ENABLED = False`, `litellm.cache = None`, durations differ).
+
+**Consequence carried into Phase C and E:** `pass^k` is a **structural constant** for the
+deterministic arm — four trials yield four identical copies, so `pass^4 = pass^1` by construction,
+not by measurement. This must be **disclosed as such**, never presented as a reliability result, and
+no variance-based statistic may be compared across arms without stating it.
+
+The frozen T = 4 design was **retained, not deviated** ([D-018](DECISIONS.md)).
 
 ### Phase C — Trajectory generation · ~$5.02
 
@@ -144,7 +165,8 @@ permutation; per-invocation UTC recorded; resume-never-restart on partial failur
 primary. Cost read from persisted `agent_cost`/`user_cost` **plus our own judge accounting**, since
 tau2 omits the latter entirely.
 
-**Phase C must not begin until [PREREGISTRATION §9](PREREGISTRATION.md) is hashed and committed.**
+**Pre-registration frozen** `a917984e…` at 2026-09-20T10:54:29Z, tamper-tested; verify with
+`python scripts/verify_preregistration.py`. **Phase C is unblocked.**
 
 ### Phase D — Judge re-grading · ~$5.97
 
@@ -163,7 +185,7 @@ Analysis per [PREREGISTRATION §6](PREREGISTRATION.md).
 1. **Evaluator audit suite** — Phase A, $0, reusable across languages and domains; scoop-proof.
 2. **Judge-swap re-grading harness** — run once, score under many judges. The primary tool.
 3. **The finding** — one sentence, with a CI and a stated MDE.
-4. **Nine upstream contributions** ([FINDINGS](FINDINGS.md) §Upstream) — filing is separately authorised.
+4. **Ten upstream contributions** ([FINDINGS](FINDINGS.md) §Upstream) — filing is separately authorised.
 5. Reproduction path: `make verify` offline, zero API keys.
 
 ## Verification

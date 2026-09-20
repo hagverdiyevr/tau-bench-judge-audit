@@ -5,7 +5,7 @@
 > [FINDINGS.md](FINDINGS.md), rationale in [DECISIONS.md](DECISIONS.md), the route in
 > [PLAN.md](PLAN.md).
 
-**Last updated:** 20 September 2026
+**Last updated:** 20 September 2026 (commit `24aa218`)
 **Phase:** A complete · **B complete except B9** — B1-B8b ALL PASSED
 **Cumulative API spend: ~USD 0.47 of 75.00** ($74.53 remaining)
 
@@ -44,14 +44,13 @@ t-bench/
 **Not yet created:** our own package, `pyproject.toml`, the offline test suite, budget ledger.
 `.env` holds live Gemini + OpenAI keys and is gitignored.
 
-**Git:** initialised on `main`, `.gitignore` in place (secrets, venvs, raw runs excluded — verified).
-**Nothing is committed yet** — no commit has been requested. 15 files are staged-ready outside
-`vendor/`.
+**Git:** committed on `main` — `24aa218`, 33 files, working tree clean.
+`vendor/tau2-bench` is now a **registered submodule** pinned at `v1.0.1` (`fc0055dc`), so the pin is
+**enforced by git**, not merely documented.
 
-⚠️ **Outstanding structural task:** `vendor/tau2-bench` is a plain clone, not a registered git
-submodule. [D-007](DECISIONS.md) calls for a submodule so the pin is reproducible for a stranger.
-Converting it requires a commit, so it is deferred until commits are requested. Until then the pin
-is documented (`v1.0.1` @ `fc0055dc`) but not enforced by git.
+**Reproducibility verified end to end (20 Sep):** a fresh
+`git clone --recurse-submodules` yields the full tree with upstream data present, **no secrets**,
+and `scripts/phase_a/01` regenerates the headline Phase A numbers with **no setup and no API keys**.
 
 ## Verified environment
 
@@ -64,21 +63,21 @@ is documented (`v1.0.1` @ `fc0055dc`) but not enforced by git.
 
 ## Next executable task
 
-**Phase B has passed every gate.** The method is validated, the agent works, the study population
-has headroom, judge noise is bounded, and costs are ~7x below plan.
+**Freeze the pre-registration.** [PREREGISTRATION.md](PREREGISTRATION.md) is complete but §9 is
+unfilled, and **Phase C is blocked until it is hashed and committed**.
 
-Before any Phase C spend:
+Requires owner review of §2 (hypothesis), §4.2 (the six exact model IDs) and §6.5 (inference
+discipline). After freezing, changes become logged deviations in §10, not edits — that property is
+the whole point.
 
-1. **Pre-register** the primary contrast and hash it ([D-012](DECISIONS.md)) — the design now has
-   many defensible cuts (agent x judge x task-regime x trial), so the primary comparison must be
-   frozen in writing first.
-2. **B9** — run-to-run noise floor (upstream #540): one config twice, different seeds, ~USD 0.20.
-   This is the ruler every later claim is read against.
-3. **Phase C** — 240 trajectories, 2 agent families x 40 judge-gated tasks x 2 trials (~USD 5).
-4. **Phase D** — re-grade under gpt-4.1 and a Gemini judge (~USD 2.52), plus replicates.
+Then, in order:
+1. **B9** — run-to-run noise floor (upstream #540, no published answer) · ~USD 0.20
+2. **Phase C** — 320 trajectories · ~USD 5.02
+3. **Phase D** — 1,280 judge evaluations + replicates · ~USD 5.97
+4. **Phase E** — analysis and release · USD 0.00
 
-**Projected remaining: ~USD 8 of the USD 74.53 left.** Surplus should buy trials and judge
-replicates, not new questions — tasks are hard-capped at 40 by [A3](FINDINGS.md).
+**Parallel, non-blocking:** nine upstream contributions are prepared and unfiled. Filing is a
+separately authorised action and does not depend on the judge study's outcome.
 
 ## Blockers
 
@@ -111,3 +110,4 @@ replicates, not new questions — tasks are hard-capped at 40 by [A3](FINDINGS.m
 | 2026-09-20 | **Live gates**: key verified, billing + cost accounting exact, thinking overhead measured (28%, not controllable), **B8/B8b PASS** — signatures survive tau2's path only via LiteLLM's id-packing. Contributions #6–7 added | ~$0.02 |
 | 2026-09-20 | **Step 4**: B6 floor gate PASS (6/7, reward 0.857), B7 cost calibration — measured **$0.0212/traj, 6.6x below plan**. New defect B-L7: ACTION checker order-sensitive (contribution #8) | ~$0.16 |
 | 2026-09-20 | OpenAI key added. **Phase B complete**: B2/B3/B5/B6b PASS. Judge-gated tasks measured far harder (0.400 vs 0.857 — headroom resolved). DB/judge disagree on 3/5. Contribution #9: tau2 does not account for judge cost (~40% understatement) | ~$0.29 |
+| 2026-09-20 | **Initial commit `24aa218`** — 33 files. Upstream converted to a submodule (pin now git-enforced). Restored upstream to pristine after an earlier overwrite; `uv sync --frozen` now required. A0 nuanced, A0b added. Fresh-clone reproducibility verified | $0.00 |

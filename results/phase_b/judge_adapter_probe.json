@@ -1,0 +1,26 @@
+{
+ "verdicts": {
+  "gpt-4.1-2025-04-14": [
+   "PASS",
+   "2 check(s), met=[True, True]"
+  ],
+  "gpt-4.1-mini": [
+   "PASS",
+   "2 check(s), met=[True, True]"
+  ],
+  "gemini/gemini-3.8-flash": [
+   "FAIL",
+   "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+  ],
+  "gemini/gemini-3.1-flash-lite": [
+   "PASS",
+   "2 check(s), met=[True, True]"
+  ]
+ },
+ "fenced": {
+  "gpt-4.1-2025-04-14": false,
+  "gpt-4.1-mini": false,
+  "gemini/gemini-3.8-flash": true,
+  "gemini/gemini-3.1-flash-lite": false
+ }
+}

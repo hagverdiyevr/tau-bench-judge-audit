@@ -1,0 +1,60 @@
+{
+ "exports": [
+  {
+   "run": "b9_openai_seed2001",
+   "file": "results/artifacts/b9_openai_seed2001.json",
+   "n_simulations": 3,
+   "source_bytes": 294166,
+   "export_bytes": 84341,
+   "sha256": "19d3f27edd1ff8f2619805faa082eff6350ae769e62739e0e8f45f2d070662c1"
+  },
+  {
+   "run": "b9_openai_seed2002",
+   "file": "results/artifacts/b9_openai_seed2002.json",
+   "n_simulations": 3,
+   "source_bytes": 431588,
+   "export_bytes": 120301,
+   "sha256": "d428e19734bb6356c11d88e848f434e42a81e17026f21a6d58bb00fa65c6f206"
+  },
+  {
+   "run": "b9_seed1002",
+   "file": "results/artifacts/b9_seed1002.json",
+   "n_simulations": 5,
+   "source_bytes": 682496,
+   "export_bytes": 216274,
+   "sha256": "d06a60ca2b7bac501c4dd2ee96b41807d1f8cf54ef422e07fee8dd10d72927e5"
+  },
+  {
+   "run": "b9_seed1003",
+   "file": "results/artifacts/b9_seed1003.json",
+   "n_simulations": 5,
+   "source_bytes": 682643,
+   "export_bytes": 216423,
+   "sha256": "7cf04636454c4d8af8aca7a677b939da9e3db288862006b306e9dca40ce50de7"
+  },
+  {
+   "run": "step4_calibration",
+   "file": "results/artifacts/step4_calibration.json",
+   "n_simulations": 7,
+   "source_bytes": 865255,
+   "export_bytes": 260626,
+   "sha256": "c160a2e39499ec93dca323e929c281719a71289f82b15cc2263c5169b876b87d"
+  },
+  {
+   "run": "step4_floor_gate",
+   "file": "results/artifacts/step4_floor_gate.json",
+   "n_simulations": 1,
+   "source_bytes": 76823,
+   "export_bytes": 26073,
+   "sha256": "d17771ae0f5c5e48f868235052eaba589c7ef2c1de4bfa09af2073a156815b9f"
+  },
+  {
+   "run": "step5_judge_gated",
+   "file": "results/artifacts/step5_judge_gated.json",
+   "n_simulations": 5,
+   "source_bytes": 682521,
+   "export_bytes": 216306,
+   "sha256": "ad0af5aae6d76bf1a1cfd6866efe0dd46c9786130d8c5463eba3341352a516f8"
+  }
+ ]
+}

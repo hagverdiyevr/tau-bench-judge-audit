@@ -18,7 +18,7 @@ not an explainer, not a long report ([REFERENCE](REFERENCE.md) §Reception).
 Three research passes and a hostile review eliminated the obvious angles
 ([D-003](DECISIONS.md), [D-005](DECISIONS.md)). A zero-cost Phase A audit then **falsified the
 surviving thesis** ([D-004](DECISIONS.md)) and surfaced the current one. Phase B validated every
-mechanism the design depends on for **USD 0.92**.
+mechanism the design depends on for **USD 1.02**.
 
 ## Thesis
 
@@ -86,7 +86,7 @@ the 2×2 control costs ~USD 2.
 
 ## Budget — measured
 
-USD 75 ceiling · **USD 0.92 spent** · **USD 74.08 remaining**. Source of truth:
+USD 75 ceiling · **USD 1.02 spent** · **USD 73.98 remaining**. Source of truth:
 `results/spend_ledger.json` (regenerated from run artifacts, not maintained by hand).
 
 | Phase | Work | Status | Cost |
@@ -97,7 +97,7 @@ USD 75 ceiling · **USD 0.92 spent** · **USD 74.08 remaining**. Source of truth
 | **C** | 320 trajectories | **next** | ~$5.02 |
 | **D** | 1,280 judge evaluations + replicates | pending | ~$5.97 |
 | **E** | Analysis and release | pending | $0.00 |
-| | **Spent to date** | | **$0.92** |
+| | **Spent to date** | | **$1.02** |
 | | **Projected remaining** | | **~$11.00** |
 
 Per-trajectory cost **measured at $0.0212** (mean; 0.0137–0.0300) for the Gemini arm — the v3.0

@@ -66,6 +66,8 @@ OUT_OF_BAND = [
     {"item": "key verification calls (gemini + openai)", "usd": 0.0004},
     {"item": "B5 judge re-grades, 15 calls", "usd": 0.1350},
     {"item": "external-review verification probes (workflow)", "usd": 0.0025},
+    {"item": "judge adapter probe, 4 judges x 1 trajectory (J1 confirmation)", "usd": 0.0100},
+    {"item": "Phase D regrade smoke, 5 trajectories x 4 judges (rec 10)", "usd": 0.0890},
 ]
 oob = sum(x["usd"] for x in OUT_OF_BAND)
 total = totals["agent_user"] + totals["judge"] + oob

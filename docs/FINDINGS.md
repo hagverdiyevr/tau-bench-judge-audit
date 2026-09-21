@@ -217,6 +217,8 @@ Not yet filed — filing is a separate authorized action (see [CLAUDE.md](../CLA
 | 9 | **Judge cost is entirely unaccounted** — no cost/usage field exists for the NL-assertion judge; measured ~40% understatement of true run cost on judge-gated tasks | B-L14 |
 | 10 | **Run-to-run noise floor for #540**, plus a reproducibility asymmetry: at temperature 0 one model family reproduces identical message contents/tool calls/rewards across repeat invocations and another does not | B-L15 |
 | 11 | **LiteLLM silently drops `seed` for the `gemini` provider** (`llm_utils.py:71`), so seeded reproducibility is unavailable for Gemini arms without the caller knowing | B-L15 correction |
+| 12 | **NL-judge path does not use upstream's own fence stripper** — `evaluator_nl_assertions.py:127` calls raw `json.loads` while `llm_utils.py:509` provides `extract_json_from_llm_response`; `gemini-3.8-flash` therefore crashes the evaluator. One-line wiring fix | B-L16 |
+| 13 | **`all([])` scores an empty judge response as a full pass**; duplicate, extra and mismatched verdicts are equally silent | B-L16 |
 
 ---
 

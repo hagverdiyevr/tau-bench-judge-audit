@@ -7,7 +7,7 @@
 
 **Last updated:** 21 September 2026
 **Phase:** A ✅ · B ✅ (all 11 gates + B9) · pre-registration **FROZEN** · **Phase C is next**
-**Cumulative API spend: USD 0.92 of 75.00** — USD 74.08 remaining
+**Cumulative API spend: USD 1.02 of 75.00** — USD 73.98 remaining
 **Ledger of record:** `results/spend_ledger.json` (regenerated from run artifacts)
 
 ---
@@ -70,7 +70,7 @@ and `scripts/phase_a/01` regenerates the headline Phase A numbers with **no setu
 
 ## Next executable task
 
-**Phase C — dispatch 320 confirmatory trajectories** (~USD 5.02 of USD 74.08 remaining).
+**Phase C — dispatch 320 confirmatory trajectories** (~USD 5.02 of USD 73.98 remaining).
 
 Readiness gates, all passing:
 - Pre-registration frozen + **amendment chain** verified (A-001, A-002)

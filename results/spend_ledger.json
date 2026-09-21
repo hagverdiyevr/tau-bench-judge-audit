@@ -3,12 +3,12 @@
  "generated_by": "scripts/build_spend_ledger.py",
  "note": "Judge cost is computed from the judge's own trajectory serialization because tau2 records no judge cost at all (FINDINGS B-L14).",
  "cap_usd": 75.0,
- "total_usd": 0.9221,
- "remaining_usd": 74.08,
+ "total_usd": 1.0211,
+ "remaining_usd": 73.98,
  "components": {
   "agent_user_usd": 0.5501,
   "judge_usd_untracked_by_tau2": 0.2141,
-  "out_of_band_usd": 0.1579
+  "out_of_band_usd": 0.2569
  },
  "trajectories": 29,
  "runs": [
@@ -92,6 +92,14 @@
   {
    "item": "external-review verification probes (workflow)",
    "usd": 0.0025
+  },
+  {
+   "item": "judge adapter probe, 4 judges x 1 trajectory (J1 confirmation)",
+   "usd": 0.01
+  },
+  {
+   "item": "Phase D regrade smoke, 5 trajectories x 4 judges (rec 10)",
+   "usd": 0.089
   }
  ]
 }

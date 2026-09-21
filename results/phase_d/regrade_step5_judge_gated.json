@@ -1,0 +1,319 @@
+{
+ "run": "step5_judge_gated",
+ "judges": [
+  "gpt-4.1-2025-04-14",
+  "gpt-4.1-mini",
+  "gemini/gemini-3.8-flash",
+  "gemini/gemini-3.1-flash-lite"
+ ],
+ "evaluations": 20,
+ "parsed_ok": 20,
+ "anomalies": 0,
+ "usd": 0.088985,
+ "rows": [
+  {
+   "task": "43",
+   "judge": "gpt-4.1-2025-04-14",
+   "ok": true,
+   "error_kind": null,
+   "error": null,
+   "nl_reward": 1.0,
+   "verdicts": {
+    "Agent should tell the user the tracking number is 840887978435.": true,
+    "Agent should tell the user the order was shipped to 943 Maple Drive, Suite 356, Chicago, IL 60621.": true,
+    "Agent should tell the user the tablet storage is 64GB.": true
+   },
+   "matches_incumbent": true,
+   "fenced": false,
+   "usd": 0.007134
+  },
+  {
+   "task": "43",
+   "judge": "gpt-4.1-mini",
+   "ok": true,
+   "error_kind": null,
+   "error": null,
+   "nl_reward": 1.0,
+   "verdicts": {
+    "Agent should tell the user the tracking number is 840887978435.": true,
+    "Agent should tell the user the order was shipped to 943 Maple Drive, Suite 356, Chicago, IL 60621.": true,
+    "Agent should tell the user the tablet storage is 64GB.": true
+   },
+   "matches_incumbent": true,
+   "fenced": false,
+   "usd": 0.001411
+  },
+  {
+   "task": "43",
+   "judge": "gemini/gemini-3.8-flash",
+   "ok": true,
+   "error_kind": null,
+   "error": null,
+   "nl_reward": 1.0,
+   "verdicts": {
+    "Agent should tell the user the tracking number is 840887978435.": true,
+    "Agent should tell the user the order was shipped to 943 Maple Drive, Suite 356, Chicago, IL 60621.": true,
+    "Agent should tell the user the tablet storage is 64GB.": true
+   },
+   "matches_incumbent": true,
+   "fenced": true,
+   "usd": 0.003602
+  },
+  {
+   "task": "43",
+   "judge": "gemini/gemini-3.1-flash-lite",
+   "ok": true,
+   "error_kind": null,
+   "error": null,
+   "nl_reward": 1.0,
+   "verdicts": {
+    "Agent should tell the user the tracking number is 840887978435.": true,
+    "Agent should tell the user the order was shipped to 943 Maple Drive, Suite 356, Chicago, IL 60621.": true,
+    "Agent should tell the user the tablet storage is 64GB.": true
+   },
+   "matches_incumbent": true,
+   "fenced": false,
+   "usd": 0.001396
+  },
+  {
+   "task": "76",
+   "judge": "gpt-4.1-2025-04-14",
+   "ok": true,
+   "error_kind": null,
+   "error": null,
+   "nl_reward": 1.0,
+   "verdicts": {
+    "Agent should tell the user the total price of all grills is $1,939.05.": true
+   },
+   "matches_incumbent": true,
+   "fenced": false,
+   "usd": 0.010668
+  },
+  {
+   "task": "76",
+   "judge": "gpt-4.1-mini",
+   "ok": true,
+   "error_kind": null,
+   "error": null,
+   "nl_reward": 1.0,
+   "verdicts": {
+    "Agent should tell the user the total price of all grills is $1,939.05.": true
+   },
+   "matches_incumbent": true,
+   "fenced": false,
+   "usd": 0.002097
+  },
+  {
+   "task": "76",
+   "judge": "gemini/gemini-3.8-flash",
+   "ok": true,
+   "error_kind": null,
+   "error": null,
+   "nl_reward": 1.0,
+   "verdicts": {
+    "Agent should tell the user the total price of all grills is $1,939.05.": true
+   },
+   "matches_incumbent": true,
+   "fenced": true,
+   "usd": 0.005045
+  },
+  {
+   "task": "76",
+   "judge": "gemini/gemini-3.1-flash-lite",
+   "ok": true,
+   "error_kind": null,
+   "error": null,
+   "nl_reward": 1.0,
+   "verdicts": {
+    "Agent should tell the user the total price of all grills is $1,939.05.": true
+   },
+   "matches_incumbent": true,
+   "fenced": false,
+   "usd": 0.001846
+  },
+  {
+   "task": "89",
+   "judge": "gpt-4.1-2025-04-14",
+   "ok": true,
+   "error_kind": null,
+   "error": null,
+   "nl_reward": 1.0,
+   "verdicts": {
+    "Agent should tell the user the cheapest mechanical keyboard costs $226.11.": true,
+    "Agent should tell the user the keyboard switch type is tactile.": true,
+    "Agent should tell the user the keyboard backlight is white.": true,
+    "Agent should tell the user the keyboard size is full.": true
+   },
+   "matches_incumbent": true,
+   "fenced": false,
+   "usd": 0.008566
+  },
+  {
+   "task": "89",
+   "judge": "gpt-4.1-mini",
+   "ok": true,
+   "error_kind": null,
+   "error": null,
+   "nl_reward": 1.0,
+   "verdicts": {
+    "Agent should tell the user the cheapest mechanical keyboard costs $226.11.": true,
+    "Agent should tell the user the keyboard switch type is tactile.": true,
+    "Agent should tell the user the keyboard backlight is white.": true,
+    "Agent should tell the user the keyboard size is full.": true
+   },
+   "matches_incumbent": true,
+   "fenced": false,
+   "usd": 0.001659
+  },
+  {
+   "task": "89",
+   "judge": "gemini/gemini-3.8-flash",
+   "ok": true,
+   "error_kind": null,
+   "error": null,
+   "nl_reward": 1.0,
+   "verdicts": {
+    "Agent should tell the user the cheapest mechanical keyboard costs $226.11.": true,
+    "Agent should tell the user the keyboard switch type is tactile.": true,
+    "Agent should tell the user the keyboard backlight is white.": true,
+    "Agent should tell the user the keyboard size is full.": true
+   },
+   "matches_incumbent": true,
+   "fenced": true,
+   "usd": 0.004179
+  },
+  {
+   "task": "89",
+   "judge": "gemini/gemini-3.1-flash-lite",
+   "ok": true,
+   "error_kind": null,
+   "error": null,
+   "nl_reward": 1.0,
+   "verdicts": {
+    "Agent should tell the user the cheapest mechanical keyboard costs $226.11.": true,
+    "Agent should tell the user the keyboard switch type is tactile.": true,
+    "Agent should tell the user the keyboard backlight is white.": true,
+    "Agent should tell the user the keyboard size is full.": true
+   },
+   "matches_incumbent": true,
+   "fenced": false,
+   "usd": 0.001625
+  },
+  {
+   "task": "103",
+   "judge": "gpt-4.1-2025-04-14",
+   "ok": true,
+   "error_kind": null,
+   "error": null,
+   "nl_reward": 0.0,
+   "verdicts": {
+    "Agent should provide the tracking number 286422338955.": false
+   },
+   "matches_incumbent": true,
+   "fenced": false,
+   "usd": 0.011788
+  },
+  {
+   "task": "103",
+   "judge": "gpt-4.1-mini",
+   "ok": true,
+   "error_kind": null,
+   "error": null,
+   "nl_reward": 0.0,
+   "verdicts": {
+    "Agent should provide the tracking number 286422338955.": false
+   },
+   "matches_incumbent": true,
+   "fenced": false,
+   "usd": 0.002401
+  },
+  {
+   "task": "103",
+   "judge": "gemini/gemini-3.8-flash",
+   "ok": true,
+   "error_kind": null,
+   "error": null,
+   "nl_reward": 0.0,
+   "verdicts": {
+    "Agent should provide the tracking number 286422338955.": false
+   },
+   "matches_incumbent": true,
+   "fenced": true,
+   "usd": 0.006425
+  },
+  {
+   "task": "103",
+   "judge": "gemini/gemini-3.1-flash-lite",
+   "ok": true,
+   "error_kind": null,
+   "error": null,
+   "nl_reward": 0.0,
+   "verdicts": {
+    "Agent should provide the tracking number 286422338955.": false
+   },
+   "matches_incumbent": true,
+   "fenced": false,
+   "usd": 0.002195
+  },
+  {
+   "task": "109",
+   "judge": "gpt-4.1-2025-04-14",
+   "ok": true,
+   "error_kind": null,
+   "error": null,
+   "nl_reward": 1.0,
+   "verdicts": {
+    "Agent should make changes to address on order and user profile": true,
+    "Agent should modify the pending order.": true
+   },
+   "matches_incumbent": true,
+   "fenced": false,
+   "usd": 0.00965
+  },
+  {
+   "task": "109",
+   "judge": "gpt-4.1-mini",
+   "ok": true,
+   "error_kind": null,
+   "error": null,
+   "nl_reward": 1.0,
+   "verdicts": {
+    "Agent should make changes to address on order and user profile": true,
+    "Agent should modify the pending order.": true
+   },
+   "matches_incumbent": true,
+   "fenced": false,
+   "usd": 0.001749
+  },
+  {
+   "task": "109",
+   "judge": "gemini/gemini-3.8-flash",
+   "ok": true,
+   "error_kind": null,
+   "error": null,
+   "nl_reward": 1.0,
+   "verdicts": {
+    "Agent should make changes to address on order and user profile": true,
+    "Agent should modify the pending order.": true
+   },
+   "matches_incumbent": true,
+   "fenced": true,
+   "usd": 0.004001
+  },
+  {
+   "task": "109",
+   "judge": "gemini/gemini-3.1-flash-lite",
+   "ok": true,
+   "error_kind": null,
+   "error": null,
+   "nl_reward": 1.0,
+   "verdicts": {
+    "Agent should make changes to address on order and user profile": true,
+    "Agent should modify the pending order.": true
+   },
+   "matches_incumbent": true,
+   "fenced": false,
+   "usd": 0.001549
+  }
+ ]
+}

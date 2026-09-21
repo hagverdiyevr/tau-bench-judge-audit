@@ -27,7 +27,7 @@ Two distinctions that keep this system honest:
 
 ## Current state
 
-**Phase A and Phase B are complete (including B9). USD 0.92 spent of 75.00; USD 74.08 remaining.**
+**Phase A and Phase B are complete (including B9). USD 1.02 spent of 75.00; USD 73.98 remaining.**
 Every mechanism the study depends on is verified. The pre-registration is **frozen**
 (`a917984e…`, 2026-09-20T10:54:29Z). **Phase C is unblocked**; no confirmatory data exists yet.
 
@@ -93,6 +93,18 @@ All measured and cited. Do not re-derive or contradict without new evidence.
   present it as reliability, and never compare a variance-based statistic across arms without
   stating the asymmetry. [D-018](docs/DECISIONS.md)
 
+**The judge parser — use our adapter, never the raw path**
+- **`gemini-3.8-flash` fences its JSON**, so upstream's raw `json.loads`
+  (`evaluator_nl_assertions.py:127`) raises `JSONDecodeError`. Verified live: the other three
+  frozen judges return bare JSON. Upstream already ships `extract_json_from_llm_response`
+  (`llm_utils.py:509`) but does not use it here.
+- **Upstream scores an empty result set as a full pass** — `all([])` is `True`, so a judge
+  response with zero verdicts silently earns full NL reward. Duplicates, extras and mismatched
+  assertion text are equally silent.
+- **Therefore all re-grading goes through `scripts/grading/judge_adapter.py`**, which is
+  fail-closed: it strips fences, proves one unique verdict per supplied assertion, and **never**
+  converts an anomalous response into a pass. 21 regression tests in `tests/test_judge_adapter.py`.
+
 **Known defects — document, do not patch**
 - **#514**: DB hash is order-sensitive on lists. [D-011](docs/DECISIONS.md)
 - **B-L7**: the ACTION checker is order-sensitive on list arguments — a call identical to gold except
@@ -137,7 +149,7 @@ Inherited from v1.0 §1 and still binding:
 
 **A** evaluator audit ($0.00 ✅) → **B** 11 gates ($0.47 ✅) → **B9** noise floor ($0.42 ✅) →
 **C** 320 trajectories (~$5.02, **next**) → **D** 1,280 judge evaluations (~$5.97) →
-**E** analysis and release ($0.00). **Spent $0.92 · projected remaining ~$11.00.**
+**E** analysis and release ($0.00). **Spent $1.02 · projected remaining ~$11.00.**
 
 The pre-registration is frozen and Phase C is unblocked. Verify the freeze any time with
 `python scripts/verify_preregistration.py`.
@@ -179,7 +191,8 @@ Then, always:
 python scripts/check_docs.py          # links, frozen hash, spend agreement, stale claims
 ```
 
-It must print **DOCS ALIGNED** before moving on. A failure is drift, not noise — fix the document,
+It must print **DOCS ALIGNED** before moving on. Before any *spend*, `make verify` must pass —
+that adds the judge-adapter and runner-guard tests to the doc check. A failure is drift, not noise — fix the document,
 do not silence the check. If a check is wrong rather than the docs, fix the *check* and say so.
 
 **Two invariants that outrank convenience:**
@@ -192,8 +205,10 @@ do not silence the check. If a check is wrong rather than the docs, fix the *che
 ## Commands
 
 ```bash
+make verify                                                      # ALL offline gates — run before any spend
+make dry-run                                                     # validate Phase C manifest, dispatch nothing
 python scripts/check_docs.py                                     # doc alignment (run every iteration)
-python scripts/verify_preregistration.py                         # freeze integrity
+python scripts/verify_preregistration.py                         # freeze + amendment chain integrity
 cd vendor/tau2-bench && uv sync --frozen                         # pinned harness, Python 3.12.9
 uv run python ../../scripts/phase_a/03_replay_and_null_agent.py  # reproduce Phase A
 uv run python ../../scripts/phase_b/step5_judge_noise.py         # re-grade saved trajectories

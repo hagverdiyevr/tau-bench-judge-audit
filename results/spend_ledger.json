@@ -3,14 +3,15 @@
  "generated_by": "scripts/build_spend_ledger.py",
  "note": "Judge cost is computed from the judge's own trajectory serialization because tau2 records no judge cost at all (FINDINGS B-L14).",
  "cap_usd": 75.0,
- "total_usd": 2.2332,
- "remaining_usd": 72.77,
+ "total_usd": 8.351,
+ "remaining_usd": 66.65,
  "components": {
-  "agent_user_usd": 1.3968,
-  "judge_usd_untracked_by_tau2": 0.5795,
+  "measured_from_attempt_logs_usd": 7.3299,
+  "agent_user_usd_estimated": 0.5501,
+  "judge_usd_estimated_untracked_by_tau2": 0.2141,
   "out_of_band_usd": 0.2569
  },
- "trajectories": 69,
+ "trajectories": 349,
  "runs": [
   {
    "run": "b9_openai_seed2001",
@@ -18,7 +19,9 @@
    "agent_user_usd": 0.020013,
    "judge_calls": 3,
    "judge_input_tokens": 10124,
-   "judge_usd": 0.027448,
+   "judge_usd_estimated": 0.027448,
+   "measured_usd_from_attempts": null,
+   "source": "estimate",
    "git_commit": "acc89b743bfee2d79c1c045820e7aff2a7a6e2a9"
   },
   {
@@ -27,7 +30,9 @@
    "agent_user_usd": 0.034301,
    "judge_calls": 3,
    "judge_input_tokens": 15272,
-   "judge_usd": 0.037744,
+   "judge_usd_estimated": 0.037744,
+   "measured_usd_from_attempts": null,
+   "source": "estimate",
    "git_commit": "acc89b743bfee2d79c1c045820e7aff2a7a6e2a9"
   },
   {
@@ -36,7 +41,9 @@
    "agent_user_usd": 0.112333,
    "judge_calls": 5,
    "judge_input_tokens": 18812,
-   "judge_usd": 0.049624,
+   "judge_usd_estimated": 0.049624,
+   "measured_usd_from_attempts": null,
+   "source": "estimate",
    "git_commit": "acc89b743bfee2d79c1c045820e7aff2a7a6e2a9"
   },
   {
@@ -45,7 +52,9 @@
    "agent_user_usd": 0.112333,
    "judge_calls": 5,
    "judge_input_tokens": 18812,
-   "judge_usd": 0.049624,
+   "judge_usd_estimated": 0.049624,
+   "measured_usd_from_attempts": null,
+   "source": "estimate",
    "git_commit": "acc89b743bfee2d79c1c045820e7aff2a7a6e2a9"
   },
   {
@@ -54,8 +63,87 @@
    "agent_user_usd": 0.846658,
    "judge_calls": 40,
    "judge_input_tokens": 134720,
-   "judge_usd": 0.36544,
-   "git_commit": "d56ed425dd3714d633b390bfc10f5f7f1adb5b64"
+   "judge_usd_estimated": 0.36544,
+   "measured_usd_from_attempts": 1.163742,
+   "source": "attempt_log",
+   "git_commit": "fc0055dc4e0a316c3f83133267fbd6faaa770992"
+  },
+  {
+   "run": "phaseC_t1_oai",
+   "simulations": 40,
+   "agent_user_usd": 0.207967,
+   "judge_calls": 40,
+   "judge_input_tokens": 106936,
+   "judge_usd_estimated": 0.309872,
+   "measured_usd_from_attempts": 1.088591,
+   "source": "attempt_log",
+   "git_commit": "fc0055dc4e0a316c3f83133267fbd6faaa770992"
+  },
+  {
+   "run": "phaseC_t2_gem",
+   "simulations": 40,
+   "agent_user_usd": 0.846658,
+   "judge_calls": 40,
+   "judge_input_tokens": 134720,
+   "judge_usd_estimated": 0.36544,
+   "measured_usd_from_attempts": 1.177558,
+   "source": "attempt_log",
+   "git_commit": "fc0055dc4e0a316c3f83133267fbd6faaa770992"
+  },
+  {
+   "run": "phaseC_t2_oai",
+   "simulations": 40,
+   "agent_user_usd": 0.223486,
+   "judge_calls": 40,
+   "judge_input_tokens": 123695,
+   "judge_usd_estimated": 0.34339,
+   "measured_usd_from_attempts": 0.59423,
+   "source": "attempt_log",
+   "git_commit": "fc0055dc4e0a316c3f83133267fbd6faaa770992"
+  },
+  {
+   "run": "phaseC_t3_gem",
+   "simulations": 40,
+   "agent_user_usd": 0.846658,
+   "judge_calls": 40,
+   "judge_input_tokens": 134720,
+   "judge_usd_estimated": 0.36544,
+   "measured_usd_from_attempts": 1.176868,
+   "source": "attempt_log",
+   "git_commit": "fc0055dc4e0a316c3f83133267fbd6faaa770992"
+  },
+  {
+   "run": "phaseC_t3_oai",
+   "simulations": 40,
+   "agent_user_usd": 0.237387,
+   "judge_calls": 40,
+   "judge_input_tokens": 124654,
+   "judge_usd_estimated": 0.345308,
+   "measured_usd_from_attempts": 0.598579,
+   "source": "attempt_log",
+   "git_commit": "fc0055dc4e0a316c3f83133267fbd6faaa770992"
+  },
+  {
+   "run": "phaseC_t4_gem",
+   "simulations": 40,
+   "agent_user_usd": 0.846658,
+   "judge_calls": 40,
+   "judge_input_tokens": 134720,
+   "judge_usd_estimated": 0.36544,
+   "measured_usd_from_attempts": 0.975435,
+   "source": "attempt_log",
+   "git_commit": "fc0055dc4e0a316c3f83133267fbd6faaa770992"
+  },
+  {
+   "run": "phaseC_t4_oai",
+   "simulations": 40,
+   "agent_user_usd": 0.210251,
+   "judge_calls": 40,
+   "judge_input_tokens": 116746,
+   "judge_usd_estimated": 0.329492,
+   "measured_usd_from_attempts": 0.554893,
+   "source": "attempt_log",
+   "git_commit": "fc0055dc4e0a316c3f83133267fbd6faaa770992"
   },
   {
    "run": "step4_calibration",
@@ -63,7 +151,9 @@
    "agent_user_usd": 0.148187,
    "judge_calls": 0,
    "judge_input_tokens": 0,
-   "judge_usd": 0.0,
+   "judge_usd_estimated": 0.0,
+   "measured_usd_from_attempts": null,
+   "source": "estimate",
    "git_commit": "unknown"
   },
   {
@@ -72,7 +162,9 @@
    "agent_user_usd": 0.01061,
    "judge_calls": 0,
    "judge_input_tokens": 0,
-   "judge_usd": 0.0,
+   "judge_usd_estimated": 0.0,
+   "measured_usd_from_attempts": null,
+   "source": "estimate",
    "git_commit": "unknown"
   },
   {
@@ -81,7 +173,9 @@
    "agent_user_usd": 0.112333,
    "judge_calls": 5,
    "judge_input_tokens": 18812,
-   "judge_usd": 0.049624,
+   "judge_usd_estimated": 0.049624,
+   "measured_usd_from_attempts": null,
+   "source": "estimate",
    "git_commit": "unknown"
   }
  ],

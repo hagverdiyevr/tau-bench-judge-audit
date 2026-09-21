@@ -679,6 +679,66 @@ Artifact: `results/artifacts/phaseC_t1_gem.json`. Journal: `results/phase_c/run_
 reproducibility claim **at no extra cost** — it is already in the protocol. This is the check
 [CLAUDE.md](../CLAUDE.md) requires before `pass^k` is reported for that arm.
 
+## C-L2 — Determinism replicates at n=40, and it breaks `pass^k` comparability
+
+*8/8 invocations, 320 simulations, **zero** `infrastructure_error`, 7,516 logged attempts.
+Script: `scripts/phase_c/analyze_phase_c.py`. Raw: `results/phase_c/determinism_n40.json`.*
+
+[CLAUDE.md](../CLAUDE.md) required this before `pass^k` could be reported for the Gemini arm,
+because [B-L15](FINDINGS.md) rested on 5 tasks in a ~15-minute window. Phase C runs the same 40
+tasks four times per arm, and LiteLLM drops `seed` for the gemini provider, so these are four
+repeat invocations — a free n=40 replication.
+
+| Identical across 4 invocations | `gemini-3.1-flash-lite` | `gpt-4.1-nano` |
+| --- | ---: | ---: |
+| message contents | **40/40 (100%)** | 0/40 (0%) |
+| tool calls | **40/40 (100%)** | 4/40 (10%) |
+| **rewards** | **40/40 (100%)** | 32/40 (80%) |
+| whole object | 0/40 | 0/40 |
+
+**The pilot claim holds at scale.** Whole-object identity remains 0/40 for both — ids and
+timestamps always differ — which is exactly the correction [B-L15](FINDINGS.md) carries.
+
+### Consequence: `pass^k` means different things in the two arms
+
+| | pass^1 | pass^4 | gap |
+| --- | ---: | ---: | ---: |
+| `gemini-3.1-flash-lite` | 0.675 | **0.675** | **+0.000** |
+| `gpt-4.1-nano` | 0.138 | 0.050 | **+0.088** |
+
+For the Gemini arm reward is identical on **all 40** tasks, so **`pass^4` equals `pass^1` by
+construction, not by measurement** — it must be reported as a determinism result. For the OpenAI
+arm reward genuinely varied on **8/40** tasks (`24, 40, 44, 45, 59, 60, 67, 70`), so its `pass^k`
+is a real reliability measurement with a meaningful 8.8pp drop.
+
+> **`pass^k` is therefore not comparable across these arms.** One side is a structural constant,
+> the other a measured quantity. Any cross-arm variance statistic must state this or it is
+> comparing a zero to a number. This is the asymmetry [D-018](DECISIONS.md) anticipated.
+
+## C-L3 — The OpenAI arm is floor-bound, which constrains what Phase D can conclude
+
+| arm | pass^1 | DB | NL | components disagree | $/traj |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `gemini-3.1-flash-lite` | **0.675** | 0.775 | 0.850 | 44/160 (28%) | 0.02117 |
+| `gpt-4.1-nano` | **0.138** | 0.263 | 0.362 | 56/160 (35%) | 0.00549 |
+
+`gpt-4.1-nano` is **far weaker on τ³-retail than expected** — pass^1 of 0.138 against the Gemini
+arm's 0.675. The [B6 floor gate](FINDINGS.md) wanted 50–70%; the Gemini arm sits in band, the
+OpenAI arm is well below it.
+
+**Why this matters for the primary estimand, stated before Phase D runs:** the judge DiD compares
+how two judge families score each agent's trajectories. If one agent's trajectories are
+overwhelmingly failures, judges have less to disagree about on that arm, and any interaction is
+estimated on a narrower base. The NL component still varies (0.362, and components disagree on
+35% of that arm's trajectories), so there is signal — but **capability is now heavily confounded
+with family**, and no claim may attribute an interaction to family without stating that the two
+arms differ by 54 percentage points in baseline success.
+
+This is a limitation to declare, not a defect to fix: the arms were frozen in
+[§4.2](PREREGISTRATION.md) and changing them now would be exactly the post-hoc choice the
+pre-registration exists to prevent.
+
 # Phase D — Judge re-grading
 
-*Not started. Budgeted ~USD 3.*
+*Not started. 320 trajectories x 4 judges = 1,280 evaluations. Mechanism validated at 20/20 in
+[B-L16](FINDINGS.md).*

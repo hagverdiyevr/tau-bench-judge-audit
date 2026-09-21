@@ -1,0 +1,16 @@
+{
+ "gemini-3.1-flash-lite": {
+  "n": 40,
+  "content": 40,
+  "tools": 40,
+  "rewards": 40,
+  "whole": 0
+ },
+ "gpt-4.1-nano": {
+  "n": 40,
+  "content": 0,
+  "tools": 4,
+  "rewards": 32,
+  "whole": 0
+ }
+}

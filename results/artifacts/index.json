@@ -33,6 +33,70 @@
    "sha256": "7cf04636454c4d8af8aca7a677b939da9e3db288862006b306e9dca40ce50de7"
   },
   {
+   "run": "phaseC_t1_gem",
+   "file": "results/artifacts/phaseC_t1_gem.json",
+   "n_simulations": 40,
+   "source_bytes": 4782325,
+   "export_bytes": 1395809,
+   "sha256": "afb7354948c45f2a5e85af09625908c14edb489a117506cfecf1fd34052f3868"
+  },
+  {
+   "run": "phaseC_t1_oai",
+   "file": "results/artifacts/phaseC_t1_oai.json",
+   "n_simulations": 40,
+   "source_bytes": 3265723,
+   "export_bytes": 848991,
+   "sha256": "28480bdf25a7b44127d2ea69fd43d988cb70a99d14e7999e1f8a2b104e86f409"
+  },
+  {
+   "run": "phaseC_t2_gem",
+   "file": "results/artifacts/phaseC_t2_gem.json",
+   "n_simulations": 40,
+   "source_bytes": 4781964,
+   "export_bytes": 1395461,
+   "sha256": "9971fb60cbd9e9d35b8e021fd41c2f826544085b3c89fe655af236dae31f9b5a"
+  },
+  {
+   "run": "phaseC_t2_oai",
+   "file": "results/artifacts/phaseC_t2_oai.json",
+   "n_simulations": 40,
+   "source_bytes": 3427511,
+   "export_bytes": 924807,
+   "sha256": "3821e772bd05b71fc0daf837481fc5efd5b699d60b35f6f2975514e281fa71ba"
+  },
+  {
+   "run": "phaseC_t3_gem",
+   "file": "results/artifacts/phaseC_t3_gem.json",
+   "n_simulations": 40,
+   "source_bytes": 4782325,
+   "export_bytes": 1395816,
+   "sha256": "f07e676f2f07c74e030b8ef805b10768c177f0b826603c05c71594caccafe046"
+  },
+  {
+   "run": "phaseC_t3_oai",
+   "file": "results/artifacts/phaseC_t3_oai.json",
+   "n_simulations": 40,
+   "source_bytes": 3471922,
+   "export_bytes": 927675,
+   "sha256": "85cc6b4c706911a2094e081977e9085bf96018f639b4d817772dbbc32ab1a837"
+  },
+  {
+   "run": "phaseC_t4_gem",
+   "file": "results/artifacts/phaseC_t4_gem.json",
+   "n_simulations": 40,
+   "source_bytes": 4782418,
+   "export_bytes": 1395899,
+   "sha256": "56da141ee8118d682f9d819bc8168451a123cd79ac107b75194f457372fcc70d"
+  },
+  {
+   "run": "phaseC_t4_oai",
+   "file": "results/artifacts/phaseC_t4_oai.json",
+   "n_simulations": 40,
+   "source_bytes": 3258492,
+   "export_bytes": 878961,
+   "sha256": "a7fd66656554d021e60f1df30e342367d6dacc8badbaf20b47d9802cff535fcd"
+  },
+  {
    "run": "step4_calibration",
    "file": "results/artifacts/step4_calibration.json",
    "n_simulations": 7,

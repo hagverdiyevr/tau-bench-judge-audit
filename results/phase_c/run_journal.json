@@ -182,6 +182,26 @@
    "usd_from_attempts": 0.554893,
    "attempt_log": "results/phase_c/attempts/phaseC_t4_oai.jsonl",
    "log_file": "results/phase_c/logs/phaseC_t4_oai.log"
+  },
+  {
+   "save_to": "phaseC_t2_oai",
+   "agent_llm": "gpt-4.1-nano-2025-04-14",
+   "seed": 1002,
+   "started_utc": "2026-09-21T21:35:49Z",
+   "ended_utc": "2026-09-21T21:51:52Z",
+   "returncode": 0,
+   "status": "completed",
+   "simulations": 40,
+   "infrastructure_errors": 0,
+   "infrastructure_error_task_ids": [],
+   "attempts": 992,
+   "attempt_failures": 22,
+   "attempt_failures_by_class": {
+    "RateLimitError": 22
+   },
+   "usd_from_attempts": 0.59423,
+   "attempt_log": "results/phase_c/attempts/phaseC_t2_oai.jsonl",
+   "log_file": "results/phase_c/logs/phaseC_t2_oai.log"
   }
  ]
 }

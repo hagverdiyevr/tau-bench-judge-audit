@@ -86,7 +86,7 @@ the 2×2 control costs ~USD 2.
 
 ## Budget — measured
 
-USD 75 ceiling · **USD 2.23 spent** · **USD 72.77 remaining**. Source of truth:
+USD 75 ceiling · **USD 8.35 spent** · **USD 66.65 remaining**. Source of truth:
 `results/spend_ledger.json` (regenerated from run artifacts, not maintained by hand).
 
 | Phase | Work | Status | Cost |
@@ -94,10 +94,10 @@ USD 75 ceiling · **USD 2.23 spent** · **USD 72.77 remaining**. Source of truth
 | **A** | Evaluator audit (static/replay) | ✅ complete | **$0.00** |
 | **B** | 11 verification gates | ✅ complete | **$0.47** |
 | **B9** | Run-to-run noise floor (#540) | ✅ complete | **$0.42** |
-| **C** | 320 trajectories | **1/8 done** | ~$5.02 (smoke: $1.21) |
+| **C** | 320 trajectories | ✅ **complete** | **$7.33** (measured) |
 | **D** | 1,280 judge evaluations + replicates | pending | ~$5.97 |
 | **E** | Analysis and release | pending | $0.00 |
-| | **Spent to date** | | **$2.23** |
+| | **Spent to date** | | **$8.35** |
 | | **Projected remaining** | | **~$11.00** |
 
 Per-trajectory cost **measured at $0.0212** (mean; 0.0137–0.0300) for the Gemini arm — the v3.0

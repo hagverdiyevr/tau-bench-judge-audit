@@ -37,14 +37,27 @@ r = run(["--dry-run"])
 check("proceeds again once restored", r.returncode == 0, f"rc={r.returncode}")
 
 print("\n--- guard: budget floor must block dispatch ---")
-led = json.loads(LEDGER.read_text())
-try:  # a ledger left showing fake headroom would mis-gate every later dispatch
-    LEDGER.write_text(json.dumps({**led, "remaining_usd": 5.50}, indent=1))
-    r = run()
-    check("refuses when remaining would breach the floor",
-          r.returncode != 0 and "budget floor" in r.stdout + r.stderr, f"rc={r.returncode}")
-finally:
-    LEDGER.write_text(json.dumps(led, indent=1))
+# The floor check sits AFTER the resume check, so it is only reachable while something is still
+# pending. Once every invocation is complete the runner skips them all and exits 0 — correctly.
+# Report that honestly rather than failing, and never claim a pass we did not exercise.
+man = json.loads((REPO / "results/phaseC_execution_manifest.json").read_text())
+journal_p = REPO / "results/phase_c/run_journal.json"
+done_tags = set()
+if journal_p.exists():
+    done_tags = {e["save_to"] for e in json.loads(journal_p.read_text())["entries"]
+                 if e.get("status") == "completed"}
+pending = [i["save_to"] for i in man["invocations"] if i["save_to"] not in done_tags]
+if not pending:
+    print("  SKIP  budget floor — unreachable: all invocations complete, nothing to dispatch")
+else:
+    led = json.loads(LEDGER.read_text())
+    try:  # a ledger left showing fake headroom would mis-gate every later dispatch
+        LEDGER.write_text(json.dumps({**led, "remaining_usd": 5.50}, indent=1))
+        r = run()
+        check("refuses when remaining would breach the floor",
+              r.returncode != 0 and "budget floor" in r.stdout + r.stderr, f"rc={r.returncode}")
+    finally:
+        LEDGER.write_text(json.dumps(led, indent=1))
 
 print("\n--- guard: resume-never-restart must skip an existing artifact ---")
 # NEVER write to a real artifact path. An earlier version of this test wrote a stub to

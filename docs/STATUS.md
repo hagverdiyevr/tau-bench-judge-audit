@@ -6,8 +6,8 @@
 > [PLAN.md](PLAN.md).
 
 **Last updated:** 21 September 2026
-**Phase:** A ✅ · B ✅ · pre-registration **FROZEN** + amendments A-001/A-002 · **Phase C: 1 of 8 invocations done**
-**Cumulative API spend: USD 2.23 of 75.00** — USD 72.77 remaining
+**Phase:** A ✅ · B ✅ · **Phase C ✅ COMPLETE (320/320 sims, 0 infra errors)** · Phase D next
+**Cumulative API spend: USD 8.35 of 75.00** — USD 66.65 remaining
 **Ledger of record:** `results/spend_ledger.json` (regenerated from run artifacts)
 
 ---

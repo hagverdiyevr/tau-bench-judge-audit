@@ -80,11 +80,35 @@ for inv in todo:
     tag = inv["save_to"]
     artifact = SIMS / tag / "results.json"
 
-    # ---- resume-never-restart -------------------------------------------------------------
-    if tag in done or artifact.exists():
-        n = len(json.loads(artifact.read_text())["simulations"]) if artifact.exists() else "?"
-        print(f"  SKIP {tag}: artifact exists ({n} sims) — resume, never restart")
-        continue
+    # ---- resume-never-restart, but only for a VALID artifact ------------------------------
+    # An artifact's mere existence is not evidence of completion. A killed run leaves a
+    # truncated results.json behind, and an earlier version of this check skipped such a file
+    # as "done" — phaseC_t2_oai was accepted with 21/40 sims and 7 infrastructure errors, no
+    # journal entry and no attempt log. Completion is now proven, not assumed.
+    if artifact.exists():
+        try:
+            asims = json.loads(artifact.read_text())["simulations"]
+        except Exception:
+            asims = []
+        n_expected = m["design"]["n_tasks"]
+        ainfra = [str(x.get("task_id")) for x in asims
+                  if x.get("termination_reason") == "infrastructure_error"]
+        journaled = tag in done
+        valid = journaled and len(asims) == n_expected and not ainfra
+        if valid:
+            print(f"  SKIP {tag}: complete ({len(asims)}/{n_expected} sims, 0 infra, journaled)")
+            continue
+        why = []
+        if not journaled:
+            why.append("no completed journal entry (likely a killed run)")
+        if len(asims) != n_expected:
+            why.append(f"{len(asims)}/{n_expected} simulations")
+        if ainfra:
+            why.append(f"{len(ainfra)} infrastructure_error (tasks {ainfra[:5]})")
+        die(f"{tag} has an INVALID artifact — {'; '.join(why)}. "
+            f"Refusing to treat it as complete and refusing to silently overwrite it. "
+            f"Archive it to results/discarded/ and remove "
+            f"{artifact.parent.relative_to(REPO)} to re-run.")
 
     # ---- pre-dispatch budget check --------------------------------------------------------
     led = json.loads(LEDGER.read_text())

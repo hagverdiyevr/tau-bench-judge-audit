@@ -175,3 +175,65 @@ property that matters — but it is recorded as *partially* pre-data rather than
 pre-data, because trajectories existed when it was written.
 
 Both are excluded from the confirmatory set; the re-runs are the data of record.
+
+## A-004 — Raise retries to 4; clarify how an infrastructure error enters the analysis
+
+**Status:** ACTIVE · **Raised:** 22 Sep 2026 · **Pre-data:** partially — see A-003 Disclosure.
+**Supersedes:** the `--max-retries` value in A-003 (2 → 4). Everything else in A-003 stands,
+including the attempt logger and the zero-`infrastructure_error` completion criterion.
+
+### Measured cause
+
+A-003's bounded retries worked: `infrastructure_error` on the OpenAI arm fell from **6/40 to 1/40**
+across 909 logged attempts with **15 `RateLimitError`** failures. The attempt log identifies the
+constraint precisely, which log-scraping could not have:
+
+```
+rate_limit_exceeded on tokens per min (TPM): Limit 200000, Used 198321,
+Requested 6194. Please try again in 1.354s.
+```
+
+It is a **200,000 TPM organisation ceiling**, not a request-rate limit. One invocation pushed
+**3,132,310 tokens** through `gpt-4.1-nano`, so the ceiling is reached repeatedly by construction.
+
+The decisive detail: the waits OpenAI asks for are **46 ms – 1.4 s**, far below our 5 s delay. So
+nearly every retry succeeded; only the tail — one task — exhausted its 3 attempts.
+
+### The amendment
+
+`--max-retries` **2 → 4** (5 attempts maximum). `--retry-delay` stays 5.0 s, which already exceeds
+every requested wait observed.
+
+**Why raise retries rather than lower concurrency.** `--max-concurrency 2` is fixed in the **frozen**
+[PREREGISTRATION §4.5](PREREGISTRATION.md); changing it is a deviation from the frozen design.
+`--max-retries` is not in the frozen document at all — it is amendment territory by construction.
+The lighter instrument is the correct one. Retried 429s are not billed, so the cost impact is
+approximately zero.
+
+**Why not simply tolerate 1/40.** The completion bar stays at zero `infrastructure_error`. Fixing
+the cause is preferable to loosening the threshold, and a bar that moves whenever it is
+inconvenient is not a bar. If 5 attempts still leave failures, that is evidence the ceiling cannot
+be cleared at this tier — a finding to report, not a threshold to relax.
+
+### Clarification — how an infrastructure error enters the analysis
+
+[PREREGISTRATION §6.4](PREREGISTRATION.md) states intention-to-treat: errored trajectories score 0
+and are retained. Applied without qualification that is wrong for the **primary** estimand, and the
+distinction was not drawn when §6.4 was written.
+
+An `infrastructure_error` trajectory has **zero messages and no `reward_info`** (verified: task 105
+in the discarded `phaseC_t1_oai`). The primary estimand is a **within-trajectory judge contrast** —
+the same conversation scored by four judges. A conversation that does not exist cannot be graded by
+any of them, so it is a **missing observation** (n: 40 → 39), not a scored zero. Scoring it 0 would
+be incoherent: there is nothing for a judge to disagree about.
+
+Therefore:
+
+- **Primary (judge DiD):** infrastructure-error trajectories are **excluded as missing data**, and
+  the realised n is reported per cell. Exclusion is symmetric — a trajectory absent in any arm is
+  absent from the paired contrast.
+- **Secondary (agent main effect on reward):** §6.4's ITT rule applies unchanged — scored 0 and
+  retained — **and** reported alongside a per-protocol figure, because at 1/40 the infrastructure
+  bias is 2.5% and readers must be able to see both.
+
+This is a clarification of §6.4's scope, not a change to it. No estimand is redefined.

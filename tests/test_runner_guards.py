@@ -89,8 +89,8 @@ check("openai arm is a pinned snapshot, not an alias",
       all(i["agent_llm"] != "gpt-4.1-nano" for i in m["invocations"]),
       "found the moving alias in the manifest")
 # A-003 supersedes A-002's retry row: bounded retries, every attempt logged.
-check("bounded retries (A-003: 2, not 0 and not upstream's 3)",
-      m["parameters"]["max_retries"] == 2, str(m["parameters"]["max_retries"]))
+check("bounded retries (A-004: 4, superseding A-003's 2 and A-002's 0)",
+      m["parameters"]["max_retries"] == 4, str(m["parameters"]["max_retries"]))
 check("retry delay raised for per-minute rate limits (A-003: 5.0s)",
       m["parameters"].get("retry_delay") == 5.0, str(m["parameters"].get("retry_delay")))
 check("every invocation routes through the attempt logger",

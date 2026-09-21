@@ -27,6 +27,47 @@
    "permanent_failures": 6,
    "log_file": "results/phase_c/logs/phaseC_t1_oai.log",
    "discarded_under": "A-003"
+  },
+  {
+   "save_to": "phaseC_t1_gem",
+   "agent_llm": "gemini/gemini-3.1-flash-lite",
+   "seed": 1001,
+   "started_utc": "2026-09-21T19:51:55Z",
+   "ended_utc": "2026-09-21T20:02:14Z",
+   "returncode": 0,
+   "status": "completed",
+   "simulations": 40,
+   "infrastructure_errors": 0,
+   "infrastructure_error_task_ids": [],
+   "attempts": 680,
+   "attempt_failures": 0,
+   "attempt_failures_by_class": {},
+   "usd_from_attempts": 1.163742,
+   "attempt_log": "results/phase_c/attempts/phaseC_t1_gem.jsonl",
+   "log_file": "results/phase_c/logs/phaseC_t1_gem.log"
+  },
+  {
+   "save_to": "phaseC_t1_oai",
+   "agent_llm": "gpt-4.1-nano-2025-04-14",
+   "seed": 1001,
+   "started_utc": "2026-09-21T20:02:17Z",
+   "ended_utc": "2026-09-21T20:16:34Z",
+   "returncode": 0,
+   "status": "discarded",
+   "simulations": 40,
+   "infrastructure_errors": 1,
+   "infrastructure_error_task_ids": [
+    "105"
+   ],
+   "attempts": 909,
+   "attempt_failures": 15,
+   "attempt_failures_by_class": {
+    "RateLimitError": 15
+   },
+   "usd_from_attempts": 0.533204,
+   "attempt_log": "results/phase_c/attempts/phaseC_t1_oai.jsonl",
+   "log_file": "results/phase_c/logs/phaseC_t1_oai.log",
+   "discarded_under": "A-004"
   }
  ]
 }

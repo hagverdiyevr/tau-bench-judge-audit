@@ -57,7 +57,7 @@
   ]
  },
  "generated_by": "scripts/phase_c/build_manifest.py",
- "generated_utc": "2026-09-21T19:50:20Z",
+ "generated_utc": "2026-09-21T20:18:39Z",
  "invocations": [
   {
    "agent_family": "google",
@@ -125,7 +125,7 @@
     "--max-errors",
     "10",
     "--max-retries",
-    "2",
+    "4",
     "--retry-delay",
     "5.0",
     "--seed",
@@ -206,7 +206,7 @@
     "--max-errors",
     "10",
     "--max-retries",
-    "2",
+    "4",
     "--retry-delay",
     "5.0",
     "--seed",
@@ -287,7 +287,7 @@
     "--max-errors",
     "10",
     "--max-retries",
-    "2",
+    "4",
     "--retry-delay",
     "5.0",
     "--seed",
@@ -368,7 +368,7 @@
     "--max-errors",
     "10",
     "--max-retries",
-    "2",
+    "4",
     "--retry-delay",
     "5.0",
     "--seed",
@@ -449,7 +449,7 @@
     "--max-errors",
     "10",
     "--max-retries",
-    "2",
+    "4",
     "--retry-delay",
     "5.0",
     "--seed",
@@ -530,7 +530,7 @@
     "--max-errors",
     "10",
     "--max-retries",
-    "2",
+    "4",
     "--retry-delay",
     "5.0",
     "--seed",
@@ -611,7 +611,7 @@
     "--max-errors",
     "10",
     "--max-retries",
-    "2",
+    "4",
     "--retry-delay",
     "5.0",
     "--seed",
@@ -692,7 +692,7 @@
     "--max-errors",
     "10",
     "--max-retries",
-    "2",
+    "4",
     "--retry-delay",
     "5.0",
     "--seed",
@@ -708,15 +708,15 @@
    "user_llm": "gemini/gemini-3.1-flash-lite"
   }
  ],
- "manifest_sha256": "4de45ccd49bb3a8204857978d583e9757e8800c9bc1e74ec95bd3fbcd57c8ac2",
+ "manifest_sha256": "59f902bb145d0b553f80ee361bbf30c0ddfda79e5326aa6294e8f64f15232f13",
  "parameters": {
   "max_concurrency": 2,
   "max_errors": 10,
   "max_output_tokens": null,
-  "max_retries": 2,
+  "max_retries": 4,
   "max_steps": 120,
   "retry_delay": 5.0,
-  "retry_rationale": "A-003 supersedes A-002. Zero retries turned transient provider rate limits into permanent agent failures (18 RateLimitError -> 6/40 dead simulations on phaseC_t1_oai), biasing the arm by our configuration. Bounded retries restore transient calls; every attempt is recorded independently of tau2 by scripts/phase_c/attempt_logger.py.",
+  "retry_rationale": "A-003 supersedes A-002. Zero retries turned transient provider rate limits into permanent agent failures (18 RateLimitError -> 6/40 dead simulations on phaseC_t1_oai), biasing the arm by our configuration. Bounded retries restore transient calls; every attempt is recorded independently of tau2 by scripts/phase_c/attempt_logger.py. A-004 raised retries 2->4 after the attempt log identified a 200k TPM org ceiling with sub-2s requested waits.",
   "simulator": "gemini/gemini-3.1-flash-lite",
   "temperature_agent": 0.0,
   "temperature_user": 0.0,
@@ -726,7 +726,8 @@
   "amendments": [
    "A-001",
    "A-002",
-   "A-003"
+   "A-003",
+   "A-004"
   ],
   "frozen_sha256": "a917984e48d16f28ea0280c5e7a2cb9b6e4a786a123a43efc989f09a972c3906",
   "sections": [
@@ -742,7 +743,7 @@
   "submodule_describe": "v1.0.1",
   "submodule_sha": "fc0055dc4e0a316c3f83133267fbd6faaa770992",
   "superproject_dirty": true,
-  "superproject_head": "ac1b2443561c42d3c50e0ded6f1996249c56333a"
+  "superproject_head": "62d57aefffbef036d6f30ff1727419079807a72e"
  },
  "schema": "phaseC-execution-manifest/1"
 }

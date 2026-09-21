@@ -5,20 +5,27 @@
    "id": "A-001",
    "sha256": "89d4a391e097b3b84481844fc8aba07b439b564c7d891471044cfafebe2b8ebb",
    "prev": "a917984e48d16f28ea0280c5e7a2cb9b6e4a786a123a43efc989f09a972c3906",
-   "sealed": false,
+   "sealed": true,
    "anchor": true
   },
   {
    "id": "A-002",
    "sha256": "2fc05a2299f9234d258f2162d78033ef426ce89980520d36d68647a58fba3617",
    "prev": "89d4a391e097b3b84481844fc8aba07b439b564c7d891471044cfafebe2b8ebb",
-   "sealed": false,
+   "sealed": true,
    "anchor": false
   },
   {
    "id": "A-003",
    "sha256": "8e414e2a0174b910058b02ba06307ed84866d241802210e294ed29dc463cdbe4",
    "prev": "2fc05a2299f9234d258f2162d78033ef426ce89980520d36d68647a58fba3617",
+   "sealed": true,
+   "anchor": false
+  },
+  {
+   "id": "A-004",
+   "sha256": "f5435ee9deab96709a94633d0000bb2073ca8d2ea6b5ef865219441575d97a44",
+   "prev": "8e414e2a0174b910058b02ba06307ed84866d241802210e294ed29dc463cdbe4",
    "sealed": false,
    "anchor": false
   }

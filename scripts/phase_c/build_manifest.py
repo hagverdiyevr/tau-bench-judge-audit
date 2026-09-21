@@ -32,7 +32,7 @@ TRIALS = (1, 2, 3, 4)                             # seeds 1000+trial (§4.5)
 # --- operational parameters (A-002) --------------------------------------------------------
 MAX_STEPS = 120          # §4.5
 MAX_CONCURRENCY = 2      # §4.5
-MAX_RETRIES = 2          # A-003: bounded retries; every attempt logged at the LiteLLM boundary
+MAX_RETRIES = 4          # A-004: 200k TPM ceiling; requested waits are 46ms-1.4s so the tail needs 5 attempts
 RETRY_DELAY = 5.0        # A-003: 1.0s default is far too short for a per-minute rate limit
 MAX_ERRORS = 10          # upstream default, recorded explicitly
 TEMPERATURE = 0.0        # §4.5, both roles
@@ -113,7 +113,9 @@ manifest = {
                            "limits into permanent agent failures (18 RateLimitError -> 6/40 dead "
                            "simulations on phaseC_t1_oai), biasing the arm by our configuration. "
                            "Bounded retries restore transient calls; every attempt is recorded "
-                           "independently of tau2 by scripts/phase_c/attempt_logger.py.",
+                           "independently of tau2 by scripts/phase_c/attempt_logger.py. A-004 raised "
+                           "retries 2->4 after the attempt log identified a 200k TPM org ceiling "
+                           "with sub-2s requested waits.",
     },
     "design": {
         "n_tasks": len(tasks), "n_agents": len(AGENTS), "n_trials": len(TRIALS),

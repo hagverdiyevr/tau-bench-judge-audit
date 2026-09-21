@@ -57,7 +57,7 @@
   ]
  },
  "generated_by": "scripts/phase_c/build_manifest.py",
- "generated_utc": "2026-09-21T06:45:44Z",
+ "generated_utc": "2026-09-21T19:50:20Z",
  "invocations": [
   {
    "agent_family": "google",
@@ -125,7 +125,9 @@
     "--max-errors",
     "10",
     "--max-retries",
-    "0",
+    "2",
+    "--retry-delay",
+    "5.0",
     "--seed",
     "1001",
     "--save-to",
@@ -204,7 +206,9 @@
     "--max-errors",
     "10",
     "--max-retries",
-    "0",
+    "2",
+    "--retry-delay",
+    "5.0",
     "--seed",
     "1001",
     "--save-to",
@@ -283,7 +287,9 @@
     "--max-errors",
     "10",
     "--max-retries",
-    "0",
+    "2",
+    "--retry-delay",
+    "5.0",
     "--seed",
     "1002",
     "--save-to",
@@ -362,7 +368,9 @@
     "--max-errors",
     "10",
     "--max-retries",
-    "0",
+    "2",
+    "--retry-delay",
+    "5.0",
     "--seed",
     "1002",
     "--save-to",
@@ -441,7 +449,9 @@
     "--max-errors",
     "10",
     "--max-retries",
-    "0",
+    "2",
+    "--retry-delay",
+    "5.0",
     "--seed",
     "1003",
     "--save-to",
@@ -520,7 +530,9 @@
     "--max-errors",
     "10",
     "--max-retries",
-    "0",
+    "2",
+    "--retry-delay",
+    "5.0",
     "--seed",
     "1003",
     "--save-to",
@@ -599,7 +611,9 @@
     "--max-errors",
     "10",
     "--max-retries",
-    "0",
+    "2",
+    "--retry-delay",
+    "5.0",
     "--seed",
     "1004",
     "--save-to",
@@ -678,7 +692,9 @@
     "--max-errors",
     "10",
     "--max-retries",
-    "0",
+    "2",
+    "--retry-delay",
+    "5.0",
     "--seed",
     "1004",
     "--save-to",
@@ -692,14 +708,15 @@
    "user_llm": "gemini/gemini-3.1-flash-lite"
   }
  ],
- "manifest_sha256": "6ee0465fc4432b855f41bd992976f9b3a30f8725c23886b9d2176aa8135d2a17",
+ "manifest_sha256": "4de45ccd49bb3a8204857978d583e9757e8800c9bc1e74ec95bd3fbcd57c8ac2",
  "parameters": {
   "max_concurrency": 2,
   "max_errors": 10,
   "max_output_tokens": null,
-  "max_retries": 0,
+  "max_retries": 2,
   "max_steps": 120,
-  "retry_rationale": "A-002: upstream default 3 means up to 4 paid attempts and failed attempts are not persisted, breaking intention-to-treat and cost accounting. Zero retries makes every attempt observable.",
+  "retry_delay": 5.0,
+  "retry_rationale": "A-003 supersedes A-002. Zero retries turned transient provider rate limits into permanent agent failures (18 RateLimitError -> 6/40 dead simulations on phaseC_t1_oai), biasing the arm by our configuration. Bounded retries restore transient calls; every attempt is recorded independently of tau2 by scripts/phase_c/attempt_logger.py.",
   "simulator": "gemini/gemini-3.1-flash-lite",
   "temperature_agent": 0.0,
   "temperature_user": 0.0,
@@ -708,7 +725,8 @@
  "preregistration": {
   "amendments": [
    "A-001",
-   "A-002"
+   "A-002",
+   "A-003"
   ],
   "frozen_sha256": "a917984e48d16f28ea0280c5e7a2cb9b6e4a786a123a43efc989f09a972c3906",
   "sections": [
@@ -724,7 +742,7 @@
   "submodule_describe": "v1.0.1",
   "submodule_sha": "fc0055dc4e0a316c3f83133267fbd6faaa770992",
   "superproject_dirty": true,
-  "superproject_head": "b3bcdc56c5814476773ee62b2068bb0281d10235"
+  "superproject_head": "ac1b2443561c42d3c50e0ded6f1996249c56333a"
  },
  "schema": "phaseC-execution-manifest/1"
 }

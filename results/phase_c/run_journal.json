@@ -7,11 +7,26 @@
    "started_utc": "2026-09-21T18:58:45Z",
    "ended_utc": "2026-09-21T19:09:30Z",
    "returncode": 0,
-   "status": "completed",
+   "status": "discarded",
    "simulations": 40,
    "retry_markers": 0,
    "permanent_failures": 0,
-   "log_file": "results/phase_c/logs/phaseC_t1_gem.log"
+   "log_file": "results/phase_c/logs/phaseC_t1_gem.log",
+   "discarded_under": "A-003"
+  },
+  {
+   "save_to": "phaseC_t1_oai",
+   "agent_llm": "gpt-4.1-nano-2025-04-14",
+   "seed": 1001,
+   "started_utc": "2026-09-21T19:21:47Z",
+   "ended_utc": "2026-09-21T19:34:44Z",
+   "returncode": 0,
+   "status": "discarded",
+   "simulations": 40,
+   "retry_markers": 0,
+   "permanent_failures": 6,
+   "log_file": "results/phase_c/logs/phaseC_t1_oai.log",
+   "discarded_under": "A-003"
   }
  ]
 }

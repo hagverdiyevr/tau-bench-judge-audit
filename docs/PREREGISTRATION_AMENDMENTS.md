@@ -118,3 +118,60 @@ submodule SHA, the Python version, and a content hash.
 ---
 
 *Next amendment id: A-003.*
+
+## A-003 — Bounded retries with every attempt logged (supersedes A-002's retry row)
+
+**Status:** ACTIVE · **Raised:** 21 Sep 2026 · **Pre-data:** partially — see Disclosure.
+**Supersedes:** the `--max-retries` row of A-002 only. All other A-002 parameters stand.
+
+### Why A-002's choice was wrong
+
+A-002 set `--max-retries 0` to fix a real problem: upstream's default of 3 allows up to four paid
+attempts, and failed attempts are **not persisted**, so cost undercounts and intention-to-treat
+failures vanish from the artifact.
+
+Zero retries fixed that and introduced something worse. Measured on `phaseC_t1_oai`
+(40 tasks, `gpt-4.1-nano-2025-04-14`): **18 × `litellm.RateLimitError`** producing **6 of 40
+simulations with `termination_reason: infrastructure_error`**, `agent_cost: None`, zero messages —
+task IDs 16, 29, 63, 89, 103, 109.
+
+Under §6.4's intention-to-treat rule those six score 0. **That biases the OpenAI arm downward by our
+own provider rate limit, not by agent capability** — a configuration artifact contaminating exactly
+the arm the primary estimand depends on. ITT exists to retain genuine agent failures, not to convert
+our infrastructure into an agent result.
+
+### The amendment
+
+| Parameter | A-002 | **A-003** |
+| --- | --- | --- |
+| `--max-retries` | 0 | **2** (3 attempts maximum) |
+| `--retry-delay` | upstream default 1.0s | **5.0s** — 1s is far too short for a per-minute rate limit |
+| Attempt visibility | log-scraping for retry markers | **every API attempt recorded at the LiteLLM boundary**, failures included |
+
+**Why this is not a return to A-002's problem.** A-002's objection was that retried attempts are
+*invisible*, not that retrying is wrong. Attempts are now recorded independently of tau2 by a
+LiteLLM callback (`scripts/phase_c/attempt_logger.py`) writing one JSONL line per request — success
+or failure — with model, latency, error class and cost. Attempt history and true spend are therefore
+complete regardless of what tau2 persists. That was the real requirement; zero retries was a blunt
+proxy for it.
+
+**Completion criterion, newly explicit.** An invocation counts as completed only if its artifact
+contains **zero `infrastructure_error` simulations**. Above zero it is recorded `degraded` and must
+be re-run, or reported with exclusion counts. `phaseC_t1_oai` was previously marked `completed` with
+6 such failures because the runner checked only the process exit code.
+
+### Disclosure — partially, not fully, pre-data
+
+Two invocations were dispatched under A-002 before this amendment:
+
+- **`phaseC_t1_gem`** — 40/40 clean. **Data destroyed** by a defect in our own
+  `tests/test_runner_guards.py`, which wrote a stub to the real artifact path and cleaned up only
+  `if created`. Unrecoverable; no export existed. Re-run under A-003.
+- **`phaseC_t1_oai`** — 34 clean / 6 `infrastructure_error`. Discarded; re-run under A-003.
+
+**No confirmatory analysis was performed on either.** No estimand was computed and no cross-arm
+comparison inspected. The amendment is therefore made in ignorance of any outcome, which is the
+property that matters — but it is recorded as *partially* pre-data rather than claimed as fully
+pre-data, because trajectories existed when it was written.
+
+Both are excluded from the confirmatory set; the re-runs are the data of record.

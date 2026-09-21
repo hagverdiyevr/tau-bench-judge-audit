@@ -30,7 +30,7 @@ if CHAIN.exists():
     ch = json.loads(CHAIN.read_text())
     body = DOC.parent / "PREREGISTRATION_AMENDMENTS.md"
     parts = _re.split(r"^## (A-\d{3}) ", body.read_text(), flags=_re.M)
-    live = {parts[i]: hashlib.sha256(parts[i + 1].encode()).hexdigest()
+    live = {parts[i]: hashlib.sha256(parts[i + 1].rstrip().encode()).hexdigest()
             for i in range(1, len(parts), 2)}
     link = ch["anchor_preregistration_sha256"]
     print(f"\n  amendment chain ({len(ch['chain'])}):")

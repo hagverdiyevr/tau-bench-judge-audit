@@ -1,0 +1,18 @@
+{
+ "run": "phaseC_t1_gem",
+ "discarded_reason": "data destroyed by tests/test_runner_guards.py writing a stub to the real artifact path (A-003 Disclosure)",
+ "n_simulations": 1,
+ "info": null,
+ "simulations": [
+  {
+   "task_id": "x",
+   "trial": null,
+   "seed": null,
+   "termination_reason": null,
+   "agent_cost": null,
+   "user_cost": null,
+   "duration": null,
+   "reward_info": null
+  }
+ ]
+}

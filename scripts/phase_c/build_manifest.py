@@ -32,7 +32,8 @@ TRIALS = (1, 2, 3, 4)                             # seeds 1000+trial (§4.5)
 # --- operational parameters (A-002) --------------------------------------------------------
 MAX_STEPS = 120          # §4.5
 MAX_CONCURRENCY = 2      # §4.5
-MAX_RETRIES = 0          # A-002: upstream default 3 => up to 4 paid attempts, unpersisted
+MAX_RETRIES = 2          # A-003: bounded retries; every attempt logged at the LiteLLM boundary
+RETRY_DELAY = 5.0        # A-003: 1.0s default is far too short for a per-minute rate limit
 MAX_ERRORS = 10          # upstream default, recorded explicitly
 TEMPERATURE = 0.0        # §4.5, both roles
 
@@ -77,6 +78,7 @@ for trial, order in zip(TRIALS, orders):
                 "--max-steps", str(MAX_STEPS),
                 "--max-errors", str(MAX_ERRORS),
                 "--max-retries", str(MAX_RETRIES),
+                "--retry-delay", str(RETRY_DELAY),
                 "--seed", str(1000 + trial),
                 "--save-to", save_to,
             ],
@@ -103,12 +105,15 @@ manifest = {
     "parameters": {
         "temperature_agent": TEMPERATURE, "temperature_user": TEMPERATURE,
         "max_steps": MAX_STEPS, "max_concurrency": MAX_CONCURRENCY,
-        "max_retries": MAX_RETRIES, "max_errors": MAX_ERRORS, "timeout": None,
+        "max_retries": MAX_RETRIES, "retry_delay": RETRY_DELAY,
+        "max_errors": MAX_ERRORS, "timeout": None,
         "max_output_tokens": None,
         "simulator": SIMULATOR,
-        "retry_rationale": "A-002: upstream default 3 means up to 4 paid attempts and failed "
-                           "attempts are not persisted, breaking intention-to-treat and cost "
-                           "accounting. Zero retries makes every attempt observable.",
+        "retry_rationale": "A-003 supersedes A-002. Zero retries turned transient provider rate "
+                           "limits into permanent agent failures (18 RateLimitError -> 6/40 dead "
+                           "simulations on phaseC_t1_oai), biasing the arm by our configuration. "
+                           "Bounded retries restore transient calls; every attempt is recorded "
+                           "independently of tau2 by scripts/phase_c/attempt_logger.py.",
     },
     "design": {
         "n_tasks": len(tasks), "n_agents": len(AGENTS), "n_trials": len(TRIALS),

@@ -18,7 +18,7 @@ not an explainer, not a long report ([REFERENCE](REFERENCE.md) §Reception).
 Three research passes and a hostile review eliminated the obvious angles
 ([D-003](DECISIONS.md), [D-005](DECISIONS.md)). A zero-cost Phase A audit then **falsified the
 surviving thesis** ([D-004](DECISIONS.md)) and surfaced the current one. Phase B validated every
-mechanism the design depends on for **USD 0.89**.
+mechanism the design depends on for **USD 0.92**.
 
 ## Thesis
 
@@ -86,7 +86,7 @@ the 2×2 control costs ~USD 2.
 
 ## Budget — measured
 
-USD 75 ceiling · **USD 0.89 spent** · **USD 74.11 remaining**. Source of truth:
+USD 75 ceiling · **USD 0.92 spent** · **USD 74.08 remaining**. Source of truth:
 `results/spend_ledger.json` (regenerated from run artifacts, not maintained by hand).
 
 | Phase | Work | Status | Cost |
@@ -94,11 +94,11 @@ USD 75 ceiling · **USD 0.89 spent** · **USD 74.11 remaining**. Source of truth
 | **A** | Evaluator audit (static/replay) | ✅ complete | **$0.00** |
 | **B** | 11 verification gates | ✅ complete | **$0.47** |
 | **B9** | Run-to-run noise floor (#540) | ✅ complete | **$0.42** |
-| **C** | 320 trajectories | **next** | ~$3.50 |
+| **C** | 320 trajectories | **next** | ~$5.02 |
 | **D** | 1,280 judge evaluations + replicates | pending | ~$5.97 |
 | **E** | Analysis and release | pending | $0.00 |
-| | **Spent to date** | | **$0.89** |
-| | **Projected remaining** | | **~$9.47** |
+| | **Spent to date** | | **$0.92** |
+| | **Projected remaining** | | **~$11.00** |
 
 Per-trajectory cost **measured at $0.0212** (mean; 0.0137–0.0300) for the Gemini arm — the v3.0
 estimate of $0.140 was **6.6× too high** ([B-L9](FINDINGS.md)). Cost tracks conversation length, not
@@ -146,7 +146,7 @@ agent families behave **oppositely at the same temperature 0.0** ([B-L15](FINDIN
 
 | Arm | Byte-identical across seeds | Cost spread |
 | --- | --- | --- |
-| `gemini/gemini-3.1-flash-lite` | **5/5** (3 seeds) | **$0.000000** |
+| `gemini/gemini-3.1-flash-lite` | **5/5** identical contents/tool-calls/rewards (3 repeat invocations) | **$0.000000** |
 | `gpt-4.1-nano` | **0/3** (2 seeds) | up to **2.6×** |
 
 Caching ruled out first (`LLM_CACHE_ENABLED = False`, `litellm.cache = None`, durations differ).

@@ -289,8 +289,12 @@ worth reporting even though it does not affect our numbers.
 
 ## D-018 — Retain T = 4 rather than deviate after the determinism finding · `ACTIVE` · 20 Sep 2026
 
-**Context.** [B-L15](FINDINGS.md) showed `gemini-3.1-flash-lite` reproduces **byte-identical**
-trajectories across seeds at temperature 0, while `gpt-4.1-nano` reproduces none. For the
+**Context.** [B-L15](FINDINGS.md) showed `gemini-3.1-flash-lite` reproduces identical message
+contents, tool calls, rewards and costs across repeat invocations at temperature 0, while
+`gpt-4.1-nano` reproduces none. *(Corrected 2026-09-21: the original wording said
+"byte-identical across seeds". Zero simulations were byte-identical, and LiteLLM drops `seed` for
+the gemini provider entirely — see the CORRECTION in B-L15. The decision below is unaffected: the
+reproducibility asymmetry is real either way.)* For the
 deterministic arm, the frozen T = 4 buys four identical copies — roughly **USD 3 of pure waste**.
 
 **Decision.** **Keep T = 4 for both arms.** No deviation is entered in

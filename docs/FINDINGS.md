@@ -215,7 +215,8 @@ Not yet filed — filing is a separate authorized action (see [CLAUDE.md](../CLA
 | 7 | Models-list endpoint advertises models the account cannot call (`gemini-2.5-flash-lite`, `gemini-3.1-flash-lite-preview`) — availability needs a real call | B-L1 |
 | 8 | **ACTION checker is order-sensitive on list arguments** — a call identical to gold except list order scores `action_match: false`. Sibling of #514; a false-negative mechanism wherever `ACTION` gates reward | B-L7 |
 | 9 | **Judge cost is entirely unaccounted** — no cost/usage field exists for the NL-assertion judge; measured ~40% understatement of true run cost on judge-gated tasks | B-L14 |
-| 10 | **Run-to-run noise floor for #540**, plus a determinism asymmetry: at temperature 0 one model family reproduces byte-identically across seeds and another does not | B-L15 |
+| 10 | **Run-to-run noise floor for #540**, plus a reproducibility asymmetry: at temperature 0 one model family reproduces identical message contents/tool calls/rewards across repeat invocations and another does not | B-L15 |
+| 11 | **LiteLLM silently drops `seed` for the `gemini` provider** (`llm_utils.py:71`), so seeded reproducibility is unavailable for Gemini arms without the caller knowing | B-L15 correction |
 
 ---
 
@@ -317,9 +318,9 @@ Three independent cost computations agree exactly on a live call:
 
 | Source | Value |
 | --- | --- |
-| LiteLLM `response_cost` | `9.5e-06` |
-| tau2 `get_response_cost()` | `9.5e-06` |
-| Our own price table | `0.0000095` |
+| LiteLLM `response_cost` | `0.000287` |
+| tau2 `get_response_cost()` | `0.000287` |
+| Our own price table | `0.000287` |
 
 **The silent-`0.0` bug is not triggered** for this model, and our table matches to the digit
 (8 prompt × $0.25/1M + 5 completion × $1.50/1M). The USD 75 ledger can be built on these numbers.
@@ -450,9 +451,10 @@ User-simulator share measured at **14%**, not the estimated 21%.
 **Cost tracks conversation length, not task complexity.** The 13-gold-action task cost $0.0268; the
 2-action task cost $0.0300. Do not budget by task complexity.
 
-**Budget consequence.** Phase C (240 trajectories) projects to **~$5** on the Gemini arm rather than
-$17. The binding cost is likely to shift to **Phase D judging** — 720 judge calls over full
-trajectories — which cannot be sized until `gpt-4.1-2025-04-14` pricing is verified (gate B3).
+**Budget consequence.** *(Superseded 2026-09-21: the design is now **320 trajectories / 1,280
+judge evaluations** — 2 agents x 40 tasks x 4 trials, 4 judges. See [PLAN.md](PLAN.md).)*
+Phase C projects to ~$5 on the Gemini arm rather than $17. The binding cost shifts to **Phase D
+judging** — which cannot be sized until `gpt-4.1-2025-04-14` pricing is verified (gate B3).
 
 ### B-L10 / Gate B3 — Judge pricing verified, and Phase D sized from real trajectories
 
@@ -561,6 +563,33 @@ answer.** Measured here by re-running an identical configuration under different
 `litellm.cache = None`, and wall-clock durations differ across runs (129.5s / 130.9s / 133.8s).
 Every run performed real inference.
 
+> ### ⚠️ CORRECTION issued 2026-09-21 — "byte-identical" was WRONG
+>
+> An independent verification pass re-compared the **complete** simulation objects across the
+> three runs, not just the fields our own script hashed. **Zero simulations were byte-identical.**
+> `scripts/phase_b/` hashed only `role + content`, so the claim asserted more than the method could
+> support. The original wording is preserved below so the error stays on the record.
+>
+> **What is actually true, and was verified field by field:**
+> - Message **contents** identical across all 3 runs, 5/5 tasks.
+> - Tool-call **names and arguments** identical, 5/5 (t43 5 calls, t76 12, t89 6, t103 12, t109 9).
+> - Per-task **rewards** identical (1.0/0.0/1.0/0.0/0.0), aggregate 0.400000 in all three runs.
+> - `agent_cost + user_cost` identical to the cent.
+> - **Differing:** message ids, tool-call ids (which carry the LiteLLM thought-signature payload),
+>   timestamps, durations, and the gpt-4.1 judge's free-text `justification` — the judge's
+>   verdicts (`met` flags) were identical in all 22 pairwise comparisons, only its prose varied.
+>
+> **Second correction — "across seeds" is also wrong for the Gemini arm.** LiteLLM drops the
+> `seed` parameter for the `gemini` provider (`vendor/tau2-bench/src/tau2/utils/llm_utils.py:71`),
+> so seeds 1001/1002/1003 never reached the API. Those were **three repeat invocations with no
+> seed applied**. This *strengthens* the stability observation — output was stable without any
+> seed pinning — while invalidating how it was described.
+>
+> **Corrected statement:** *in a 5-task, ~15-minute pilot, three repeat invocations of
+> `gemini-3.1-flash-lite` at temperature 0 produced identical message contents, tool calls,
+> rewards and costs; the OpenAI arm produced none identical across 3 tasks.* Scope is a pilot
+> observation, not a structural property. **Re-verify on the Phase C output before reporting.**
+
 #### Result — the two agent families behave oppositely at the same temperature 0.0
 
 | Agent | Seeds | Byte-identical conversations | Cost spread |
@@ -568,8 +597,8 @@ Every run performed real inference.
 | `gemini/gemini-3.1-flash-lite` | 1001, 1002, 1003 | **5/5** | **$0.000000** |
 | `gpt-4.1-nano` | 2001, 2002 | **0/3** | up to **2.6×** on one task ($0.00476 → $0.01254) |
 
-The Gemini arm reproduced **byte-identical** conversations, identical message counts, identical
-rewards and identical costs to the cent across three independent runs. The OpenAI arm reproduced
+The Gemini arm reproduced identical **message contents**, message counts, rewards and costs to
+the cent across three independent runs (see the CORRECTION above — *not* byte-identical). The OpenAI arm reproduced
 **none** of three, despite identical settings, identical simulator, and `temperature = 0.0` on both.
 
 Aggregate rewards were stable for both (Gemini 0.400 ×3; OpenAI 0.333 ×2), so the divergence is in

@@ -27,7 +27,7 @@ Two distinctions that keep this system honest:
 
 ## Current state
 
-**Phase A and Phase B are complete (including B9). USD 0.89 spent of 75.00; USD 74.11 remaining.**
+**Phase A and Phase B are complete (including B9). USD 0.92 spent of 75.00; USD 74.08 remaining.**
 Every mechanism the study depends on is verified. The pre-registration is **frozen**
 (`a917984e…`, 2026-09-20T10:54:29Z). **Phase C is unblocked**; no confirmatory data exists yet.
 
@@ -82,11 +82,14 @@ All measured and cited. Do not re-derive or contradict without new evidence.
 
 **Reproducibility — the two arms differ**
 - **At temperature 0, `gemini-3.1-flash-lite` is deterministic and `gpt-4.1-nano` is not.** Across
-  seeds the Gemini arm reproduced **5/5 byte-identical** trajectories with zero cost spread; the
-  OpenAI arm reproduced **0/3**, with up to **2.6×** per-task cost variation. Caching ruled out.
+  repeat invocations the Gemini arm reproduced **5/5 identical message contents, tool calls,
+  rewards and costs**; the OpenAI arm reproduced **0/3**, with up to **2.6×** per-task cost
+  variation. Caching ruled out. **Not byte-identical** — ids/timestamps differ. Also: LiteLLM
+  **drops `seed` for the gemini provider**, so these were repeats, not seeded replicates.
   [B-L15](docs/FINDINGS.md)
-- **Therefore `pass^k` is a structural constant for the Gemini arm** — four trials yield four
-  identical copies, so `pass^4 = pass^1` by construction, not by measurement. Disclose it; never
+- **Therefore `pass^k` was constant for the Gemini arm in a 5-task pilot** — repeat invocations
+  yielded identical rewards, so `pass^4` would equal `pass^1`. This is a **pilot observation, not
+  a structural guarantee**; re-verify on the Phase C output before reporting. Disclose it; never
   present it as reliability, and never compare a variance-based statistic across arms without
   stating the asymmetry. [D-018](docs/DECISIONS.md)
 
@@ -133,8 +136,8 @@ Inherited from v1.0 §1 and still binding:
 ## Phases
 
 **A** evaluator audit ($0.00 ✅) → **B** 11 gates ($0.47 ✅) → **B9** noise floor ($0.42 ✅) →
-**C** 320 trajectories (~$3.50, **next**) → **D** 1,280 judge evaluations (~$5.97) →
-**E** analysis and release ($0.00). **Spent $0.89 · projected remaining ~$9.47.**
+**C** 320 trajectories (~$5.02, **next**) → **D** 1,280 judge evaluations (~$5.97) →
+**E** analysis and release ($0.00). **Spent $0.92 · projected remaining ~$11.00.**
 
 The pre-registration is frozen and Phase C is unblocked. Verify the freeze any time with
 `python scripts/verify_preregistration.py`.

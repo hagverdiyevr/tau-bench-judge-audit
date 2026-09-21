@@ -1,0 +1,94 @@
+{
+ "gemini-3.1-flash-lite": [
+  {
+   "task": "43",
+   "content_identical": true,
+   "toolcalls_identical": true,
+   "rewards": [
+    1.0
+   ],
+   "reward_identical": true,
+   "cost_identical": true,
+   "whole_object_identical": false
+  },
+  {
+   "task": "76",
+   "content_identical": true,
+   "toolcalls_identical": true,
+   "rewards": [
+    0.0
+   ],
+   "reward_identical": true,
+   "cost_identical": true,
+   "whole_object_identical": false
+  },
+  {
+   "task": "89",
+   "content_identical": true,
+   "toolcalls_identical": true,
+   "rewards": [
+    1.0
+   ],
+   "reward_identical": true,
+   "cost_identical": true,
+   "whole_object_identical": false
+  },
+  {
+   "task": "103",
+   "content_identical": true,
+   "toolcalls_identical": true,
+   "rewards": [
+    0.0
+   ],
+   "reward_identical": true,
+   "cost_identical": true,
+   "whole_object_identical": false
+  },
+  {
+   "task": "109",
+   "content_identical": true,
+   "toolcalls_identical": true,
+   "rewards": [
+    0.0
+   ],
+   "reward_identical": true,
+   "cost_identical": true,
+   "whole_object_identical": false
+  }
+ ],
+ "gpt-4.1-nano": [
+  {
+   "task": "43",
+   "content_identical": false,
+   "toolcalls_identical": false,
+   "rewards": [
+    0.0
+   ],
+   "reward_identical": true,
+   "cost_identical": false,
+   "whole_object_identical": false
+  },
+  {
+   "task": "89",
+   "content_identical": false,
+   "toolcalls_identical": false,
+   "rewards": [
+    1.0
+   ],
+   "reward_identical": true,
+   "cost_identical": false,
+   "whole_object_identical": false
+  },
+  {
+   "task": "109",
+   "content_identical": false,
+   "toolcalls_identical": false,
+   "rewards": [
+    0.0
+   ],
+   "reward_identical": true,
+   "cost_identical": false,
+   "whole_object_identical": false
+  }
+ ]
+}

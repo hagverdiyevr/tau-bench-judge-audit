@@ -13,14 +13,17 @@ Initial external spending authorization: USD 25 total. This is a cumulative proj
 > the dev/held-out split (`split_tasks.json`, 74/40/114), `pass_hat_k()`, per-run cost capture
 > (`agent_cost`/`user_cost`), and a results viewer.
 >
-> **The active plan is the τ³-retail evaluator-audit + language-aware-grading plan** (approved
-> 19 Sep 2026). Changes that override this document:
+> **The active plan is [docs/PLAN.md](docs/PLAN.md) — the τ³-retail judge-family study**
+> ([D-006](docs/DECISIONS.md)), with its hypothesis frozen in
+> [docs/PREREGISTRATION.md](docs/PREREGISTRATION.md). The German/language-aware-grading direction
+> named in earlier revisions of this banner was itself superseded ([D-004](docs/DECISIONS.md):
+> `COMMUNICATE` is used by zero retail tasks). Changes that override this document:
 >
 > | Item | This document (v1.0) | **Active plan** |
 > | --- | --- | --- |
 > | Spend ceiling | USD 25 | **USD 75** (~40 planned, 35 reserve), authorized 19 Sep 2026 |
 > | Time | 18–24h / 4 weeks | 40–60h / 8–10 weeks |
-> | Research question | One intervention on a 10/10 task split | Grader-artifact measurement via **re-grading**, German language contrast |
+> | Research question | One intervention on a 10/10 task split | **Agent-family × judge-family interaction**, measured by re-grading saved trajectories |
 > | Phases | §6–§12 (Phases 0–6) | Phases A–E |
 >
 > **What remains binding from this document:** the operating rules in §1 (no secrets, no mocked

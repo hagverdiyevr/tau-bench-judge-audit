@@ -11,10 +11,25 @@ import hashlib
 import json
 import pathlib
 import re
+import subprocess
 import sys
 
+
+def subprocess_run_tracked_md():
+    try:
+        out = subprocess.run(["git", "ls-files", "*.md"], cwd=pathlib.Path(__file__).resolve().parents[1],
+                             capture_output=True, text=True).stdout.split()
+        root = pathlib.Path(__file__).resolve().parents[1]
+        return [root / f for f in out if (root / f).exists()]
+    except Exception:
+        return []
+
+
 REPO = pathlib.Path(__file__).resolve().parents[1]
-DOCS = sorted((REPO / "docs").glob("*.md")) + [REPO / "CLAUDE.md"]
+# Corpus = ALL tracked markdown, not just docs/ + CLAUDE.md. The narrower corpus let
+# RETAIL_AGENT_IMPLEMENTATION_PLAN.md drift unchecked while the checker reported "ALIGNED".
+_tracked = subprocess_run_tracked_md()
+DOCS = _tracked if _tracked else sorted((REPO / "docs").glob("*.md")) + [REPO / "CLAUDE.md"]
 FROZEN = REPO / "docs" / "PREREGISTRATION.md"
 LEDGER = REPO / "results" / "spend_ledger.json"
 
@@ -74,6 +89,25 @@ for bad, why in STALE.items():
             if bad in line and not any(e in line.lower() for e in EXEMPT):
                 hits.append(f"{f.name}:{i}")
     check(f"no stale claim ASSERTED: {bad!r}", not hits, f"at {hits} — {why}")
+
+# 4b — git provenance: STATUS must not claim a stale commit or a clean tree when it is dirty
+head = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=REPO,
+                      capture_output=True, text=True).stdout.strip()
+dirty = subprocess.run(["git", "status", "--porcelain"], cwd=REPO,
+                       capture_output=True, text=True).stdout.strip()
+status_txt = (REPO / "docs" / "STATUS.md").read_text()
+import re as _re2
+claimed = _re2.findall(r"commit `([0-9a-f]{7,})`", status_txt)
+check("STATUS.md does not cite a stale commit", not claimed or any(c.startswith(head) for c in claimed),
+      f"STATUS cites {claimed}; HEAD is {head}")
+if dirty:
+    check("STATUS.md does not claim a clean tree while dirty", "working tree clean" not in status_txt,
+          f"tree has {len(dirty.splitlines())} dirty path(s)")
+
+# 4c — amendment chain verifies
+amd = subprocess.run([sys.executable, str(REPO / "scripts/verify_preregistration.py")],
+                     cwd=REPO, capture_output=True, text=True)
+check("pre-registration + amendment chain verify", amd.returncode == 0, amd.stdout.strip()[-200:])
 
 # 5 — pre-registration declares itself frozen, and S10 discipline holds
 pr = FROZEN.read_text()

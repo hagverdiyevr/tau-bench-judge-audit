@@ -3,14 +3,14 @@
  "generated_by": "scripts/build_spend_ledger.py",
  "note": "Judge cost is computed from the judge's own trajectory serialization because tau2 records no judge cost at all (FINDINGS B-L14).",
  "cap_usd": 75.0,
- "total_usd": 1.0211,
- "remaining_usd": 73.98,
+ "total_usd": 2.2332,
+ "remaining_usd": 72.77,
  "components": {
-  "agent_user_usd": 0.5501,
-  "judge_usd_untracked_by_tau2": 0.2141,
+  "agent_user_usd": 1.3968,
+  "judge_usd_untracked_by_tau2": 0.5795,
   "out_of_band_usd": 0.2569
  },
- "trajectories": 29,
+ "trajectories": 69,
  "runs": [
   {
    "run": "b9_openai_seed2001",
@@ -47,6 +47,15 @@
    "judge_input_tokens": 18812,
    "judge_usd": 0.049624,
    "git_commit": "acc89b743bfee2d79c1c045820e7aff2a7a6e2a9"
+  },
+  {
+   "run": "phaseC_t1_gem",
+   "simulations": 40,
+   "agent_user_usd": 0.846658,
+   "judge_calls": 40,
+   "judge_input_tokens": 134720,
+   "judge_usd": 0.36544,
+   "git_commit": "d56ed425dd3714d633b390bfc10f5f7f1adb5b64"
   },
   {
    "run": "step4_calibration",

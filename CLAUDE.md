@@ -27,7 +27,7 @@ Two distinctions that keep this system honest:
 
 ## Current state
 
-**Phase A and Phase B are complete (including B9). USD 1.02 spent of 75.00; USD 73.98 remaining.**
+**Phase A and B complete; Phase C 1/8 dispatched. USD 2.23 spent of 75.00; USD 72.77 remaining.**
 Every mechanism the study depends on is verified. The pre-registration is **frozen**
 (`a917984e…`, 2026-09-20T10:54:29Z). **Phase C is unblocked**; no confirmatory data exists yet.
 
@@ -148,8 +148,8 @@ Inherited from v1.0 §1 and still binding:
 ## Phases
 
 **A** evaluator audit ($0.00 ✅) → **B** 11 gates ($0.47 ✅) → **B9** noise floor ($0.42 ✅) →
-**C** 320 trajectories (~$5.02, **next**) → **D** 1,280 judge evaluations (~$5.97) →
-**E** analysis and release ($0.00). **Spent $1.02 · projected remaining ~$11.00.**
+**C** 320 trajectories (**1/8 done**, ~$5.02) → **D** 1,280 judge evaluations (~$5.97) →
+**E** analysis and release ($0.00). **Spent $2.23 · projected remaining ~$10.00.**
 
 The pre-registration is frozen and Phase C is unblocked. Verify the freeze any time with
 `python scripts/verify_preregistration.py`.

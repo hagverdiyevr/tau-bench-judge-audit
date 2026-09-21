@@ -643,7 +643,41 @@ reliability measurement.
 
 # Phase C — Trajectory generation
 
-*Not started. Budgeted ~USD 35.*
+## C-L1 — Smoke invocation: 1 of 8 complete · **$1.21**
+
+*First confirmatory invocation, `phaseC_t1_gem` (Gemini agent, seed 1001), 21 Sep 2026.
+Artifact: `results/artifacts/phaseC_t1_gem.json`. Journal: `results/phase_c/run_journal.json`.*
+
+| Metric | Value | Against expectation |
+| --- | --- | --- |
+| Simulations | 40 / 40 | complete |
+| Mean reward | **0.675** (27 pass / 13 fail) | 5-task pilot read 0.400 — the pilot drew harder tasks |
+| DB component | 0.775 | |
+| NL component | 0.850 | |
+| **Components disagree** | **11 / 40 (28%)** | pilot suggested 3/5; 28% is the honest rate |
+| Terminations | 40 × `user_stop` | **no truncation, no errors** |
+| Cost / trajectory | mean **$0.02117** | matches the $0.0212 B-L9 measurement exactly |
+| Cost tail | max **$0.12413** | **one task cost 5.9× the mean** — new observation |
+| Duration | 19.4 min (29.1 s/task) | 8 invocations ≈ 2.5 h wall clock |
+| Retries / perm. failures | 0 / 0 | A-002's `--max-retries 0` held |
+| `info.git_commit` | recorded (`d56ed425`) | the R3 'unknown' defect is fixed going forward |
+
+**Three things this changes:**
+
+1. **Headroom is real but tighter than hoped.** 0.675 sits just above the 50–70% band. There is
+   room for an effect, but the agent is not far from ceiling on this population.
+2. **The judge component genuinely varies.** 28% component disagreement at n=40 means the NL
+   component is not a constant — so the judge study has something to measure. This materially
+   softens the null preview in [B-L16](FINDINGS.md), which rested on 5 trajectories where all
+   four judges happened to agree.
+3. **Cost has a long tail.** Mean $0.0212 but max $0.124. Budget by the mean, but expect
+   individual invocations to vary; the per-invocation estimate should not be read as a bound.
+
+**Free determinism re-test at scale.** The design runs the Gemini arm four times over the *same*
+40 tasks at seeds 1001–1004, and LiteLLM drops `seed` for that provider
+([B-L15 correction](FINDINGS.md)). So trials 2–4 constitute an n=40 replication of the
+reproducibility claim **at no extra cost** — it is already in the protocol. This is the check
+[CLAUDE.md](../CLAUDE.md) requires before `pass^k` is reported for that arm.
 
 # Phase D — Judge re-grading
 

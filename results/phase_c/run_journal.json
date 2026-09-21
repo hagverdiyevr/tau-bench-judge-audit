@@ -1,0 +1,17 @@
+{
+ "entries": [
+  {
+   "save_to": "phaseC_t1_gem",
+   "agent_llm": "gemini/gemini-3.1-flash-lite",
+   "seed": 1001,
+   "started_utc": "2026-09-21T18:58:45Z",
+   "ended_utc": "2026-09-21T19:09:30Z",
+   "returncode": 0,
+   "status": "completed",
+   "simulations": 40,
+   "retry_markers": 0,
+   "permanent_failures": 0,
+   "log_file": "results/phase_c/logs/phaseC_t1_gem.log"
+  }
+ ]
+}

@@ -312,3 +312,38 @@ variance-based statistic is compared across arms without stating the asymmetry.
 **Precedent.** A deviation is warranted when the frozen design would produce an *invalid* result.
 It is not warranted to reduce cost or tidy an inefficiency. This entry is the reference for future
 deviation requests.
+
+## D-019 — Act on an external review rather than defend against it · `ACTIVE` · 21 Sep 2026
+
+**Context.** Before dispatching Phase C, an external model reviewed the repository and produced 10
+recommendations plus a "not yet safe to start" verdict. An independent verification pass
+(6 dimensions, 34 findings, `$0.0025` of probes) checked each claim against code and data.
+
+**Decision.** Treat the review as evidence, verify every claim independently, and act on what
+survives — including the parts that were errors of ours rather than the reviewer's.
+
+**What it caught that we had wrong.** Five of our own claims were false:
+
+| Our claim | Reality |
+| --- | --- |
+| Gemini runs were "byte-identical" | **0/5** whole-object identical; our script hashed only `role + content` |
+| "across seeds 1001/1002/1003" | LiteLLM **drops `seed`** for the gemini provider; those were repeat invocations |
+| `.env` backup held only placeholders | Held a **live OpenAI key** behind a `#` |
+| Ledger "regenerated from run artifacts" | No generator existed; line items did not sum to the total |
+| PLAN's verification table | Named **9 test files; 2 existed** |
+
+**What the reviewer overstated.** "Reward metadata differ" — reward metadata is *identical* across
+runs; only the judge's free-text justification varies. And J1, though a genuine blocker, could not
+have affected Phase C generation, only Phase D re-grading.
+
+**The sharpest consequence.** J1 (`gemini-3.8-flash` fences its JSON and crashes the evaluator) was
+made *more* central by our own [A-001](PREREGISTRATION_AMENDMENTS.md), which pinned the **primary**
+estimand to that judge. Had we dispatched first, we would have generated 320 trajectories and only
+then discovered Phase D could not score them.
+
+**Cost of the review: `$0.09` of probes. Cost avoided: a 320-trajectory run scored by a broken
+parser, and a published paper resting on a false determinism claim.**
+
+**Precedent.** An unsolicited review that contradicts our own records is worth more than one that
+agrees. Verify it independently, correct the record where it is right, and say plainly where it is
+wrong — do not split the difference.

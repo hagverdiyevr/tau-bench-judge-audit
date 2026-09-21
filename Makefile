@@ -21,6 +21,8 @@ test:
 	@python3 tests/test_judge_adapter.py
 	@echo ""
 	@python3 tests/test_runner_guards.py
+	@echo ""
+	@cd vendor/tau2-bench && uv run python ../../tests/test_phase_a_regression.py
 
 ledger:
 	@cd vendor/tau2-bench && uv run python ../../scripts/build_spend_ledger.py

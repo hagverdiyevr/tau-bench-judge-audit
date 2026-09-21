@@ -18,7 +18,7 @@ not an explainer, not a long report ([REFERENCE](REFERENCE.md) §Reception).
 Three research passes and a hostile review eliminated the obvious angles
 ([D-003](DECISIONS.md), [D-005](DECISIONS.md)). A zero-cost Phase A audit then **falsified the
 surviving thesis** ([D-004](DECISIONS.md)) and surfaced the current one. Phase B validated every
-mechanism the design depends on for **USD 1.02**.
+mechanism the design depends on for **USD 2.23**.
 
 ## Thesis
 
@@ -86,7 +86,7 @@ the 2×2 control costs ~USD 2.
 
 ## Budget — measured
 
-USD 75 ceiling · **USD 1.02 spent** · **USD 73.98 remaining**. Source of truth:
+USD 75 ceiling · **USD 2.23 spent** · **USD 72.77 remaining**. Source of truth:
 `results/spend_ledger.json` (regenerated from run artifacts, not maintained by hand).
 
 | Phase | Work | Status | Cost |
@@ -94,10 +94,10 @@ USD 75 ceiling · **USD 1.02 spent** · **USD 73.98 remaining**. Source of truth
 | **A** | Evaluator audit (static/replay) | ✅ complete | **$0.00** |
 | **B** | 11 verification gates | ✅ complete | **$0.47** |
 | **B9** | Run-to-run noise floor (#540) | ✅ complete | **$0.42** |
-| **C** | 320 trajectories | **next** | ~$5.02 |
+| **C** | 320 trajectories | **1/8 done** | ~$5.02 (smoke: $1.21) |
 | **D** | 1,280 judge evaluations + replicates | pending | ~$5.97 |
 | **E** | Analysis and release | pending | $0.00 |
-| | **Spent to date** | | **$1.02** |
+| | **Spent to date** | | **$2.23** |
 | | **Projected remaining** | | **~$11.00** |
 
 Per-trajectory cost **measured at $0.0212** (mean; 0.0137–0.0300) for the Gemini arm — the v3.0
@@ -192,17 +192,20 @@ Analysis per [PREREGISTRATION §6](PREREGISTRATION.md).
 
 Offline, no API keys — this is what makes the artifact reviewable by a stranger.
 
-| Test | Asserts |
-| --- | --- |
-| `test_upstream_pin.py` | Submodule SHA == `fc0055dc…`; refuse to run on drift |
-| `test_reward_composition.py` | Reproduces A1/A3 — COMMUNICATE in 0 bases; 74 DB-only / 40 judge-gated |
-| `test_gold_replay.py` | Replay failures == committed 15-task / 18-action allowlist (A4) |
-| `test_null_agent.py` | Null-agent DB pass set == committed 11-task list (A5) |
-| `test_judge_patch.py` | Patching the evaluator module changes the dispatched model; patching `tau2.config` does **not** (B1, both directions) |
-| `test_regrade_fidelity.py` | Re-grading a saved trajectory reproduces its recorded verdict (B-L13) |
-| `test_cost_integrity.py` | Unpriced model raises rather than accepting `0.0`; judge cost is counted |
-| `test_db_hash_order.py` | Documents #514 order-sensitivity; both hashes computed |
-| `test_action_order.py` | Documents B-L7 — list-order-only difference yields `action_match: false` |
+```bash
+make verify      # the single pre-spend gate: docs + freeze + chain + all tests
+```
+
+| Test | Asserts | Status |
+| --- | --- | --- |
+| `tests/test_phase_a_regression.py` | Every Phase A number: 114 tasks, 112 `[DB,NL_ASSERTION]`, 2 `[DB]`, **0 COMMUNICATE**, 40 live judge, 74 DB-only, 104 mutating, splits 74/40/114; judge identity + temperature; B1 patch target *and* that `tau2.config` is a no-op; #514 and B-L7 order sensitivity; A4's 18-action/15-task allowlist; A5's 11-task null-agent set | **18 checks, passing** |
+| `tests/test_judge_adapter.py` | Fenced JSON parses; empty / partial / duplicate / extra / mismatched / malformed / non-bool responses all **reject with reward withheld**; explicit upstream contrast (`all([])` is `True`) | **21 checks, passing** |
+| `tests/test_runner_guards.py` | Guards **fire**: tampered amendment chain blocks dispatch, budget floor blocks dispatch, existing artifact is skipped, unknown `--only` rejected, manifest 2:2 balanced with pinned snapshot and retries disabled | **8 checks, passing** |
+| `scripts/verify_preregistration.py` | Frozen hash intact; amendment chain links verified. Tamper-tested both directions | **passing** |
+| `scripts/check_docs.py` | Cross-links; spend matches the generated ledger; no stale claim *asserted*; git provenance not misstated | **passing** |
+
+> Earlier revisions of this table named nine test files that did not exist. The table now lists
+> only what runs, and `make verify` executes exactly these.
 
 ## Honest risks
 

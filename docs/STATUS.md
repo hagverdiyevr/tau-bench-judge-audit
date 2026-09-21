@@ -6,8 +6,8 @@
 > [PLAN.md](PLAN.md).
 
 **Last updated:** 21 September 2026
-**Phase:** A ✅ · B ✅ (all 11 gates + B9) · pre-registration **FROZEN** · **Phase C is next**
-**Cumulative API spend: USD 1.02 of 75.00** — USD 73.98 remaining
+**Phase:** A ✅ · B ✅ · pre-registration **FROZEN** + amendments A-001/A-002 · **Phase C: 1 of 8 invocations done**
+**Cumulative API spend: USD 2.23 of 75.00** — USD 72.77 remaining
 **Ledger of record:** `results/spend_ledger.json` (regenerated from run artifacts)
 
 ---
@@ -39,6 +39,13 @@ t-bench/
 ├── scripts/phase_a/               01..04, reproduce every Phase A number
 ├── scripts/phase_b/               step1..step5, all Phase B gates
 ├── results/                       phase_a/, phase_b/, spend_ledger.json
+├── Makefile                       `make verify` = the pre-spend gate
+├── tests/                         3 files, 47 checks (phase_a regression, judge adapter, runner guards)
+├── scripts/grading/               fail-closed judge adapter
+├── scripts/phase_c/               build_manifest.py, run_phase_c.py
+├── scripts/phase_d/               regrade.py (N-judge re-grading harness)
+├── scripts/build_spend_ledger.py  ledger generator (incl. judge cost)
+├── scripts/export_artifacts.py    lifts runs out of the gitignored submodule
 ├── scripts/check_docs.py          doc alignment — run every iteration
 ├── scripts/verify_preregistration.py  tamper check for the freeze
 └── vendor/tau2-bench/             pinned v1.0.1 @ fc0055dc, .venv on 3.12.9
@@ -70,22 +77,23 @@ and `scripts/phase_a/01` regenerates the headline Phase A numbers with **no setu
 
 ## Next executable task
 
-**Phase C — dispatch 320 confirmatory trajectories** (~USD 5.02 of USD 73.98 remaining).
-
-Readiness gates, all passing:
-- Pre-registration frozen + **amendment chain** verified (A-001, A-002)
-- Execution manifest content-hashed, order **balanced 2:2**, snapshot IDs pinned
-- Runner dry-run clean; refuses to dispatch on a broken chain or moved submodule
-- Ledger generated from artifacts, **including the judge cost tau2 omits**
+**Phase C — the remaining 7 invocations** (~USD 4 of USD 72.77 remaining, ~2 h wall clock).
 
 ```bash
-cd vendor/tau2-bench && uv run python ../../scripts/phase_c/run_phase_c.py --dry-run
-cd vendor/tau2-bench && uv run python ../../scripts/phase_c/run_phase_c.py --only phaseC_t1_gem
 cd vendor/tau2-bench && uv run python ../../scripts/phase_c/run_phase_c.py
 ```
 
-⚠️ **Outstanding owner action: rotate the OpenAI key.** It was briefly world-readable in a backup
-(now shredded; `.env` at 0600). That key pays for both the agent arm and the incumbent judge.
+The runner skips `phaseC_t1_gem` automatically (resume, never restart).
+
+**Smoke result ([C-L1](FINDINGS.md)):** 40/40 sims, mean reward **0.675**, all `user_stop`, zero
+retries, zero truncation, cost/trajectory **$0.02117** — exactly the B-L9 measurement.
+**Components disagreed on 11/40 (28%)**, which means the NL component genuinely varies and the
+judge study has something to measure.
+
+Then **Phase D** (`scripts/phase_d/regrade.py`, all 320 × 4 judges, ~USD 6) and **Phase E**.
+
+⚠️ **Still outstanding: rotate the OpenAI key.** Flagged twice; the smoke ran on the Gemini arm so
+it did not use that key, but 4 of the remaining 7 invocations will.
 
 ## Blockers
 
@@ -121,3 +129,4 @@ cd vendor/tau2-bench && uv run python ../../scripts/phase_c/run_phase_c.py
 | 2026-09-20 | **Initial commit `24aa218`** — 33 files. Upstream converted to a submodule (pin now git-enforced). Restored upstream to pristine after an earlier overwrite; `uv sync --frozen` now required. A0 nuanced, A0b added. Fresh-clone reproducibility verified | $0.00 |
 | 2026-09-20 | Pre-registration **FROZEN** (`a917984e`, tamper-tested) + verifier. **B9 complete** — answered #540; found determinism asymmetry between families (contribution #10). Docs realigned; spend ledger automated | ~$0.42 |
 | 2026-09-21 | External review verified across 6 dimensions (34 findings). Corrected 5 of my own errors incl. the false "byte-identical" claim. Added amendment chain (A-001/A-002), execution manifest, budget-aware runner, ledger generator, hardened checker | $0.0025 |
+| 2026-09-21 | Closed external-review recs 4/5/8/9/10: fail-closed judge adapter (J1 confirmed live, J2 offline), 21+8+18 tests, artifact export, Makefile gate. **Phase C smoke: 40/40 sims, reward 0.675, 28% component disagreement** | $1.21 |

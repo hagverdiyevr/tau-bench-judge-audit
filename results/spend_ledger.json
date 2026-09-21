@@ -1,36 +1,97 @@
 {
- "total_usd": 0.8945,
- "remaining_usd": 74.11,
+ "schema": "spend-ledger/2",
+ "generated_by": "scripts/build_spend_ledger.py",
+ "note": "Judge cost is computed from the judge's own trajectory serialization because tau2 records no judge cost at all (FINDINGS B-L14).",
+ "cap_usd": 75.0,
+ "total_usd": 0.9221,
+ "remaining_usd": 74.08,
+ "components": {
+  "agent_user_usd": 0.5501,
+  "judge_usd_untracked_by_tau2": 0.2141,
+  "out_of_band_usd": 0.1579
+ },
  "trajectories": 29,
- "judge_calls": 36,
- "runs": {
-  "b9_openai_seed2001": {
-   "sims": 3,
-   "agent_user_usd": 0.02001
+ "runs": [
+  {
+   "run": "b9_openai_seed2001",
+   "simulations": 3,
+   "agent_user_usd": 0.020013,
+   "judge_calls": 3,
+   "judge_input_tokens": 10124,
+   "judge_usd": 0.027448,
+   "git_commit": "acc89b743bfee2d79c1c045820e7aff2a7a6e2a9"
   },
-  "b9_openai_seed2002": {
-   "sims": 3,
-   "agent_user_usd": 0.0343
+  {
+   "run": "b9_openai_seed2002",
+   "simulations": 3,
+   "agent_user_usd": 0.034301,
+   "judge_calls": 3,
+   "judge_input_tokens": 15272,
+   "judge_usd": 0.037744,
+   "git_commit": "acc89b743bfee2d79c1c045820e7aff2a7a6e2a9"
   },
-  "b9_seed1002": {
-   "sims": 5,
-   "agent_user_usd": 0.11233
+  {
+   "run": "b9_seed1002",
+   "simulations": 5,
+   "agent_user_usd": 0.112333,
+   "judge_calls": 5,
+   "judge_input_tokens": 18812,
+   "judge_usd": 0.049624,
+   "git_commit": "acc89b743bfee2d79c1c045820e7aff2a7a6e2a9"
   },
-  "b9_seed1003": {
-   "sims": 5,
-   "agent_user_usd": 0.11233
+  {
+   "run": "b9_seed1003",
+   "simulations": 5,
+   "agent_user_usd": 0.112333,
+   "judge_calls": 5,
+   "judge_input_tokens": 18812,
+   "judge_usd": 0.049624,
+   "git_commit": "acc89b743bfee2d79c1c045820e7aff2a7a6e2a9"
   },
-  "step4_calibration": {
-   "sims": 7,
-   "agent_user_usd": 0.14819
+  {
+   "run": "step4_calibration",
+   "simulations": 7,
+   "agent_user_usd": 0.148187,
+   "judge_calls": 0,
+   "judge_input_tokens": 0,
+   "judge_usd": 0.0,
+   "git_commit": "unknown"
   },
-  "step4_floor_gate": {
-   "sims": 1,
-   "agent_user_usd": 0.01061
+  {
+   "run": "step4_floor_gate",
+   "simulations": 1,
+   "agent_user_usd": 0.01061,
+   "judge_calls": 0,
+   "judge_input_tokens": 0,
+   "judge_usd": 0.0,
+   "git_commit": "unknown"
   },
-  "step5_judge_gated": {
-   "sims": 5,
-   "agent_user_usd": 0.11233
+  {
+   "run": "step5_judge_gated",
+   "simulations": 5,
+   "agent_user_usd": 0.112333,
+   "judge_calls": 5,
+   "judge_input_tokens": 18812,
+   "judge_usd": 0.049624,
+   "git_commit": "unknown"
   }
- }
+ ],
+ "out_of_band": [
+  {
+   "item": "phase_b steps 1-3b probes (access, billing, thinking, signatures)",
+   "usd": 0.02
+  },
+  {
+   "item": "key verification calls (gemini + openai)",
+   "usd": 0.0004
+  },
+  {
+   "item": "B5 judge re-grades, 15 calls",
+   "usd": 0.135
+  },
+  {
+   "item": "external-review verification probes (workflow)",
+   "usd": 0.0025
+  }
+ ]
 }

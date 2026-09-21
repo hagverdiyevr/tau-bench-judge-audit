@@ -1,0 +1,19 @@
+{
+ "anchor_preregistration_sha256": "a917984e48d16f28ea0280c5e7a2cb9b6e4a786a123a43efc989f09a972c3906",
+ "chain": [
+  {
+   "id": "A-001",
+   "sha256": "79a52044306619bc80aab7df8943d353e3e5c391f7f2f20ad97f2084ce569344",
+   "prev": "a917984e48d16f28ea0280c5e7a2cb9b6e4a786a123a43efc989f09a972c3906",
+   "sealed": true,
+   "anchor": true
+  },
+  {
+   "id": "A-002",
+   "sha256": "2f39f6a76296c5ff61ff2d9d3567b31fc23ac34b94a03fbcfdd50aac2f1c0d29",
+   "prev": "79a52044306619bc80aab7df8943d353e3e5c391f7f2f20ad97f2084ce569344",
+   "sealed": true,
+   "anchor": false
+  }
+ ]
+}

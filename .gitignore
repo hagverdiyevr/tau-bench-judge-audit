@@ -26,3 +26,6 @@ data/simulations/
 .ruff_cache/
 .pytest_cache/
 .ipynb_checkpoints/
+
+# credential backups must never be created, but if they are:
+.env.backup*

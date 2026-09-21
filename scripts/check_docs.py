@@ -97,7 +97,11 @@ dirty = subprocess.run(["git", "status", "--porcelain"], cwd=REPO,
                        capture_output=True, text=True).stdout.strip()
 status_txt = (REPO / "docs" / "STATUS.md").read_text()
 import re as _re2
-claimed = _re2.findall(r"commit `([0-9a-f]{7,})`", status_txt)
+# Only the CURRENT-STATE sections make claims about HEAD. The session log is a historical
+# record — citing the commit a past session made is correct, not drift. (Same distinction as
+# the stale-claim check: assertion vs citation.)
+current_state = status_txt.split("## Session log", 1)[0]
+claimed = _re2.findall(r"commit `([0-9a-f]{7,})`", current_state)
 check("STATUS.md does not cite a stale commit", not claimed or any(c.startswith(head) for c in claimed),
       f"STATUS cites {claimed}; HEAD is {head}")
 if dirty:

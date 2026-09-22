@@ -148,7 +148,7 @@ success by default.
 
 ## Upstream contributions
 
-**13 defects** found and documented with reproductions, in
+**15 defects and gaps** documented with reproductions — **13 reported upstream** — in
 [`docs/FINDINGS.md`](docs/FINDINGS.md) § Upstream. Highlights:
 
 - The NL judge **cannot see tool calls** — `content` is `None` on tool-calling turns, so names and
@@ -160,7 +160,18 @@ success by default.
 - LiteLLM **silently drops `seed` for the `gemini` provider**, so seeded reproducibility is
   unavailable without the caller knowing
 
-*Filing is a separate, explicitly authorised step; drafts are prepared, nothing has been submitted.*
+**Filed 22 September 2026** as [#553–#560](https://github.com/sierra-research/tau2-bench/issues/553)
+plus evidence comments on four existing threads
+([#499](https://github.com/sierra-research/tau2-bench/issues/499),
+[#384](https://github.com/sierra-research/tau2-bench/issues/384),
+[#540](https://github.com/sierra-research/tau2-bench/issues/540),
+[#474](https://github.com/sierra-research/tau2-bench/issues/474)).
+
+Eight new issues rather than thirteen: a duplicate check found five drafts overlapped open threads,
+so those were posted as comments adding evidence instead. One draft was **withdrawn rather than
+filed** — a Python 3.13 import claim that could not be reproduced on this machine. Full record and
+the three claims that verification corrected before publication:
+[`docs/UPSTREAM_ISSUES.md`](docs/UPSTREAM_ISSUES.md).
 
 ---
 

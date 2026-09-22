@@ -235,7 +235,8 @@ Analysis per [PREREGISTRATION §6](PREREGISTRATION.md).
 1. **Evaluator audit suite** — Phase A, $0, reusable across languages and domains; scoop-proof.
 2. **Judge-swap re-grading harness** — run once, score under many judges. The primary tool.
 3. **The finding** — one sentence, with a CI and a stated MDE.
-4. **Ten upstream contributions** ([FINDINGS](FINDINGS.md) §Upstream) — filing is separately authorised.
+4. **13 upstream contributions** ([FINDINGS](FINDINGS.md) §Upstream) — **filed 22 Sep 2026** as
+   8 issues (#553–#560) + 4 comments; record in [UPSTREAM_ISSUES.md](UPSTREAM_ISSUES.md).
 5. Reproduction path: `make verify` offline, zero API keys.
 
 ## Verification

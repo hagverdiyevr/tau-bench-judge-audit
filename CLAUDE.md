@@ -27,7 +27,7 @@ Two distinctions that keep this system honest:
 
 ## Current state
 
-**Phase A, B, C and D complete. USD 13.76 spent of 75.00; USD 61.24 remaining.**
+**All phases (A–E) complete. USD 13.76 spent of 75.00; USD 61.24 remaining.**
 Every mechanism the study depends on is verified. The pre-registration is **frozen**
 (`a917984e…`, 2026-09-20T10:54:29Z). **320 confirmatory trajectories exist** (8/8 invocations, 0 infrastructure errors). Phase D is next.
 
@@ -41,6 +41,15 @@ Both `GEMINI_API_KEY` and `OPENAI_API_KEY` are live in a gitignored `.env`.
 
 **Research question:** τ³-retail's reward is gated on 40 of 114 tasks by an LLM judge hardcoded to
 `gpt-4.1-2025-04-14`. **Does that judge favour agents from its own model family?**
+
+**Answer (Phase D, 1,792 evaluations):** no detectable effect — `FamilyBias = +0.0063`,
+95% CI `[-0.0875, +0.1062]`. This is an **underpowered null, not equivalence**: realized MDE is
+**0.1367**, TOST against ±5pp does not clear, and the OpenAI arm is floor-bound so capability is
+confounded with family. **Never state it as "the judge is unbiased"** — [D-021](docs/DECISIONS.md)
+forbids it and `scripts/check_docs.py` fails the build on that phrasing.
+The durable results are the three positives: a **9.1-point judge-leniency spread**
+([D-L2](docs/FINDINGS.md)), a **100% fence-crash rate** ([D-L3](docs/FINDINGS.md)), and the
+official grader's **own irreproducibility** ([D-L5](docs/FINDINGS.md)).
 
 **Method:** generate each trajectory once, then re-grade the *same saved trajectory* under four
 judges (2 families × 2 capability tiers). The contrast is within-trajectory and paired, so it costs
@@ -166,16 +175,22 @@ Inherited from v1.0 §1 and still binding:
   .env` over a live file.** Never print or commit a key.
 - **Publishing is separately authorised** — posting, messages, deployment, leaderboard submission,
   and filing upstream issues or PRs. Prepare drafts; do not perform them.
+  **One authorisation has been given and consumed:** upstream issue filing, 22 Sep 2026 → 8 issues
+  (#553–#560) + 4 comments, as `@hagverdiyevr`. That authorisation covered *those* filings only.
+  **Still unauthorised:** social posts, leaderboard submission, and **PRs** — several issues offer
+  one; none is open. A new go-ahead is required for each.
 
 ## Phases
 
 **A** evaluator audit ($0.00 ✅) → **B** 11 gates ($0.47 ✅) → **B9** noise floor ($0.42 ✅) →
 **C** 320 trajectories (✅ $7.33) → **D** ✅ **1,792** judge evaluations ($5.41) →
 **E** ✅ analysis and release ($0.00). **Spent $13.76 of $75 — the study is complete.**
-The only outstanding action is **filing the 13 upstream issues**, which is separately
-authorised and remains **undone** — drafts in [docs/UPSTREAM_ISSUES.md](docs/UPSTREAM_ISSUES.md).
+Upstream filing was authorised and is **done**: 8 issues (#553–#560) + 4 comments on existing
+threads, 22 Sep — record in [docs/UPSTREAM_ISSUES.md](docs/UPSTREAM_ISSUES.md), rationale in
+[D-022](docs/DECISIONS.md). **No other publishing is authorised** (no posts, no leaderboard
+submission, no PRs).
 
-Phase C is **complete** (320 trajectories, 0 infrastructure errors). Phase D is **running**.
+**All measurement is finished.** Nothing further requires spend.
 
 **Phase D is 1,792 evaluations, not 1,280.** The smaller figure counted only the base pass;
 [§6.3](docs/PREREGISTRATION.md)'s noise control adds 512 replicates on a pre-drawn 20% sample

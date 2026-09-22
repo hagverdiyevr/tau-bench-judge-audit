@@ -426,3 +426,59 @@ null is reported in full, in its own section, with its MDE beside it.
 **40** by the benchmark ([A3](FINDINGS.md)). Trials reduce within-task noise, which is not the
 binding term. Only more *tasks* would move the MDE, and none exist. USD 61.24 remains and **cannot
 buy power here** — a structural ceiling, not a budget decision.
+
+## D-022 — File 8 issues and 4 comments, not 13 issues; withdraw what could not be reproduced
+
+**Date:** 22 September 2026 · **Context:** upstream filing authorised; [UPSTREAM_ISSUES.md](UPSTREAM_ISSUES.md)
+
+**The fork.** Thirteen contributions were drafted and the instruction was to file them. A duplicate
+check against the live tracker — run *before* anything was posted — found that five overlapped
+existing threads, including one (`#499`) whose title was nearly identical to our draft.
+
+| Option | Why not |
+| --- | --- |
+| **A. File all 13 as new issues, as drafted.** | Five would have been closed as duplicates of open threads the maintainers already track. A batch where 38% is duplicate noise devalues the other 62%, and the whole point of this work is to be credible to people who read carefully. |
+| **B. File only the 8 novel ones; drop the rest.** | Throws away the strongest material. The `#499` characterization and the `#540` decomposition are more valuable *as replies* than as standalone issues — they answer questions those threads are explicitly asking. |
+| **C. 8 new issues + 4 comments.** | **Chosen.** |
+
+**Decision.** Eight genuinely novel findings as new issues (`#553`–`#560`); the five overlapping
+ones as comments adding evidence to `#499`, `#384`, `#540` and `#474`. Drafts 8 and 10 both belonged
+on `#384` and went as **one** comment rather than two consecutive ones on the same thread.
+
+**Rationale.** A comment on an active thread reaches the people already working on that problem;
+a duplicate issue reaches a triager. Where our material *extends* someone else's work, saying so
+explicitly is both more accurate and more useful than restating it under our own number.
+
+### The part that matters more: three claims changed under verification
+
+Every repro was executed before filing rather than trusted from our own notes. Three did not
+survive contact:
+
+1. **Withdrawn — the Python 3.13 import failure.** [A0](FINDINGS.md) records that `tau2` cannot be
+   imported on 3.13 via `audioop`/PEP 594. No 3.13 exists on this machine, and the
+   `audioop`-importing dependency is **not present in the installed venv** — most likely behind the
+   voice extras, which we never installed. So the finding may well be true and we could not show
+   it. **It was dropped rather than asserted.** `#560` carries only the `uv.lock` half, which was
+   reproduced directly.
+2. **Corrected — `uv sync --frozen`.** The draft claimed it fails against the stale lock. Tested
+   expecting failure: it **succeeds**. `#560` states that explicitly rather than overstating severity.
+3. **Sharpened — the seed drop.** The draft blamed a bare LiteLLM drop. The mechanism is tau2's own
+   `litellm.drop_params = True` (`llm_utils.py:71`) converting LiteLLM's `UnsupportedParamsError`
+   into silence. The corrected version is a better issue *and* a fairer one.
+
+A fourth was reframed before filing: "the judge cannot see tool calls" is weak, because
+`ticks_to_message_history:151` documents excluding tool calls as **intentional**. The real defect is
+that line 79 does not implement that documented intent. That turned a design argument into a
+one-line fix against upstream's own docstring.
+
+**Consequence.** [D-004](DECISIONS.md) says *verify against shipped data, not documentation.* This
+is the first time that rule was applied to **our own documentation**, and it cost us one
+contribution. That is the correct trade: a public claim we cannot reproduce on demand would
+discredit the twelve we can.
+
+**One further exclusion.** Contribution #7 (the models-list endpoint advertising uncallable models)
+was not filed at all — it is an observation about provider account provisioning, not a tau2 defect,
+and has no honest home in that tracker. Retained in [FINDINGS](FINDINGS.md) as evidence.
+
+**Still unauthorised:** social posts, leaderboard submission, and **PRs**. Several issues offer a
+PR; none is open. Each needs its own go-ahead.

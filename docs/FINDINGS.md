@@ -216,25 +216,44 @@ See [DECISIONS.md](DECISIONS.md) D-004.
 family is a first-order validity question for every published τ³-retail number — and it is
 measurable by **re-grading saved trajectories** rather than re-running them.
 
-## Upstream contributions ready to file
+## Upstream contributions — **FILED 22 September 2026**
 
-Not yet filed — filing is a separate authorized action (see [CLAUDE.md](../CLAUDE.md)).
+Filed as [@hagverdiyevr](https://github.com/hagverdiyevr) against v1.0.1 (`fc0055dc`):
+**8 new issues ([#553–#560](https://github.com/sierra-research/tau2-bench/issues/553)) and
+4 comments** on existing threads. Full record, including three claims that verification corrected
+before publication, in [UPSTREAM_ISSUES.md](UPSTREAM_ISSUES.md).
 
-| # | Contribution | Source finding |
-| --- | --- | --- |
-| 1 | Py3.13 import failure; one-line root cause, three fix options | A0 |
-| 2 | #499 characterization: the 16/2 stale-data vs hash-corrupting split, with task IDs; tasks 64 and 105 have logically impossible gold actions | A4 |
-| 3 | Null-agent baseline as a reusable validity check; the 67/68/105 × #499 false-positive mechanism | A5 |
-| 4 | Docs/schema mismatch: `communicate_info` populated on 36 tasks, scored on none | A1 |
-| 5 | **NL-assertion judge cannot see tool calls** — `tool_calls` dropped by the `message.content` serialization; empty assistant turns leak as literal `"assistant: None"` into the judge prompt | B4 |
-| 6 | **`ToolCall` cannot carry `provider_specific_fields`**, so Gemini thought signatures survive only via LiteLLM's id-packing fallback (litellm#41534). A transport change breaks tau2's Gemini multi-turn tool calling silently | B-L6 |
-| 7 | Models-list endpoint advertises models the account cannot call (`gemini-2.5-flash-lite`, `gemini-3.1-flash-lite-preview`) — availability needs a real call | B-L1 |
-| 8 | **ACTION checker is order-sensitive on list arguments** — a call identical to gold except list order scores `action_match: false`. Sibling of #514; a false-negative mechanism wherever `ACTION` gates reward | B-L7 |
-| 9 | **Judge cost is entirely unaccounted** — no cost/usage field exists for the NL-assertion judge; measured ~40% understatement of true run cost on judge-gated tasks | B-L14 |
-| 10 | **Run-to-run noise floor for #540**, plus a reproducibility asymmetry: at temperature 0 one model family reproduces identical message contents/tool calls/rewards across repeat invocations and another does not | B-L15 |
-| 11 | **LiteLLM silently drops `seed` for the `gemini` provider** (`llm_utils.py:71`), so seeded reproducibility is unavailable for Gemini arms without the caller knowing | B-L15 correction |
-| 12 | **NL-judge path does not use upstream's own fence stripper** — `evaluator_nl_assertions.py:127` calls raw `json.loads` while `llm_utils.py:509` provides `extract_json_from_llm_response`; `gemini-3.8-flash` therefore crashes the evaluator. One-line wiring fix | B-L16 |
-| 13 | **`all([])` scores an empty judge response as a full pass**; duplicate, extra and mismatched verdicts are equally silent | B-L16 |
+**Two entries in this table were NOT filed, and the reconciliation is recorded rather than tidied
+away:**
+
+- **#1 (Py3.13 import failure) — WITHDRAWN.** No Python 3.13 is available on this machine and the
+  `audioop`-importing dependency could not be located in the installed venv; it is most likely
+  behind the voice extras, which are not installed. Asserting it publicly would have repeated
+  [D-004](DECISIONS.md)'s error — claiming from our own notes rather than shipped reality. Only the
+  `uv.lock` half ([A0b](FINDINGS.md)) was filed, as #560.
+- **#7 (models-list endpoint) — NOT FILED.** It is an observation about provider account
+  provisioning, not a tau2 defect, so it has no natural home in this tracker. Retained here as
+  evidence ([B-L1](FINDINGS.md)); see [D-022](DECISIONS.md).
+
+Two contributions filed were **not** in the original 13 and are appended below as 14 and 15.
+
+| # | Contribution | Source finding | **Filed as** |
+| --- | --- | --- | --- |
+| 1 | Py3.13 import failure; one-line root cause, three fix options | A0 | **WITHDRAWN** — unreproducible |
+| 2 | #499 characterization: the 16/2 stale-data vs hash-corrupting split, with task IDs; tasks 64 and 105 have logically impossible gold actions | A4 | comment on [#499](https://github.com/sierra-research/tau2-bench/issues/499#issuecomment-5772485558) |
+| 3 | Null-agent baseline as a reusable validity check; the 67/68/105 × #499 false-positive mechanism | A5 | comment on [#384](https://github.com/sierra-research/tau2-bench/issues/384#issuecomment-5774383986) |
+| 4 | Docs/schema mismatch: `communicate_info` populated on 36 tasks, scored on none | A1 | comment on [#384](https://github.com/sierra-research/tau2-bench/issues/384#issuecomment-5774383986) |
+| 5 | **NL-assertion judge cannot see tool calls** — `tool_calls` dropped by the `message.content` serialization; empty assistant turns leak as literal `"assistant: None"` into the judge prompt | B4 | **[#553](https://github.com/sierra-research/tau2-bench/issues/553)** |
+| 6 | **`ToolCall` cannot carry `provider_specific_fields`**, so Gemini thought signatures survive only via LiteLLM's id-packing fallback (litellm#41534). A transport change breaks tau2's Gemini multi-turn tool calling silently | B-L6 | **[#559](https://github.com/sierra-research/tau2-bench/issues/559)** |
+| 7 | Models-list endpoint advertises models the account cannot call (`gemini-2.5-flash-lite`, `gemini-3.1-flash-lite-preview`) — availability needs a real call | B-L1 | **not filed** — not a tau2 defect |
+| 8 | **ACTION checker is order-sensitive on list arguments** — a call identical to gold except list order scores `action_match: false`. Sibling of #514; a false-negative mechanism wherever `ACTION` gates reward | B-L7 | **[#557](https://github.com/sierra-research/tau2-bench/issues/557)** |
+| 9 | **Judge cost is entirely unaccounted** — no cost/usage field exists for the NL-assertion judge; measured ~40% understatement of true run cost on judge-gated tasks | B-L14 | **[#556](https://github.com/sierra-research/tau2-bench/issues/556)** |
+| 10 | **Run-to-run noise floor for #540**, plus a reproducibility asymmetry: at temperature 0 one model family reproduces identical message contents/tool calls/rewards across repeat invocations and another does not | B-L15 | comment on [#540](https://github.com/sierra-research/tau2-bench/issues/540#issuecomment-5774393926) |
+| 11 | **LiteLLM silently drops `seed` for the `gemini` provider** (`llm_utils.py:71`), so seeded reproducibility is unavailable for Gemini arms without the caller knowing | B-L15 correction | **[#558](https://github.com/sierra-research/tau2-bench/issues/558)** |
+| 12 | **NL-judge path does not use upstream's own fence stripper** — `evaluator_nl_assertions.py:127` calls raw `json.loads` while `llm_utils.py:509` provides `extract_json_from_llm_response`; `gemini-3.8-flash` therefore crashes the evaluator. One-line wiring fix | B-L16 | **[#555](https://github.com/sierra-research/tau2-bench/issues/555)** |
+| 13 | **`all([])` scores an empty judge response as a full pass**; duplicate, extra and mismatched verdicts are equally silent | B-L16 | **[#554](https://github.com/sierra-research/tau2-bench/issues/554)** |
+| 14 | **Committed `uv.lock` is stale at tag v1.0.1** — records `tau2` 1.0.0 against `pyproject.toml`'s 1.0.1, so any `uv run` dirties a fresh clone. `uv sync --frozen` still succeeds (tested) | A0b | **[#560](https://github.com/sierra-research/tau2-bench/issues/560)** |
+| 15 | **The judge is hardcoded with no override, and the override is worth 9.1 points** — patching `tau2.config` is a silent no-op; measured leniency spread across four judges on identical prompts | B1, [D-L2](FINDINGS.md) | comment on [#474](https://github.com/sierra-research/tau2-bench/issues/474#issuecomment-5774408352) |
 
 ---
 

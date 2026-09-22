@@ -6,7 +6,7 @@
 > [PLAN.md](PLAN.md).
 
 **Last updated:** 22 September 2026
-**Phase:** A ✅ · B ✅ · C ✅ · D ✅ · **E ✅ analysis complete — release drafts prepared, unfiled**
+**Phase:** A ✅ · B ✅ · C ✅ · D ✅ · **E ✅ COMPLETE — analysis published, upstream filed**
 **Cumulative API spend: USD 13.76 of 75.00** — USD 61.24 remaining
 *(a lower bound: 32 successful calls carried no cost from LiteLLM — [D-L4](FINDINGS.md))*
 **Ledger of record:** `results/spend_ledger.json` (regenerated from run artifacts)
@@ -147,3 +147,8 @@ the primary is an **underpowered null** (MDE 0.1367), the OpenAI arm is **floor-
 | 2026-09-20 | Pre-registration **FROZEN** (`a917984e`, tamper-tested) + verifier. **B9 complete** — answered #540; found determinism asymmetry between families (contribution #10). Docs realigned; spend ledger automated | ~$0.42 |
 | 2026-09-21 | External review verified across 6 dimensions (34 findings). Corrected 5 of my own errors incl. the false "byte-identical" claim. Added amendment chain (A-001/A-002), execution manifest, budget-aware runner, ledger generator, hardened checker | $0.0025 |
 | 2026-09-21 | Closed external-review recs 4/5/8/9/10: fail-closed judge adapter (J1 confirmed live, J2 offline), 21+8+18 tests, artifact export, Makefile gate. **Phase C smoke: 40/40 sims, reward 0.675, 28% component disagreement** | $1.21 |
+| 2026-09-22 | **Phase C complete** — 8/8 invocations, 320 sims, **0 infrastructure errors**, 7,516 attempts logged. Determinism replicated at n=40 ([C-L2](FINDINGS.md)); OpenAI arm found floor-bound ([C-L3](FINDINGS.md)). A-003/A-004 retry work; resume hardened to prove completion | $7.33 |
+| 2026-09-22 | **A-005 — Phase D hardened before dispatch.** Audit found the harness did **zero retries** (litellm's default, = A-002's defect) and had **no §6.3 replicates**; true volume is **1,792**, not 1,280. Added gated/resumable runner, pre-drawn replicate sample, 28 guard tests | $0.08 |
+| 2026-09-22 | **Phase D complete** — 1,792/1,792 settled, 0 anomalies, journal matches manifest exactly. **FamilyBias +0.0063 [−0.0875, +0.1062]**, an underpowered null (MDE 0.1367). Positives: 9.1pp leniency spread, 448/448 fence crash, incumbent judge not reproducible | $5.41 |
+| 2026-09-22 | **Phase E** — §6.2 audit found a mislabelled secondary and two missing ones; added true S3, S5, §4.3 sensitivity. **E-L1**: DB/judge disagree on 31.2%. **E-L2**: cheaper agent costs **10× more per reliable task**. README published with machine-checked numbers | $0.00 |
+| 2026-09-22 | **Upstream filed** — 8 issues (#553–#560) + 4 comments, after a duplicate check moved 5 drafts to existing threads. One claim **withdrawn** as unreproducible, two corrected under verification ([D-022](DECISIONS.md)) | $0.00 |

@@ -405,7 +405,7 @@ not depend on it:
 
 1. **A 9.1-point judge-leniency spread** ([D-L2](FINDINGS.md)) — swapping only the grader moves a
    reported score by more than most leaderboard gaps. And the DiD control is what stops this being
-   published as bias: the incumbent's +0.053 edge on the OpenAI arm comes with a +0.050 edge on the
+   published as bias: the incumbent's +0.056 edge on the OpenAI arm comes with a +0.050 edge on the
    Google arm. **Without the control term this study would have reported a false positive.**
 2. **A 100% fence-crash rate** ([D-L3](FINDINGS.md)) — 448/448 for `gemini-3.8-flash` against
    upstream's raw `json.loads`. Not a flaky edge case; a total failure for anyone swapping the judge.

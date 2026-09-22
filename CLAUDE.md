@@ -171,7 +171,9 @@ Inherited from v1.0 §1 and still binding:
 
 **A** evaluator audit ($0.00 ✅) → **B** 11 gates ($0.47 ✅) → **B9** noise floor ($0.42 ✅) →
 **C** 320 trajectories (✅ $7.33) → **D** ✅ **1,792** judge evaluations ($5.41) →
-**E** analysis and release ($0.00, **next**). **Spent $13.76 of $75 — all measurement is done.**
+**E** ✅ analysis and release ($0.00). **Spent $13.76 of $75 — the study is complete.**
+The only outstanding action is **filing the 13 upstream issues**, which is separately
+authorised and remains **undone** — drafts in [docs/UPSTREAM_ISSUES.md](docs/UPSTREAM_ISSUES.md).
 
 Phase C is **complete** (320 trajectories, 0 infrastructure errors). Phase D is **running**.
 

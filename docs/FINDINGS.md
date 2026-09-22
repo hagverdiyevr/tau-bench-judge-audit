@@ -814,7 +814,7 @@ Mean NL-assertion reward, **same 320 trajectories, same captured prompt**, only 
 moves a reported score by more than most leaderboard gaps.
 
 This is the finding [D-009](DECISIONS.md) predicted and the reason the DiD control term is
-mandatory. Taking the incumbent's **+0.053** advantage over `gemini-3.8-flash` on the OpenAI arm
+mandatory. Taking the incumbent's **+0.056** advantage over `gemini-3.8-flash` on the OpenAI arm
 as evidence of favouritism would be wrong: it grades the *Google* arm **+0.050** higher too. It is
 a uniformly more lenient judge, not a biased one. **The control term is what separates those, and
 without it this study would have reported a false positive.**
@@ -906,3 +906,79 @@ C-L2 found `gpt-4.1-nano` nondeterministic and `gemini-3.1-flash-lite` determini
 set, with a different instrument — the same 3/320 residual disagreement in the table above is the
 same phenomenon. **The benchmark's official grader is not reproducible**, and its own
 irreproducibility is the floor under every score it assigns.
+
+# Phase E — Completing the pre-registered analysis
+
+*22 Sep 2026. **USD 0.00** — no new data; these are the [§6.2](PREREGISTRATION.md) secondaries
+computed over Phase C components and Phase D verdicts. Script:
+`scripts/phase_d/analyze_phase_d.py`.*
+
+**A label was wrong and is corrected here.** The block the analyzer first printed as "S3" was
+*mechanism validation* (does a re-grade reproduce tau2's own verdict), not §6.2's S3 (component
+decomposition). It is now printed as **M1**, and the real S3 is below. Passing a convenience
+metric off as a pre-registered secondary is precisely the drift the freeze exists to stop.
+
+## E-L1 — DB and the judge disagree on **31% of all trajectories**; the judge passes 64 that the database fails
+
+[§6.2](PREREGISTRATION.md) S3, as a 2×2 contingency. Reward is the **product** of the two
+components, so an additive "contribution" split would be meaningless and is not computed.
+
+| Arm | n | DB+ NL+ | DB+ NL− | DB− NL+ | DB− NL− | **Disagree** |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| OpenAI | 160 | 22 | 20 | 36 | 82 | **56 (35.0%)** |
+| Google | 160 | 108 | 16 | 28 | 8 | **44 (27.5%)** |
+| **Both** | **320** | **130** | **36** | **64** | **90** | **100 (31.2%)** |
+
+[B-L12](FINDINGS.md) proposed partial independence from 5 trajectories. At **n=320 it holds**: the
+two instruments disagree on **roughly a third of all trajectories**.
+
+The **DB− NL+** cell is the one to read twice. On **64 trajectories (20% of the corpus)** the LLM
+judge certifies the agent did what was asked while the database says the world was not changed
+correctly. Multiplicative scoring saves the final number — those trajectories score 0 regardless —
+but **the judge alone would have passed one trajectory in five that the database fails**. Anyone
+using an NL judge without a state check inherits that error rate.
+
+The mirror cell, **DB+ NL− (36)**, is the reverse: the right end state reached without the
+narration the assertions demand.
+
+## E-L2 — The cheaper agent costs **10× more per reliably-completed task**
+
+[§6.2](PREREGISTRATION.md) S5, judge cost included ([B-L14](FINDINGS.md): tau2 omits it entirely).
+Phase D's re-grading cost is split evenly across arms — each contributed 160 of 320 trajectories.
+
+| Arm | Generation | Judge | Total | k=1 successes | **Cost / success** | k=4 all-4 | **Cost / reliable task** |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| OpenAI (`gpt-4.1-nano`) | $2.8363 | $2.7043 | $5.5406 | 22/160 | **$0.2518** | 2/40 | **$2.7703** |
+| Google (`gemini-3.1-flash-lite`) | $4.4936 | $2.7043 | $7.1979 | 108/160 | **$0.0666** | 27/40 | **$0.2666** |
+
+**The ranking inverts depending on what you count.** Per *attempt*, the OpenAI arm is the cheaper
+one — it generated 160 trajectories for $2.84 against $4.49. Per *success* it is **3.8× more
+expensive**. Per *reliably-completed task* (all four trials passing) it is **10.4× more expensive**.
+
+Reliability compounds: the arm that succeeds 13.8% of the time needs ~7 attempts per success, and
+far more than that for four-in-a-row. A cost-per-token or cost-per-attempt comparison — the
+default in most model marketing — points at the wrong model here by an order of magnitude.
+
+> Cost per success is **undefined, never zero**, at zero successes ([§6.5](PREREGISTRATION.md)).
+> Both arms have successes, so both are defined.
+
+## E-L3 — The pre-specified sensitivity analysis does not change the conclusion
+
+[§4.3](PREREGISTRATION.md) disclosed that 5 tasks (**89, 76, 109, 103, 43**) were inspected during
+Phase B calibration, and required a pre-specified sensitivity analysis excluding them.
+
+| Set | FamilyBias | 95% CI | n |
+| --- | ---: | --- | ---: |
+| All tasks | **+0.0063** | [−0.0875, +0.1062] | 40 |
+| Excluding the 5 disclosed | **−0.0143** | [−0.1143, +0.0929] | 35 |
+
+The point estimate moves by 0.0205 and **changes sign**, which is unsurprising when both estimates
+are indistinguishable from zero and the shift is a seventh of the interval's width. Both intervals
+contain zero; **the conclusion is unchanged**, as §4.3 required.
+
+## E-L4 — ITT and per-protocol are identical
+
+[§6.4](PREREGISTRATION.md) requires both. Phase C completed with **zero `infrastructure_error`
+trajectories**, so there is nothing to exclude and the two analyses coincide at **n = 40 per
+cell**. The distinction was not idle: [A-004](PREREGISTRATION_AMENDMENTS.md) had to settle whether
+such trajectories are scored zeros or missing data, and an earlier discarded invocation had 6.

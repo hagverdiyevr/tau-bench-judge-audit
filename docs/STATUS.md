@@ -6,7 +6,7 @@
 > [PLAN.md](PLAN.md).
 
 **Last updated:** 22 September 2026
-**Phase:** A ✅ · B ✅ · C ✅ · **D ✅ COMPLETE (1,792/1,792 evaluations, 0 anomalies)** · Phase E next
+**Phase:** A ✅ · B ✅ · C ✅ · D ✅ · **E ✅ analysis complete — release drafts prepared, unfiled**
 **Cumulative API spend: USD 13.76 of 75.00** — USD 61.24 remaining
 *(a lower bound: 32 successful calls carried no cost from LiteLLM — [D-L4](FINDINGS.md))*
 **Ledger of record:** `results/spend_ledger.json` (regenerated from run artifacts)
@@ -78,31 +78,32 @@ and `scripts/phase_a/01` regenerates the headline Phase A numbers with **no setu
 
 ## Next executable task
 
-**Phase E — analysis and release.** All measurement is done; no further spend is required.
+**Nothing is blocking and no spend remains.** All five [PLAN](PLAN.md) Phase E deliverables exist:
+
+| Deliverable | Where |
+| --- | --- |
+| Evaluator audit suite | `scripts/phase_a/` |
+| Judge-swap re-grading harness | `scripts/phase_d/` |
+| The finding, with CI and MDE | [README.md](../README.md) |
+| 13 upstream contributions | [UPSTREAM_ISSUES.md](UPSTREAM_ISSUES.md) — **drafted, not filed** |
+| Reproduction path | `make verify`, offline, no keys |
+
+The pre-registered analysis is **complete**: §6.1 primary, §6.2 S1–S5, §6.3 noise floor, §6.4
+ITT/per-protocol, and the §4.3 sensitivity analysis. See [D-L1..D-L5](FINDINGS.md) and
+[E-L1..E-L4](FINDINGS.md).
 
 ```bash
-python3 scripts/phase_d/analyze_phase_d.py     # regenerates every Phase D number
-make verify                                     # all offline gates
+python3 scripts/phase_d/analyze_phase_d.py     # regenerates every published number
+make verify                                     # 99 offline checks, incl. README number-drift
 ```
 
-The confirmatory result is in [D-L1..D-L5](FINDINGS.md):
+**The only remaining action requires your authorisation:** filing the 13 upstream issues.
+[CLAUDE.md](../CLAUDE.md) treats publishing as separately authorised, so they stay drafted until
+you say otherwise.
 
-| | |
-| --- | --- |
-| **§6.1 primary** | FamilyBias **+0.0063**, 95% CI **[−0.0875, +0.1062]**, n=40 tasks |
-| **§6.5 TOST (±5pp)** | **Not equivalent** — realized MDE 0.1367; rules out \|effect\| > 0.1062 |
-| **§6.2 S1 tier control** | high +0.0063, low +0.0000 — both null, mutually corroborating |
-| **§6.3 noise floor** | 1 flip / 256 pairs (0.004), inside B-L13's <9% bound |
-
-**What Phase E must carry, non-negotiably:**
-- The headline is **not** "no bias". It is **"no family bias detectable between these two agents,
-  at a design that could only have seen a ~14-point effect"** ([D-L1](FINDINGS.md)).
-- The OpenAI arm is **floor-bound** (0.138 vs 0.675) — capability is confounded with family
-  ([C-L3](FINDINGS.md)). State it before any family claim.
-- The **positive** findings are the stronger deliverable: a 9.1-point judge-leniency spread
-  ([D-L2](FINDINGS.md)), a 100% fence-crash rate ([D-L3](FINDINGS.md)), and the incumbent judge's
-  own irreproducibility ([D-L5](FINDINGS.md)).
-- `pass^k` is not comparable across arms ([C-L2](FINDINGS.md)).
+**What must never be dropped when this is presented** ([D-021](DECISIONS.md)):
+the primary is an **underpowered null** (MDE 0.1367), the OpenAI arm is **floor-bound**
+(0.138 vs 0.675), and `pass^k` is not comparable across arms.
 
 ## Blockers
 

@@ -209,12 +209,93 @@ for fam, hi_j, lo_j in (("openai", "gpt-4.1-2025-04-14", "gpt-4.1-mini"),
         print(f"    {fam:<7} high {statistics.mean(h):.3f}  low {statistics.mean(lw):.3f}  "
               f"delta {statistics.mean(h) - statistics.mean(lw):+.3f}")
 
-print("\n  S3 — incumbent agreement: does a re-grade reproduce the score tau2 recorded?")
+# NOTE: the block below was originally labelled "S3". It is NOT PREREGISTRATION §6.2's S3
+# (component decomposition) -- it is mechanism validation. The real S3 follows it. Mislabelling a
+# secondary as a preregistered one is exactly the drift the freeze exists to prevent.
+print("\n  M1 (mechanism, not §6.2) — does a re-grade reproduce the score tau2 recorded?")
 for j in man["design"]["judges"]:
     v = [r for r in base if r["judge"] == j and r.get("matches_incumbent") is not None]
     if v:
         ag = sum(1 for r in v if r["matches_incumbent"])
         print(f"    {j:<32}{ag:>5}/{len(v):<5} ({ag / len(v):.3f})")
+
+# ---------------------------------------------------------------- §6.2 S3, S5 + §4.3 sensitivity
+# These need Phase C's component scores, which live in the simulation artifacts rather than the
+# re-grading journal.
+SIMS = REPO / "vendor" / "tau2-bench" / "data" / "simulations"
+comp = {}          # (run, task) -> {"DB": x, "NL": y, "reward": z}
+for run in sorted({r["run"] for r in rows}):
+    art = SIMS / run / "results.json"
+    if not art.exists():
+        continue
+    for sim in json.loads(art.read_text())["simulations"]:
+        rb = (sim.get("reward_info") or {}).get("reward_breakdown") or {}
+        comp[(run, str(sim["task_id"]))] = {
+            "DB": rb.get("DB"), "NL": rb.get("NL_ASSERTION"),
+            "reward": (sim.get("reward_info") or {}).get("reward"),
+        }
+
+print("\n  S3 — component decomposition: DB x NL_ASSERTION as a 2x2 (§6.2; NOT additive —")
+print("       reward is the PRODUCT, so a single 'component contribution' number is meaningless)")
+for label, want in (("openai", "openai"), ("google", "google"), ("both", None)):
+    cells = {(1, 1): 0, (1, 0): 0, (0, 1): 0, (0, 0): 0}
+    for (run, task), c in comp.items():
+        if want and arm(run) != want:
+            continue
+        if c["DB"] is None or c["NL"] is None:
+            continue
+        cells[(int(c["DB"] == 1.0), int(c["NL"] == 1.0))] += 1
+    n = sum(cells.values()) or 1
+    disagree = cells[(1, 0)] + cells[(0, 1)]
+    print(f"    {label:<7} n={n:<4} "
+          f"DB+NL+ {cells[(1, 1)]:>4}  DB+NL- {cells[(1, 0)]:>4}  "
+          f"DB-NL+ {cells[(0, 1)]:>4}  DB-NL- {cells[(0, 0)]:>4}   "
+          f"disagree {disagree}/{n} ({disagree / n:.1%})")
+print("       DB+NL- and DB-NL+ are the cells that matter: each is a trajectory ONE instrument")
+print("       scores as a pass and the other as a fail. B-L12 predicted partial independence.")
+
+print("\n  S5 — cost per success, judge cost INCLUDED (§6.2; undefined at zero successes)")
+led = json.loads((REPO / "results" / "spend_ledger.json").read_text())
+runcost = {r["run"]: (r["measured_usd_from_attempts"]
+                      if r["source"] == "attempt_log"
+                      else r["agent_user_usd"] + r["judge_usd_estimated"])
+           for r in led["runs"]}
+phase_d_usd = led.get("components", {}).get("phase_d_regrade_usd", 0.0)
+for a in ("openai", "google"):
+    runs_a = [r for r in runcost if r.startswith("phaseC_") and arm(r) == a]
+    gen = sum(runcost[r] for r in runs_a)
+    # Phase D re-grading cost is shared evenly across the two arms: each contributed 160 of 320.
+    total = gen + phase_d_usd / 2
+    trials = [(run, task) for (run, task) in comp if arm(run) == a]
+    succ1 = sum(1 for k in trials if comp[k]["reward"] == 1.0)
+    bytask = {}
+    for run, task in trials:
+        bytask.setdefault(task, []).append(comp[(run, task)]["reward"] == 1.0)
+    succ4 = sum(1 for t, v in bytask.items() if len(v) == 4 and all(v))
+    c1 = f"${total / succ1:.4f}" if succ1 else "UNDEFINED (0 successes)"
+    c4 = f"${total / succ4:.4f}" if succ4 else "UNDEFINED (0 successes)"
+    print(f"    {a:<7} generation ${gen:.4f} + judge ${phase_d_usd / 2:.4f} = ${total:.4f}")
+    print(f"            k=1: {succ1:>3}/{len(trials)} successes -> {c1} per success")
+    print(f"            k=4: {succ4:>3}/{len(bytask)} tasks all-4 -> {c4} per reliably-completed task")
+
+print("\n  §4.3 SENSITIVITY — re-run the primary excluding the 5 tasks inspected in Phase B")
+DISCLOSED = {"89", "76", "109", "103", "43"}
+did_s, _ = per_task(INCUMBENT, GOOGLE_HIGH)
+kept = {t: v for t, v in did_s.items() if t not in DISCLOSED}
+if kept:
+    ps, los, his = cluster_bootstrap(kept)
+    print(f"    excluding {sorted(DISCLOSED, key=int)}: FamilyBias {ps:+.4f}  "
+          f"95% CI [{los:+.4f}, {his:+.4f}]  (n={len(kept)} tasks)")
+    if did:
+        moved = abs(ps - point)
+        print(f"    full set {point:+.4f} -> shift {moved:+.4f}.  "
+              f"{'CONCLUSION UNCHANGED' if (los <= 0 <= his) == (lo <= 0 <= hi) else 'CONCLUSION CHANGED — investigate'}")
+
+print("\n  §6.4 ITT vs PER-PROTOCOL")
+infra = sum(1 for (run, task) in comp if comp[(run, task)]["reward"] is None)
+print(f"    infrastructure-error trajectories: {infra}")
+print(f"    ITT and per-protocol are {'IDENTICAL (nothing to exclude)' if infra == 0 else 'DIFFERENT'}"
+      f" — Phase C completed with zero infrastructure errors, so n = 40 per cell either way.")
 
 # ---------------------------------------------------------------- exploratory (§6.5)
 print("\n" + "=" * 78)

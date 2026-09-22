@@ -226,7 +226,7 @@ trajectory*, and does so preferentially on the longest and hardest tasks.
 Also analyse the judge's `reasoning` field qualitatively on a stratified sample — justifications are
 persisted and independently checkable by a reviewer.
 
-### Phase E — Analysis and release · $0.00
+### Phase E — Analysis and release · $0.00 · ✅ **COMPLETE (filing still unauthorised)**
 
 Analysis per [PREREGISTRATION §6](PREREGISTRATION.md).
 

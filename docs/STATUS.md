@@ -5,8 +5,8 @@
 > [FINDINGS.md](FINDINGS.md), rationale in [DECISIONS.md](DECISIONS.md), the route in
 > [PLAN.md](PLAN.md).
 
-**Last updated:** 21 September 2026
-**Phase:** A ✅ · B ✅ · **Phase C ✅ COMPLETE (320/320 sims, 0 infra errors)** · Phase D next
+**Last updated:** 22 September 2026
+**Phase:** A ✅ · B ✅ · C ✅ (320/320 sims, 0 infra errors) · **Phase D RUNNING — 1,792 evaluations**
 **Cumulative API spend: USD 8.35 of 75.00** — USD 66.65 remaining
 **Ledger of record:** `results/spend_ledger.json` (regenerated from run artifacts)
 
@@ -40,10 +40,10 @@ t-bench/
 ├── scripts/phase_b/               step1..step5, all Phase B gates
 ├── results/                       phase_a/, phase_b/, spend_ledger.json
 ├── Makefile                       `make verify` = the pre-spend gate
-├── tests/                         3 files, 47 checks (phase_a regression, judge adapter, runner guards)
+├── tests/                         4 files, 75 checks (phase_a, judge adapter, runner guards, phase_d guards)
 ├── scripts/grading/               fail-closed judge adapter
 ├── scripts/phase_c/               build_manifest.py, run_phase_c.py
-├── scripts/phase_d/               regrade.py (N-judge re-grading harness)
+├── scripts/phase_d/               build_manifest.py, run_phase_d.py, pricing.py, regrade.py
 ├── scripts/build_spend_ledger.py  ledger generator (incl. judge cost)
 ├── scripts/export_artifacts.py    lifts runs out of the gitignored submodule
 ├── scripts/check_docs.py          doc alignment — run every iteration
@@ -77,16 +77,26 @@ and `scripts/phase_a/01` regenerates the headline Phase A numbers with **no setu
 
 ## Next executable task
 
-**Phase D — re-grade all 320 trajectories under 4 judges** (1,280 evaluations, ~USD 6 of USD 66.65).
+**Phase D is in flight** — **1,792** evaluations (1,280 base + 512 §6.3 replicates), ~USD 5.93.
 
 ```bash
-cd vendor/tau2-bench && uv run python ../../scripts/phase_d/regrade.py --run phaseC_t1_gem
+cd vendor/tau2-bench && uv run python ../../scripts/phase_d/run_phase_d.py          # resumes
+cd vendor/tau2-bench && uv run python ../../scripts/phase_d/run_phase_d.py --dry-run
 ```
 
-Mechanism validated end to end at **20/20** in [B-L16](FINDINGS.md): prompt identity guaranteed by
-capturing tau2's own constructed prompt, parsing through the fail-closed adapter. Note
-`gemini-3.8-flash` fences its JSON and **crashes the raw upstream parser** — the adapter is not
-optional.
+**Resume is safe and free.** A unit is journaled the moment it settles, so re-running never repeats
+settled work. An evaluation whose retries were exhausted is recorded `settled: false` and
+**re-attempted**, never banked as missing data.
+
+Mechanism validated at **20/20** in [B-L16](FINDINGS.md) and confirmed live on the first 20 units:
+prompt identity by capturing tau2's own constructed prompt, parsed through the fail-closed adapter.
+`gemini-3.8-flash` fenced **4 of 4** responses — it would crash the raw upstream parser every time,
+so the adapter is not optional.
+
+Before dispatch the runner was hardened under [A-005](PREREGISTRATION_AMENDMENTS.md): the previous
+harness performed **zero retries** (litellm's default), which in a paired design unpairs whole
+trajectories rather than losing single observations. Four gates now precede any spend — freeze,
+provenance, **input-corpus integrity**, budget.
 
 **Carry into Phase D and E:**
 - **`pass^k` is not comparable across arms** ([C-L2](FINDINGS.md)). Gemini's `pass^4` = `pass^1`
@@ -101,7 +111,7 @@ optional.
 | Blocker | Impact |
 | --- | --- |
 | ~~Gemini-only credentials~~ | **RESOLVED 20 Sep** — OpenAI key added; `gpt-4.1-2025-04-14` verified reachable, cost accounting exact. Both families available. |
-| `gpt-4.1-2025-04-14` pricing unverified | Cannot finalise the Phase D budget line until checked (gate B3) |
+| ~~`gpt-4.1-2025-04-14` pricing unverified~~ | **RESOLVED** — $2.00/$8.00 per 1M confirmed live; all 4 judges price through LiteLLM with no table fallback needed |
 | `gemini-2.5-flash-lite` unavailable | The 2.5×-cheaper arm is closed to new accounts ([B-L1](FINDINGS.md)); planned arms stand |
 
 ## Open questions carried forward

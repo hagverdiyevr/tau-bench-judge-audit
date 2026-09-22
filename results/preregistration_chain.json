@@ -26,7 +26,14 @@
    "id": "A-004",
    "sha256": "f5435ee9deab96709a94633d0000bb2073ca8d2ea6b5ef865219441575d97a44",
    "prev": "8e414e2a0174b910058b02ba06307ed84866d241802210e294ed29dc463cdbe4",
-   "sealed": false,
+   "sealed": true,
+   "anchor": false
+  },
+  {
+   "id": "A-005",
+   "sha256": "84690b144c013786fde2f42d8f8d2d4e69594614fabe66e06a03ff1e05d13225",
+   "prev": "f5435ee9deab96709a94633d0000bb2073ca8d2ea6b5ef865219441575d97a44",
+   "sealed": true,
    "anchor": false
   }
  ]

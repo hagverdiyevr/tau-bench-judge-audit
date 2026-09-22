@@ -100,6 +100,11 @@ All measured and cited. Do not re-derive or contradict without new evidence.
 - **Every API attempt is recorded** by `scripts/phase_c/attempt_logger.py`, a LiteLLM callback at
   the one shared request boundary. It captures failures and the judge calls tau2 records nowhere.
   `scripts/build_spend_ledger.py` prefers these **measured** totals over estimates. [A-003](docs/PREREGISTRATION_AMENDMENTS.md)
+- **LiteLLM retries NOTHING by default.** `litellm.num_retries` is `None` and `completion()` has
+  no `num_retries` default — verified in the pinned venv. Any direct `completion()` call must pass
+  it explicitly. In a **paired** design an unretried rate limit does not cost one observation, it
+  **unpairs the trajectory**, and it does so preferentially on the longest requests, i.e. the
+  hardest tasks. [A-005](docs/PREREGISTRATION_AMENDMENTS.md)
 - **OpenAI org limit is 200,000 TPM.** One 40-task invocation pushes ~3.1M tokens through
   `gpt-4.1-nano`, so the ceiling is hit by construction; requested waits are 46ms–1.4s. Retries are
   set to **4** and absorb it — 101 rate-limit failures across Phase C, **zero** reaching results.
@@ -159,10 +164,14 @@ Inherited from v1.0 §1 and still binding:
 ## Phases
 
 **A** evaluator audit ($0.00 ✅) → **B** 11 gates ($0.47 ✅) → **B9** noise floor ($0.42 ✅) →
-**C** 320 trajectories (✅ $7.33 measured) → **D** 1,280 judge evaluations (~$6, **next**) →
+**C** 320 trajectories (✅ $7.33 measured) → **D** **1,792** judge evaluations (~$5.93, **running**) →
 **E** analysis and release ($0.00). **Spent $8.35 · Phase D ~$6 · projected total ~$14.**
 
-Phase C is **complete** (320 trajectories, 0 infrastructure errors). Phase D is next.
+Phase C is **complete** (320 trajectories, 0 infrastructure errors). Phase D is **running**.
+
+**Phase D is 1,792 evaluations, not 1,280.** The smaller figure counted only the base pass;
+[§6.3](docs/PREREGISTRATION.md)'s noise control adds 512 replicates on a pre-drawn 20% sample
+([A-005](docs/PREREGISTRATION_AMENDMENTS.md)).
 Verify the freeze and the 4-amendment chain any time with
 `python scripts/verify_preregistration.py`.
 

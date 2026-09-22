@@ -237,3 +237,94 @@ Therefore:
   bias is 2.5% and readers must be able to see both.
 
 This is a clarification of §6.4's scope, not a change to it. No estimand is redefined.
+
+## A-005 — Phase D execution parameters, and the pre-drawn §6.3 replicate sample
+
+**Date:** 22 September 2026 · **Status:** sealed before the data it affects · **Spend at time of
+writing:** USD 8.35 of 75.00
+
+### What prompted this
+
+Phase C is complete and clean (320 simulations, 0 `infrastructure_error`). Before dispatching
+Phase D, the re-grading harness `scripts/phase_d/regrade.py` was audited against what Phase C
+actually taught us rather than against the plan written before it ran. The harness's *mechanism*
+was sound — prompt identity by capture, fail-closed parsing, validated 20/20 in
+[B-L16](FINDINGS.md). Its *operations* were not: it was a script, not a runner.
+
+Two gaps were material enough to change the design record.
+
+### 1. The zero-retry defect, in the place where it costs most
+
+`litellm.completion()` takes `num_retries` as a keyword and the global `litellm.num_retries`
+defaults to `None`. Verified directly in the pinned venv: **the harness performed zero retries.**
+
+That is precisely the configuration A-002 set for generation and A-003/A-004 had to undo, after
+18 `RateLimitError`s converted into 6 of 40 dead simulations. The ceiling has not moved: the
+OpenAI org limit is **200,000 TPM**, and one judge pass over all 320 trajectories carries
+**1,010,911 input tokens** — about **5.1 minutes** of pure token budget for `gpt-4.1` alone,
+before `gpt-4.1-mini` adds the same again. Rate limiting is certain by construction, exactly as
+A-004 found for the agent arm.
+
+**Why this is worse in Phase D than it was in Phase C.** The primary estimand is a
+**within-trajectory paired contrast** across four judges. A missing verdict does not cost one
+observation — it **unpairs the trajectory**, removing it from every contrast that involves that
+judge. And the loss is **not missing-at-random**: rate limits fall on the largest requests, which
+are the longest trajectories, which are the hardest tasks. Unretried, the design would silently
+drop its hardest cases from one arm and call the remainder a paired comparison.
+
+**Adopted.** `num_retries = 4`, `retry_delay = 5.0s`, `timeout = 120s` — A-004's settings, for
+A-004's reason. Every attempt is recorded by `scripts/phase_c/attempt_logger.py` at the shared
+LiteLLM boundary, as A-003 requires.
+
+**Unsettled is not settled.** An evaluation whose retries are exhausted is journaled as
+`settled: false` and **re-attempted on the next resume**. Only a parsed judge response settles a
+unit. Banking an exhausted rate limit as a result would make an infrastructure outcome permanent
+data — the same error in a new costume.
+
+### 2. §6.3's replicates were never enumerated
+
+[PREREGISTRATION §6.3](PREREGISTRATION.md) requires "a pre-specified random 20% of trajectories
+3× per judge" as the noise control. The harness had **no replicate support**, and §4.4's headline
+of "1,280 judge evaluations" counts only the base pass. The true volume is:
+
+| | Evaluations |
+| --- | ---: |
+| Base — 320 trajectories × 4 judges | 1,280 |
+| §6.3 replicates — 64 trajectories × 4 judges × 2 further gradings | 512 |
+| **Total** | **1,792** |
+
+A sample drawn at dispatch time is not pre-specified. It is now drawn by
+`scripts/phase_d/build_manifest.py` from **stated seed 20260922**, published in
+`results/phaseD_regrade_manifest.json` **before execution**, under the same discipline §5.2
+applies to the Phase C permutation.
+
+**Stratification — the one substantive choice.** The sample is drawn as **8 of each invocation's
+40 trajectories**, not freely across all 320. Free sampling can land unevenly across arms and
+trials; the per-arm flip rate is the number §6.3 exists to produce, and it should not rest on
+whatever the draw happened to give. Stratified sampling is still a random 20% of trajectories and
+remains blind to any outcome. **This is a refinement of how the sample is drawn, not a change to
+what §6.3 measures, and it is recorded here rather than left implicit.**
+
+### 3. Supporting corrections, recorded for completeness
+
+- **Cost may not silently be zero.** `get_response_cost()` returns `0.0` on exception, so an
+  unpriced judge would report as free against a hard cap. `scripts/phase_d/pricing.py` falls back
+  to the REFERENCE §2 table and returns **`None`, never `0.0`**, when it cannot price a call; the
+  runner counts and surfaces unpriced calls.
+- **Alias drift becomes detectable.** Two of the four frozen judges (`gpt-4.1-mini`,
+  `gemini/gemini-3.8-flash`) are aliases rather than dated snapshots. The freeze is not
+  reinterpreted — the runner records the model the provider **returns** on every call, so drift is
+  visible after the fact instead of invisible.
+- **Trajectory reconstruction no longer fails silently.** `rebuild()` wrapped message
+  reconstruction in `except Exception: pass`, which would have dropped messages from the
+  conversation the judge sees without a word. Verified lossless across all **8,430** Phase C
+  messages; the runner now **aborts** rather than re-grading a silently truncated trajectory.
+- **The input corpus is gated.** Phase D reads Phase C's artifacts, so the runner refuses to
+  dispatch unless all 8 invocations are present with 40 simulations, zero `infrastructure_error`,
+  and a trajectory-set hash matching the manifest.
+
+### What is unchanged
+
+The four judges, the 320 trajectories, temperature 0.0, the estimand, and every analysis rule in
+§6.1–§6.5. No hypothesis, arm or comparison is redefined. This amendment fixes **how the planned
+evaluations are dispatched and accounted for**, not what they measure.

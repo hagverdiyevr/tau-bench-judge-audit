@@ -46,13 +46,32 @@ if not found:
 prev = json.loads(CHAIN.read_text())["chain"] if CHAIN.exists() else []
 prev_by_id = {e["id"]: e for e in prev}
 
+
+def diagnose(body):
+    """Say WHY a sealed section moved, because 'tampered' is usually the wrong guess.
+
+    A section's extent is 'text until the next ## A-NNN heading'. rstrip() makes trailing
+    WHITESPACE append-stable, but a horizontal rule is not whitespace: writing '---' before a new
+    heading appends it to the PREVIOUS section's body and breaks that seal. It looks exactly like
+    tampering and is not. Recent amendments are therefore separated by a blank line only — a
+    convention this check exists to explain rather than merely enforce.
+    """
+    tail = body.rstrip("-\n \t")
+    if tail != body:
+        return ("  -> the body now ENDS IN A SEPARATOR ('---'). If you just appended a new "
+                "amendment, delete the '---' you put before its heading: it belongs to THIS "
+                "section, not the new one. This is an append artifact, not an edit.")
+    return "  -> the text of this sealed section genuinely differs. Diff it against git."
+
+
 chain, link = [], ANCHOR
 violations = []
 for aid, body in found:
     h = hashlib.sha256(body.encode()).hexdigest()
     was = prev_by_id.get(aid)
     if was and was["sha256"] != h:
-        violations.append(f"{aid}: sealed as {was['sha256'][:12]}… but is now {h[:12]}…")
+        violations.append(f"{aid}: sealed as {was['sha256'][:12]}… but is now {h[:12]}…\n"
+                          + diagnose(body))
     chain.append({"id": aid, "sha256": h, "prev": link,
                   "sealed": bool(was), "anchor": link == ANCHOR})
     link = h

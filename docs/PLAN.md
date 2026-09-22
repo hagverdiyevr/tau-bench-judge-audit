@@ -79,7 +79,8 @@ Frozen in [PREREGISTRATION §4](PREREGISTRATION.md). Summary:
 | Task | 40 judge-gated, `base` split (entire population; hard cap) |
 | Trial | 4 |
 
-**320 trajectories · 1,280 judge evaluations.** Scaffold stays stock `llm_agent` ("standard").
+**320 trajectories · 1,792 judge evaluations** (1,280 base + 512 §6.3 replicates).
+Scaffold stays stock `llm_agent` ("standard").
 
 The four-judge grid is the key addition over v3.0: comparing a strong OpenAI judge against a small
 Gemini judge would confound **family** with **capability**. Because re-grading is offline and cheap,
@@ -96,7 +97,7 @@ USD 75 ceiling · **USD 8.35 spent** · **USD 66.65 remaining**. Source of truth
 | **B** | 11 verification gates | ✅ complete | **$0.47** |
 | **B9** | Run-to-run noise floor (#540) | ✅ complete | **$0.42** |
 | **C** | 320 trajectories | ✅ **complete** | **$7.33** (measured) |
-| **D** | 1,280 judge evaluations + replicates | pending | ~$5.97 |
+| **D** | **1,792** judge evaluations (1,280 base + 512 §6.3 replicates) | running | ~$5.93 |
 | **E** | Analysis and release | pending | $0.00 |
 | | **Spent to date** | | **$8.35** |
 | | **Projected remaining** | | **~$11.00** |
@@ -189,10 +190,27 @@ Two invocations were discarded before the final set and retained as evidence in
 `results/discarded/`: one whose data our own test destroyed, one degraded by a rate-limit ceiling.
 See [A-003](PREREGISTRATION_AMENDMENTS.md) Disclosure.
 
-### Phase D — Judge re-grading · ~$6 · **NEXT**
+### Phase D — Judge re-grading · ~$5.93 · **RUNNING**
 
-1,280 evaluations (320 × 4 judges), offline against saved trajectories, plus 3× replicates on a
-pre-specified random 20% for the noise floor.
+**1,792 evaluations**, not the 1,280 quoted until now. That figure counted only the base pass
+(320 trajectories × 4 judges); [§6.3](PREREGISTRATION.md)'s noise control adds **512** more —
+a pre-specified random 20% of trajectories graded 3× per judge. The replicate sample is
+**pre-drawn from stated seed 20260922** and published in `results/phaseD_regrade_manifest.json`
+*before* execution, stratified as 8 of each invocation's 40 so the per-arm flip rate does not
+rest on whatever a free draw happened to give ([A-005](PREREGISTRATION_AMENDMENTS.md)).
+
+| | Evaluations |
+| --- | ---: |
+| Base — 320 trajectories × 4 judges | 1,280 |
+| §6.3 replicates — 64 × 4 × 2 further gradings | 512 |
+| **Total** | **1,792** |
+
+Run by `scripts/phase_d/run_phase_d.py`, which applies Phase C's operating discipline to
+re-grading: four pre-dispatch gates (freeze, provenance, **input-corpus integrity**, budget),
+bounded retries with every attempt logged, and **resume at the granularity of one evaluation**.
+The harness it replaces (`regrade.py`) had a validated mechanism but performed **zero retries** —
+litellm's own default — which in a paired design does not lose an observation, it *unpairs the
+trajectory*, and does so preferentially on the longest and hardest tasks.
 
 Also analyse the judge's `reasoning` field qualitatively on a stratified sample — justifications are
 persisted and independently checkable by a reviewer.

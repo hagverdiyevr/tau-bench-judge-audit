@@ -77,23 +77,24 @@ and `scripts/phase_a/01` regenerates the headline Phase A numbers with **no setu
 
 ## Next executable task
 
-**Phase C — the remaining 7 invocations** (~USD 4 of USD 72.77 remaining, ~2 h wall clock).
+**Phase D — re-grade all 320 trajectories under 4 judges** (1,280 evaluations, ~USD 6 of USD 66.65).
 
 ```bash
-cd vendor/tau2-bench && uv run python ../../scripts/phase_c/run_phase_c.py
+cd vendor/tau2-bench && uv run python ../../scripts/phase_d/regrade.py --run phaseC_t1_gem
 ```
 
-The runner skips `phaseC_t1_gem` automatically (resume, never restart).
+Mechanism validated end to end at **20/20** in [B-L16](FINDINGS.md): prompt identity guaranteed by
+capturing tau2's own constructed prompt, parsing through the fail-closed adapter. Note
+`gemini-3.8-flash` fences its JSON and **crashes the raw upstream parser** — the adapter is not
+optional.
 
-**Smoke result ([C-L1](FINDINGS.md)):** 40/40 sims, mean reward **0.675**, all `user_stop`, zero
-retries, zero truncation, cost/trajectory **$0.02117** — exactly the B-L9 measurement.
-**Components disagreed on 11/40 (28%)**, which means the NL component genuinely varies and the
-judge study has something to measure.
-
-Then **Phase D** (`scripts/phase_d/regrade.py`, all 320 × 4 judges, ~USD 6) and **Phase E**.
-
-⚠️ **Still outstanding: rotate the OpenAI key.** Flagged twice; the smoke ran on the Gemini arm so
-it did not use that key, but 4 of the remaining 7 invocations will.
+**Carry into Phase D and E:**
+- **`pass^k` is not comparable across arms** ([C-L2](FINDINGS.md)). Gemini's `pass^4` = `pass^1`
+  by construction; report it as determinism, never as reliability.
+- **The OpenAI arm is floor-bound** at pass^1 0.138 vs 0.675 ([C-L3](FINDINGS.md)). Capability is
+  confounded with family — state it before any family attribution.
+- **Infrastructure-error trajectories are missing data, not scored zeros**, for the within-trajectory
+  judge contrast ([A-004](PREREGISTRATION_AMENDMENTS.md)). Phase C has none, so n = 40 per cell.
 
 ## Blockers
 
@@ -110,9 +111,13 @@ it did not use that key, but 4 of the remaining 7 invocations will.
   from "most likely way the study ends early" to a routine check — temp 0 still is not determinism
   for remote inference.
 - Whether `llm_agent_gt` leaks ground truth (name implies it does; unread). Do not use as a baseline
-  until checked.
-- **Resolved 20 Sep:** B1 (judge swappable — yes), B4 (judge sees tool calls — no). See
-  [FINDINGS](FINDINGS.md).
+  until checked. **Still open** — not used by this study, so not blocking.
+- **Resolved 20 Sep:** B1 (judge swappable — yes), B4 (judge sees tool calls — no).
+- **Resolved 22 Sep:** determinism — the B-L15 pilot claim **replicates at n=40**
+  ([C-L2](FINDINGS.md)), so the "re-verify before reporting" condition in CLAUDE.md is discharged.
+- **New, open:** the OpenAI arm's floor-bound baseline ([C-L3](FINDINGS.md)) constrains what a
+  Phase D interaction can be attributed to. Not fixable without changing frozen arms; to be
+  declared as a limitation.
 
 ## Session log
 

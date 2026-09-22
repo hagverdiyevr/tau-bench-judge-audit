@@ -27,9 +27,9 @@ Two distinctions that keep this system honest:
 
 ## Current state
 
-**Phase A and B complete; Phase C 1/8 dispatched. USD 8.35 spent of 75.00; USD 66.65 remaining.**
+**Phase A, B and C complete. USD 8.35 spent of 75.00; USD 66.65 remaining.**
 Every mechanism the study depends on is verified. The pre-registration is **frozen**
-(`a917984e…`, 2026-09-20T10:54:29Z). **Phase C is unblocked**; no confirmatory data exists yet.
+(`a917984e…`, 2026-09-20T10:54:29Z). **320 confirmatory trajectories exist** (8/8 invocations, 0 infrastructure errors). Phase D is next.
 
 Spend is tracked in `results/spend_ledger.json`, regenerated from run artifacts — never by hand.
 
@@ -80,30 +80,41 @@ All measured and cited. Do not re-derive or contradict without new evidence.
 - **tau2 does not account for judge cost at all** — ~40% understatement of true run cost on
   judge-gated tasks. Our ledger must add it. [B-L14](docs/FINDINGS.md)
 
-**Reproducibility — the two arms differ**
-- **At temperature 0, `gemini-3.1-flash-lite` is deterministic and `gpt-4.1-nano` is not.** Across
-  repeat invocations the Gemini arm reproduced **5/5 identical message contents, tool calls,
-  rewards and costs**; the OpenAI arm reproduced **0/3**, with up to **2.6×** per-task cost
-  variation. Caching ruled out. **Not byte-identical** — ids/timestamps differ. Also: LiteLLM
-  **drops `seed` for the gemini provider**, so these were repeats, not seeded replicates.
-  [B-L15](docs/FINDINGS.md)
-- **Therefore `pass^k` was constant for the Gemini arm in a 5-task pilot** — repeat invocations
-  yielded identical rewards, so `pass^4` would equal `pass^1`. This is a **pilot observation, not
-  a structural guarantee**; re-verify on the Phase C output before reporting. Disclose it; never
-  present it as reliability, and never compare a variance-based statistic across arms without
-  stating the asymmetry. [D-018](docs/DECISIONS.md)
+**Reproducibility — the two arms differ, verified at n=40**
+- **At temperature 0, `gemini-3.1-flash-lite` is deterministic and `gpt-4.1-nano` is not.**
+  Replicated across **four** repeat invocations over **all 40** tasks: Gemini identical on message
+  contents 40/40, tool calls 40/40, **rewards 40/40**; OpenAI 0/40, 4/40, 32/40. Whole-object
+  identity is 0/40 for both — ids and timestamps always differ, so **never say "byte-identical"**.
+  LiteLLM **drops `seed` for the gemini provider**, so these are repeat invocations, not seeded
+  replicates. [C-L2](docs/FINDINGS.md), superseding the 5-task pilot in [B-L15](docs/FINDINGS.md)
+- **`pass^k` is not comparable across these arms.** Gemini `pass^4` = `pass^1` = 0.675 **by
+  construction**; OpenAI varied on 8/40 tasks giving a real 8.8pp drop (0.138 → 0.050). Report the
+  Gemini figure as a determinism result, never as reliability, and state the asymmetry before any
+  cross-arm variance statistic. [D-018](docs/DECISIONS.md)
+- **The OpenAI arm is floor-bound**: pass^1 **0.138** vs Gemini's **0.675** — a 54-point gap against
+  a 50–70% target. Phase D still has signal (NL 0.362; components disagree on 35% of that arm), but
+  **capability is confounded with family** and no interaction may be attributed to family without
+  stating this. [C-L3](docs/FINDINGS.md)
 
-**The judge parser — use our adapter, never the raw path**
-- **`gemini-3.8-flash` fences its JSON**, so upstream's raw `json.loads`
-  (`evaluator_nl_assertions.py:127`) raises `JSONDecodeError`. Verified live: the other three
-  frozen judges return bare JSON. Upstream already ships `extract_json_from_llm_response`
-  (`llm_utils.py:509`) but does not use it here.
-- **Upstream scores an empty result set as a full pass** — `all([])` is `True`, so a judge
-  response with zero verdicts silently earns full NL reward. Duplicates, extras and mismatched
-  assertion text are equally silent.
-- **Therefore all re-grading goes through `scripts/grading/judge_adapter.py`**, which is
-  fail-closed: it strips fences, proves one unique verdict per supplied assertion, and **never**
-  converts an anomalous response into a pass. 21 regression tests in `tests/test_judge_adapter.py`.
+**Spend accounting — trust the attempt log, not tau2**
+- **Every API attempt is recorded** by `scripts/phase_c/attempt_logger.py`, a LiteLLM callback at
+  the one shared request boundary. It captures failures and the judge calls tau2 records nowhere.
+  `scripts/build_spend_ledger.py` prefers these **measured** totals over estimates. [A-003](docs/PREREGISTRATION_AMENDMENTS.md)
+- **OpenAI org limit is 200,000 TPM.** One 40-task invocation pushes ~3.1M tokens through
+  `gpt-4.1-nano`, so the ceiling is hit by construction; requested waits are 46ms–1.4s. Retries are
+  set to **4** and absorb it — 101 rate-limit failures across Phase C, **zero** reaching results.
+  [A-004](docs/PREREGISTRATION_AMENDMENTS.md)
+
+**Inferring success from a weak proxy — three defects, same shape**
+Each of these silently corrupted or nearly corrupted real data, and each is now a test that proves
+the property instead of assuming it:
+- A test wrote a stub to a **real artifact path** and cleaned up only `if created` → destroyed 40
+  paid simulations. Tests now write only to a reserved probe name and clean up in `finally`.
+- An invocation was marked `completed` on **exit code alone** while 6/40 simulations were dead.
+  Completion now requires **zero `infrastructure_error`**.
+- Resume skipped any invocation whose artifact merely **existed**, accepting a 21/40 truncated file
+  from a killed run. Resume now requires a journal entry **and** the full simulation count **and**
+  zero infra errors.
 
 **Known defects — document, do not patch**
 - **#514**: DB hash is order-sensitive on lists. [D-011](docs/DECISIONS.md)
@@ -148,10 +159,11 @@ Inherited from v1.0 §1 and still binding:
 ## Phases
 
 **A** evaluator audit ($0.00 ✅) → **B** 11 gates ($0.47 ✅) → **B9** noise floor ($0.42 ✅) →
-**C** 320 trajectories (✅ complete, $7.33) → **D** 1,280 judge evaluations (~$5.97) →
+**C** 320 trajectories (✅ $7.33 measured) → **D** 1,280 judge evaluations (~$6, **next**) →
 **E** analysis and release ($0.00). **Spent $8.35 · Phase D ~$6 · projected total ~$14.**
 
-The pre-registration is frozen and Phase C is unblocked. Verify the freeze any time with
+Phase C is **complete** (320 trajectories, 0 infrastructure errors). Phase D is next.
+Verify the freeze and the 4-amendment chain any time with
 `python scripts/verify_preregistration.py`.
 
 Surplus budget buys trials and judge replicates only. Tasks are hard-capped at 40 by the benchmark;

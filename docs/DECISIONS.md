@@ -347,3 +347,37 @@ parser, and a published paper resting on a false determinism claim.**
 **Precedent.** An unsolicited review that contradicts our own records is worth more than one that
 agrees. Verify it independently, correct the record where it is right, and say plainly where it is
 wrong — do not split the difference.
+
+## D-020 — Never infer success from a weak proxy · `ACTIVE` · 22 Sep 2026
+
+**Context.** Three defects surfaced during Phase C, all mine, all with the same shape: a check
+asked an *easy* question and treated the answer as evidence for a *different, harder* one.
+
+| Proxy asked | Property that actually mattered | Damage |
+| --- | --- | --- |
+| `if created` (did *I* make this directory?) | Is it safe to delete what is here? | A test overwrote a real artifact and **destroyed 40 paid simulations**; no export existed |
+| `returncode == 0` | Did every task actually run? | An invocation was marked `completed` with **6/40 simulations dead** of `infrastructure_error` |
+| `artifact.exists()` | Is this invocation complete? | Resume accepted a **21/40 truncated file** from a killed run as finished |
+
+Each would have entered the confirmatory analysis silently. None raised an error.
+
+**Decision.** A check must verify the property it is relied upon for, not a correlate of it.
+Concretely, now enforced in code and tests:
+
+- Completion requires a **journal entry** *and* the **full expected simulation count** *and*
+  **zero `infrastructure_error`** — not an exit code, not a file's existence.
+- Tests write only to a **reserved probe path** that no real invocation can claim, and restore in
+  `finally`, not on a conditional.
+- Anomalies **fail loudly**. The fail-closed judge adapter is the same principle applied to the
+  judge: an unparseable or incomplete verdict withholds reward rather than defaulting to a pass —
+  which is precisely upstream's `all([]) is True` defect ([B-L16](FINDINGS.md)).
+
+**Why this is worth a decision entry.** The pattern recurred three times in one phase despite each
+individual fix being obvious in hindsight. It is also the *same* failure mode as the upstream
+defects this project exists to document: `#499` swallows replay exceptions, `get_response_cost()`
+returns `0.0` on error, `all([])` returns `True`. The benchmark's bugs and our own share a root —
+**treating absence of evidence as evidence of success** — and the study loses its standing to
+report theirs if it repeats them.
+
+**Test of the rule:** if the check passed while the underlying property was false, would anything
+notice? If not, the check is a proxy and must be replaced.

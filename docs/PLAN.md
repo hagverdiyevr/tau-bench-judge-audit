@@ -66,6 +66,7 @@ The control term is mandatory; without it the quantity is judge *leniency*, not 
 | Judge input content | Trajectory as `f"{role}: {content}"` — **tool calls invisible**; 4–11 literal `content: None` lines per trajectory (B4, corroborated in production) |
 | Judge temperature | **0.0** (verified). Self-consistency 11/11; flip rate bounded **<9%** (B-L13) |
 | Judge cost | **Not accounted by tau2 at all** — ~40% understatement of true run cost (B-L14) |
+| Attempt visibility | **Every API attempt logged** at the LiteLLM boundary (A-003), failures included. This is how the 200k TPM ceiling was identified and how true spend is now measured rather than estimated |
 
 ## Design
 
@@ -158,17 +159,37 @@ no variance-based statistic may be compared across arms without stating it.
 
 The frozen T = 4 design was **retained, not deviated** ([D-018](DECISIONS.md)).
 
-### Phase C — Trajectory generation · ~$5.02
+### Phase C — Trajectory generation · ✅ COMPLETE · **$7.33 measured**
 
-320 trajectories per [PREREGISTRATION §4–5](PREREGISTRATION.md). Interleaved by a pre-drawn seeded
-permutation; per-invocation UTC recorded; resume-never-restart on partial failure; intention-to-treat
-primary. Cost read from persisted `agent_cost`/`user_cost` **plus our own judge accounting**, since
-tau2 omits the latter entirely.
+320 trajectories (2 agents × 40 judge-gated tasks × 4 trials), 8/8 invocations,
+**zero `infrastructure_error`**, 7,516 logged attempts. Executed from the content-hashed manifest
+with balanced 2:2 order; every attempt recorded at the LiteLLM boundary per
+[A-003](PREREGISTRATION_AMENDMENTS.md).
 
-**Pre-registration frozen** `a917984e…` at 2026-09-20T10:54:29Z, tamper-tested; verify with
-`python scripts/verify_preregistration.py`. **Phase C is unblocked.**
+| | Gemini arm | OpenAI arm |
+| --- | ---: | ---: |
+| pass^1 | **0.675** | **0.138** |
+| pass^4 | 0.675 *(= pass^1 by construction)* | 0.050 |
+| DB component | 0.775 | 0.263 |
+| NL component | 0.850 | 0.362 |
+| components disagree | 44/160 (28%) | 56/160 (35%) |
+| cost / trajectory | $0.02117 | $0.00549 |
 
-### Phase D — Judge re-grading · ~$5.97
+**Two results that shape Phase D** ([C-L2](FINDINGS.md), [C-L3](FINDINGS.md)):
+
+1. **Determinism replicated at n=40.** Gemini reproduced identical rewards on **40/40** tasks
+   across four invocations; OpenAI on 32/40. So `pass^k` is a **structural constant** for one arm
+   and a **real measurement** for the other — not comparable, and it must be said.
+2. **The OpenAI arm is floor-bound** at 0.138 against a 50–70% target. Signal remains, but
+   capability is now confounded with family. Declared as a limitation rather than fixed: the arms
+   are frozen in [§4.2](PREREGISTRATION.md), and swapping one because its baseline disappoints is
+   the post-hoc choice pre-registration exists to prevent.
+
+Two invocations were discarded before the final set and retained as evidence in
+`results/discarded/`: one whose data our own test destroyed, one degraded by a rate-limit ceiling.
+See [A-003](PREREGISTRATION_AMENDMENTS.md) Disclosure.
+
+### Phase D — Judge re-grading · ~$6 · **NEXT**
 
 1,280 evaluations (320 × 4 judges), offline against saved trajectories, plus 3× replicates on a
 pre-specified random 20% for the noise floor.
@@ -209,6 +230,9 @@ make verify      # the single pre-spend gate: docs + freeze + chain + all tests
 
 ## Honest risks
 
+- **The OpenAI arm is floor-bound (pass^1 0.138 vs 0.675).** Capability is confounded with family,
+  so a measured interaction cannot be attributed to family alone. This is the single largest
+  interpretive constraint on the result and must appear in the abstract, not a footnote.
 - **The bias may not exist.** A bounded null with a stated MDE is publishable and is accepted in
   advance ([PREREGISTRATION §7](PREREGISTRATION.md)).
 - **n = 40 tasks and n = 2 agent families are hard caps.** No claim generalises beyond them.

@@ -5,7 +5,7 @@
 > holds only our own measurements. Slow-changing; re-verify anything time-sensitive before it
 > becomes load-bearing in a published claim.
 
-**Entries verified 19–20 September 2026** unless noted. Prices and model availability are
+**Entries verified 19–22 September 2026** unless noted. Prices and model availability are
 time-sensitive — **re-verify before any paid run and again at write-up time.**
 
 ---
@@ -107,12 +107,15 @@ non-editable installs.
 | **#499** | 18 retail golden actions raise during gold replay, silently swallowed | Reproduced and characterized — [FINDINGS A4](FINDINGS.md); contribution ready |
 | **#514** | DB hash order-sensitive on lists | Confirmed [A6](FINDINGS.md); **do not fix** (D-011), report both hashes |
 | **#384 / #327** | No-op / missing reward checks permit false-positive rewards | Quantified via null-agent baseline [A5](FINDINGS.md) |
-| **#540** | Run-to-run noise floor of published baselines unknown | **Answered** by [B-L15](FINDINGS.md): not one number — determinism differs by model family at temperature 0 |
+| **#540** | Run-to-run noise floor of published baselines unknown | **Answered** by [C-L2](FINDINGS.md) at **n=40**: not one number — at temperature 0 `gemini-3.1-flash-lite` reproduces identical rewards 40/40 across four invocations while `gpt-4.1-nano` reproduces 32/40. Supersedes the 5-task pilot in [B-L15](FINDINGS.md) |
 | **#224** | "Airline domain may NOT be a reliable benchmark" | Context only; we use retail |
 | — | Py3.13 import failure | Ours, [A0](FINDINGS.md); not yet filed |
 | — | Judge cannot see tool calls | Ours, [B4](FINDINGS.md) |
 | — | ACTION checker order-sensitive on lists | Ours, [B-L7](FINDINGS.md); **do not fix** ([D-017](DECISIONS.md)) |
 | — | Judge cost unaccounted | Ours, [B-L14](FINDINGS.md) |
+| — | **NL-judge path ignores upstream's own fence stripper** — `evaluator_nl_assertions.py:127` calls raw `json.loads` while `llm_utils.py:509` provides `extract_json_from_llm_response`, so `gemini-3.8-flash` crashes the evaluator | Ours, [B-L16](FINDINGS.md); one-line wiring fix, **do not patch our vendored copy** |
+| — | **`all([])` scores an empty judge response as a full pass**; duplicate, extra and mismatched verdicts equally silent | Ours, [B-L16](FINDINGS.md); mitigated by our fail-closed adapter, not by patching upstream |
+| — | Committed `uv.lock` stale at v1.0.1 (records `1.0.0`) | Ours, [A0b](FINDINGS.md); cosmetic, but it dirties every working tree |
 
 **Comparability:** results from `< v1.0.1` are formally non-comparable; 50+ tasks changed Feb 2026.
 Leaderboard submissions need pass^1–pass^4, ≥4 trials/domain, cost optional, and are classified

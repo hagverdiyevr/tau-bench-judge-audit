@@ -27,7 +27,7 @@ Two distinctions that keep this system honest:
 
 ## Current state
 
-**Phase A, B and C complete. USD 8.35 spent of 75.00; USD 66.65 remaining.**
+**Phase A, B, C and D complete. USD 13.76 spent of 75.00; USD 61.24 remaining.**
 Every mechanism the study depends on is verified. The pre-registration is **frozen**
 (`a917984e…`, 2026-09-20T10:54:29Z). **320 confirmatory trajectories exist** (8/8 invocations, 0 infrastructure errors). Phase D is next.
 
@@ -170,8 +170,8 @@ Inherited from v1.0 §1 and still binding:
 ## Phases
 
 **A** evaluator audit ($0.00 ✅) → **B** 11 gates ($0.47 ✅) → **B9** noise floor ($0.42 ✅) →
-**C** 320 trajectories (✅ $7.33 measured) → **D** **1,792** judge evaluations (~$5.93, **running**) →
-**E** analysis and release ($0.00). **Spent $8.35 · Phase D ~$6 · projected total ~$14.**
+**C** 320 trajectories (✅ $7.33) → **D** ✅ **1,792** judge evaluations ($5.41) →
+**E** analysis and release ($0.00, **next**). **Spent $13.76 of $75 — all measurement is done.**
 
 Phase C is **complete** (320 trajectories, 0 infrastructure errors). Phase D is **running**.
 

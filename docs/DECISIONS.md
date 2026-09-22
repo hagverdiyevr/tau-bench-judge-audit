@@ -381,3 +381,48 @@ report theirs if it repeats them.
 
 **Test of the rule:** if the check passed while the underlying property was false, would anything
 notice? If not, the check is a proxy and must be replaced.
+
+## D-021 — Lead with the positives; report the primary as an underpowered null, never as "no bias"
+
+**Date:** 22 September 2026 · **Context:** Phase D complete, [D-L1..D-L5](FINDINGS.md)
+
+**The fork.** The pre-registered primary came back null: FamilyBias **+0.0063**, 95% CI
+**[−0.0875, +0.1062]**, and TOST against ±5pp does **not** clear. Three ways to present that.
+
+| Option | Why not |
+| --- | --- |
+| **A. Headline "the τ³ judge is not biased."** | Unsupported. The CI admits effects up to ±10.6pp, and the realized MDE is **0.1367** — the design could only ever have seen a ~14-point effect. Absence of evidence, sold as evidence of absence. It is also the fourth appearance of [D-020](DECISIONS.md)'s shape: a weak instrument's silence read as a strong result. |
+| **B. Bury the null; publish only the defects.** | Suppresses the pre-registered result because it was uninteresting. That is exactly the practice pre-registration exists to prevent, and [CLAUDE.md](../CLAUDE.md) requires negative results be retained. |
+| **C. Report the null precisely, lead with the positives.** | **Chosen.** |
+
+**Decision.** The primary is reported as *"no family bias detectable **between these two specific
+agents**, at a design whose realized MDE is 0.137"* — with the ruled-out region
+(|effect| > 0.1062), the failed TOST, and the [C-L3](FINDINGS.md) floor-bound confound all stated
+**in the same breath**, not in a limitations section at the end.
+
+The **deliverable leads with the three positive findings**, which are sharper than the null and do
+not depend on it:
+
+1. **A 9.1-point judge-leniency spread** ([D-L2](FINDINGS.md)) — swapping only the grader moves a
+   reported score by more than most leaderboard gaps. And the DiD control is what stops this being
+   published as bias: the incumbent's +0.053 edge on the OpenAI arm comes with a +0.050 edge on the
+   Google arm. **Without the control term this study would have reported a false positive.**
+2. **A 100% fence-crash rate** ([D-L3](FINDINGS.md)) — 448/448 for `gemini-3.8-flash` against
+   upstream's raw `json.loads`. Not a flaky edge case; a total failure for anyone swapping the judge.
+3. **The official grader is not reproducible** ([D-L5](FINDINGS.md)) — the incumbent `gpt-4.1` is
+   the *only* judge of four that flipped a verdict across byte-identical requests at temperature 0,
+   independently reproducing [C-L2](FINDINGS.md)'s agent-role asymmetry in the judge role.
+
+**Rationale.** The null is real and must be published, but it is the *weakest* thing measured here.
+The three positives are direct measurements with no power caveat — and the leniency result is what
+gives the null its value: it shows the instrument **can** detect large judge differences, so the
+absence of an *interaction* is informative rather than merely quiet.
+
+**Consequence.** No headline may contain "unbiased", "fair" or "no bias" unqualified. Phase E's
+title and abstract lead with judge leniency and the grader's irreproducibility; the pre-registered
+null is reported in full, in its own section, with its MDE beside it.
+
+**Why more spend would not fix this.** Between-task SD is **0.3087** over a task set hard-capped at
+**40** by the benchmark ([A3](FINDINGS.md)). Trials reduce within-task noise, which is not the
+binding term. Only more *tasks* would move the MDE, and none exist. USD 61.24 remains and **cannot
+buy power here** — a structural ceiling, not a budget decision.

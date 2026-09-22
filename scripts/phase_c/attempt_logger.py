@@ -124,15 +124,29 @@ def summarize(path: str | pathlib.Path) -> dict:
     rows = [json.loads(l) for l in p.read_text().splitlines() if l.strip()]
     fails: dict[str, int] = {}
     usd = 0.0
+    unpriced = 0
     for r in rows:
         if r.get("outcome") == "failure":
             fails[r.get("error_class") or "Unknown"] = fails.get(r.get("error_class") or "Unknown", 0) + 1
-        usd += r.get("usd") or 0.0
+            continue
+        # A SUCCESSFUL call with no cost is not a free call. LiteLLM does not always have
+        # response_cost populated in _hidden_params by the time this callback fires: measured at
+        # 2 of 1,792 on Phase D, where the run's own journal did have both. Summing `or 0.0`
+        # would report those as free -- the same defect this project documents in
+        # get_response_cost(). They are counted and surfaced instead.
+        if r.get("usd") is None:
+            unpriced += 1
+        else:
+            usd += r["usd"]
     return {"attempts": len(rows),
             "successes": sum(1 for r in rows if r.get("outcome") == "success"),
             "failures": sum(1 for r in rows if r.get("outcome") == "failure"),
             "failures_by_class": fails,
-            "usd_from_attempts": round(usd, 6)}
+            "unpriced_successes": unpriced,
+            "usd_from_attempts": round(usd, 6),
+            # True when every successful attempt carried a cost, so the total is a total.
+            # False means it is a LOWER BOUND and the caller must say so.
+            "usd_is_complete": unpriced == 0}
 
 
 if __name__ == "__main__":

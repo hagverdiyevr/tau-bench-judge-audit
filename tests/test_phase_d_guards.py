@@ -118,6 +118,8 @@ try:
     r = run(["--dry-run"])
     check("a settled unit is not re-dispatched",
           "already settled     : 1" in r.stdout, r.stdout[-300:])
+    check("the other 1,791 units are still planned",
+          "this session        : 1791" in r.stdout, r.stdout[-300:])
 
     # An API failure is an infrastructure outcome, not a verdict. If resume treated it as done,
     # a transient rate limit would become permanent missing data in the paired contrast.
@@ -156,8 +158,11 @@ check("proceeds again once restored", r.returncode == 0, f"rc={r.returncode}")
 
 # ---------------------------------------------------------------- no-credential safety
 print("\n--- dry-run must validate without credentials or spend ---")
-check("dry-run reaches the budget gate and dispatches nothing",
-      "DRY RUN — nothing dispatched, no spend." in r.stdout)
+# Once every unit is settled the runner short-circuits BEFORE the dry-run branch, which is
+# correct: there is nothing to dry-run. Accept either terminal state, never a dispatch.
+check("dry-run dispatches nothing (either 'DRY RUN' or 'nothing to do')",
+      ("DRY RUN — nothing dispatched, no spend." in r.stdout
+       or "nothing to do — Phase D is complete." in r.stdout), r.stdout[-200:])
 check("gates run before any live import (dry-run needs no API key)",
       src.index("if args.dry_run") < src.index("from litellm import completion"))
 

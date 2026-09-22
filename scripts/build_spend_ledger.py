@@ -50,14 +50,30 @@ ATTEMPTS = REPO / "results" / "phase_c" / "attempts"
 
 
 def attempt_usd(run_name):
+    """Measured spend for one invocation, plus how many successes carried no cost.
+
+    A successful call with usd=None is NOT a free call. LiteLLM does not always have
+    response_cost populated in _hidden_params when the success callback fires -- 30 of 7,516
+    Phase C attempts (0.40%), across all four models, so it is a callback timing race rather
+    than a pricing gap. Summing `or 0.0` would silently bill those at zero, which is the very
+    defect this project documents in get_response_cost(). They are counted and surfaced, and a
+    total carrying any of them is reported as a LOWER BOUND. [D-L4](../docs/FINDINGS.md)
+    """
     f = ATTEMPTS / f"{run_name}.jsonl"
     if not f.exists():
-        return None
-    usd = 0.0
+        return None, 0
+    usd, unpriced = 0.0, 0
     for line in f.read_text().splitlines():
-        if line.strip():
-            usd += (json.loads(line).get("usd") or 0.0)
-    return round(usd, 6)
+        if not line.strip():
+            continue
+        row = json.loads(line)
+        if row.get("outcome") == "failure":
+            continue
+        if row.get("usd") is None:
+            unpriced += 1
+        else:
+            usd += row["usd"]
+    return round(usd, 6), unpriced
 
 
 runs, totals = [], {"agent_user": 0.0, "judge": 0.0, "measured": 0.0}
@@ -68,12 +84,14 @@ for path in sorted(glob.glob(str(REPO / "vendor/tau2-bench/data/simulations/*/re
     judged = [s for s in d["simulations"] if (s["reward_info"].get("nl_assertions") or [])]
     jin = sum(judge_input_tokens(s) for s in judged)
     jcost = jin / 1e6 * PRICES[JUDGE][0] + len(judged) * JUDGE_OUTPUT_TOKENS / 1e6 * PRICES[JUDGE][1]
-    measured = attempt_usd(name)
+    measured, unpriced_n = attempt_usd(name)
     runs.append({"run": name, "simulations": len(d["simulations"]),
                  "agent_user_usd": round(au, 6),
                  "judge_calls": len(judged), "judge_input_tokens": jin,
                  "judge_usd_estimated": round(jcost, 6),
                  "measured_usd_from_attempts": measured,
+                 "unpriced_successes": unpriced_n,
+                 "measured_is_lower_bound": bool(unpriced_n),
                  "source": "attempt_log" if measured is not None else "estimate",
                  "git_commit": (d.get("info") or {}).get("git_commit", "unknown")})
     if measured is not None:
@@ -92,10 +110,31 @@ OUT_OF_BAND = [
     {"item": "Phase D regrade smoke, 5 trajectories x 4 judges (rec 10)", "usd": 0.0890},
 ]
 oob = sum(x["usd"] for x in OUT_OF_BAND)
-total = totals["agent_user"] + totals["judge"] + totals["measured"] + oob
+
+# Phase D is re-grading, not simulation: it has no results.json, so it is accounted from its own
+# per-evaluation journal. The journal is preferred over the attempt log because it is the more
+# complete instrument -- it carried a cost for 1,792 of 1,792 evaluations where the attempt log
+# was missing 2. Both are kept; they agree to $0.0085. [D-L4](../docs/FINDINGS.md)
+PHASE_D_JOURNAL = REPO / "results" / "phase_d" / "regrade_journal.jsonl"
+phase_d = {"evaluations": 0, "usd": 0.0, "unpriced": 0}
+if PHASE_D_JOURNAL.exists():
+    for line in PHASE_D_JOURNAL.read_text().splitlines():
+        if not line.strip():
+            continue
+        row = json.loads(line)
+        if not row.get("settled"):
+            continue
+        phase_d["evaluations"] += 1
+        if row.get("usd") is None:
+            phase_d["unpriced"] += 1
+        else:
+            phase_d["usd"] += row["usd"]
+phase_d["usd"] = round(phase_d["usd"], 6)
+
+total = totals["agent_user"] + totals["judge"] + totals["measured"] + oob + phase_d["usd"]
 
 ledger = {
-    "schema": "spend-ledger/2",
+    "schema": "spend-ledger/3",
     "generated_by": "scripts/build_spend_ledger.py",
     "note": "Judge cost is computed from the judge's own trajectory serialization because tau2 "
             "records no judge cost at all (FINDINGS B-L14).",
@@ -104,6 +143,7 @@ ledger = {
     "remaining_usd": round(CAP_USD - total, 2),
     "components": {
         "measured_from_attempt_logs_usd": round(totals["measured"], 4),
+        "phase_d_regrade_usd": phase_d["usd"],
         "agent_user_usd_estimated": round(totals["agent_user"], 4),
         "judge_usd_estimated_untracked_by_tau2": round(totals["judge"], 4),
         "out_of_band_usd": round(oob, 4),
@@ -119,12 +159,17 @@ for r in runs:
     u = r['measured_usd_from_attempts'] if r['source'] == 'attempt_log' else r['agent_user_usd'] + r['judge_usd_estimated']
     print(f"  {r['run']:<24}{r['simulations']:>5}{u:>11.5f}  {r['source']}")
 print(f"\n  MEASURED (attempt logs)    ${totals['measured']:.4f}  <- Phase C, judge included")
+print(f"  PHASE D (regrade journal)  ${phase_d['usd']:.4f}  <- {phase_d['evaluations']} evaluations")
+_unp = sum(r.get('unpriced_successes') or 0 for r in runs) + phase_d['unpriced']
+if _unp:
+    print(f"  !! {_unp} successful call(s) carried NO cost from LiteLLM — totals above are a "
+          f"LOWER BOUND, not a total (D-L4)")
 print(f"  agent+user (estimated)     ${totals['agent_user']:.4f}")
 print(f"  judge      (estimated)     ${totals['judge']:.4f}")
 print(f"  out of band                ${oob:.4f}")
 print(f"  {'-'*44}")
 print(f"  TOTAL                      ${total:.4f} of ${CAP_USD:.2f}")
 print(f"  REMAINING                  ${CAP_USD - total:.2f}")
-chk = abs((totals['agent_user'] + totals['judge'] + totals['measured'] + oob) - total) < 1e-9
+chk = abs((totals['agent_user'] + totals['judge'] + totals['measured'] + oob + phase_d['usd']) - total) < 1e-9
 print(f"\n  components sum to total: {chk}")
 print(f"  wrote {OUT.relative_to(REPO)}")

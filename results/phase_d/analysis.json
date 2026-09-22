@@ -1,0 +1,21 @@
+{
+ "planned": 1792,
+ "journaled": 1792,
+ "settled": 1792,
+ "unsettled": 0,
+ "scored": 1792,
+ "usd": 5.408567,
+ "noise_floor": {
+  "flipped": 1,
+  "pairs": 256,
+  "rate": 0.00390625
+ },
+ "family_bias": {
+  "point": 0.00625,
+  "ci_low": -0.0875,
+  "ci_high": 0.10625,
+  "n_tasks": 40,
+  "between_task_sd": 0.30866395562164367,
+  "realized_mde": 0.13665135839061388
+ }
+}

@@ -756,5 +756,153 @@ pre-registration exists to prevent.
 
 # Phase D — Judge re-grading
 
-*Not started. 320 trajectories x 4 judges = 1,280 evaluations. Mechanism validated at 20/20 in
-[B-L16](FINDINGS.md).*
+*Complete, 22 Sep 2026. **1,792 evaluations** (1,280 base + 512 §6.3 replicates) over the 320
+Phase C trajectories. **0 unsettled, 0 anomalies, 0 truncations, 1,792/1,792 priced.** USD 5.4086.
+Runner: `scripts/phase_d/run_phase_d.py`. Analysis: `scripts/phase_d/analyze_phase_d.py`.
+Raw: `results/phase_d/regrade_journal.jsonl`, `results/phase_d/analysis.json`.*
+
+Every planned unit was settled and the journal matches the manifest **exactly** — 1,792 planned,
+1,792 settled, 0 missing, 0 unplanned, 0 duplicated.
+
+## D-L1 — The incumbent judge shows **no detectable family bias**, and the study is underpowered to call that equivalence
+
+**The pre-registered primary estimand ([§3](PREREGISTRATION.md)), computed as specified:**
+
+```
+FamilyBias = +0.0063    95% CI [-0.0875, +0.1062]    (task-level cluster bootstrap, B=10,000, n=40 tasks)
+```
+
+The interval contains zero, so this is a **null claim** and [§6.5](PREREGISTRATION.md) requires it
+be defended rather than merely stated.
+
+**TOST against the pre-specified ±5pp margin: NOT equivalent.** The realized MDE is **0.1367** —
+the design can detect a ~14-point interaction, not a 5-point one. What the data *does* rule out is
+**|FamilyBias| > 0.1062**.
+
+The gap is structural, not a budget problem. Between-task SD is **0.3087** across a task set
+**hard-capped at 40** by the benchmark ([A3](FINDINGS.md)). More trials shrink within-task noise,
+which is not the binding term; only more *tasks* would move the MDE, and there are none.
+
+**The §6.2 S1 tier control agrees, which is the more informative result.** A genuine family effect
+must appear in both tiers:
+
+| Tier | FamilyBias | 95% CI |
+| --- | ---: | --- |
+| High (`gpt-4.1` vs `gemini-3.8-flash`) | +0.0063 | [-0.0875, +0.1062] |
+| Low (`gpt-4.1-mini` vs `gemini-3.1-flash-lite`) | +0.0000 | [-0.0875, +0.0750] |
+
+Both are indistinguishable from zero and neither carries the other. Two independent tiers pointing
+at nothing is stronger than one tier's interval alone.
+
+**Mandatory interpretation constraint ([C-L3](FINDINGS.md)).** The OpenAI arm is floor-bound —
+pass^1 **0.138** vs the Gemini arm's **0.675**. Capability is confounded with family by 54 points
+of baseline success. This null is therefore *"no family bias detectable **between these two
+specific agents**"*, and cannot be generalized to a family claim.
+
+## D-L2 — Judges differ in **leniency by 9.1 points** — which a naive contrast would have reported as bias
+
+Mean NL-assertion reward, **same 320 trajectories, same captured prompt**, only the grader changes:
+
+| Judge | OpenAI arm | Google arm | Overall |
+| --- | ---: | ---: | ---: |
+| `gpt-4.1-mini` | 0.394 | 0.900 | **0.647** |
+| `gpt-4.1-2025-04-14` (incumbent) | 0.369 | 0.850 | 0.609 |
+| `gemini/gemini-3.1-flash-lite` | 0.344 | 0.850 | 0.597 |
+| `gemini/gemini-3.8-flash` | 0.312 | 0.800 | **0.556** |
+
+**A 9.1-point spread between the strictest and most lenient judge.** Swapping the grader alone
+moves a reported score by more than most leaderboard gaps.
+
+This is the finding [D-009](DECISIONS.md) predicted and the reason the DiD control term is
+mandatory. Taking the incumbent's **+0.053** advantage over `gemini-3.8-flash` on the OpenAI arm
+as evidence of favouritism would be wrong: it grades the *Google* arm **+0.050** higher too. It is
+a uniformly more lenient judge, not a biased one. **The control term is what separates those, and
+without it this study would have reported a false positive.**
+
+**Capability moves leniency more than family does (§6.2 S2).** Within each family the low tier is
+the *more* lenient: OpenAI −0.037 high-vs-low, Google −0.041. Nearly identical in both families —
+so the ordering tracks capability tier, not vendor.
+
+## D-L3 — `gemini-3.8-flash` fenced **448 of 448** responses; upstream's parser would crash every time
+
+[B-L16](FINDINGS.md) found the NL-judge path calls raw `json.loads` while upstream's own
+`extract_json_from_llm_response` sits unused one module away, and that `gemini-3.8-flash` fences
+its JSON in Markdown. At n=5 that was a defect report. At **n=448 it is a 100% failure rate**:
+
+| Judge | Fenced |
+| --- | ---: |
+| `gemini/gemini-3.8-flash` | **448/448 (100%)** |
+| `gpt-4.1-2025-04-14` | 0/448 |
+| `gpt-4.1-mini` | 0/448 |
+| `gemini/gemini-3.1-flash-lite` | 0/448 |
+
+Anyone pointing τ³'s judge at `gemini-3.8-flash` gets a crash on **every single task**, not an
+occasional one. The fail-closed adapter is not defensive polish — it is the only reason a quarter
+of this study exists. Strengthens upstream contribution #12.
+
+**Alias resolution, recorded because the freeze uses two aliases:** `gpt-4.1-mini` →
+`gpt-4.1-mini-2025-04-14` on all 448 calls; no judge served more than one snapshot, so no drift
+occurred during the run.
+
+## D-L4 — LiteLLM reports **no cost on ~0.4% of successful calls**, and summing them as zero is the defect we document in others
+
+Reconciling two independent instruments over the same 1,792 evaluations:
+
+| Instrument | Total |
+| --- | ---: |
+| Per-evaluation journal | $5.408567 |
+| Attempt log (LiteLLM callback) | $5.400018 |
+| **Difference** | **$0.008550** |
+
+The gap resolves **exactly**: 2 attempt-log rows carry `usd: None` while the journal priced them
+($0.007924 + $0.000626). `response_cost` is not reliably populated in `_hidden_params` at the
+moment the success callback fires.
+
+**It is not confined to Phase D.** Across Phase C, **30 of 7,516** successful attempts (0.40%) are
+unpriced, spread over **all four models** — `gemini-3.1-flash-lite` (25), `gpt-4.1-nano` (3),
+`gpt-4.1` (3), `gpt-4.1-mini` (1). A model-agnostic timing race, not a pricing gap.
+
+**Our own code had the defect it documents.** `attempt_logger.summarize()` and
+`build_spend_ledger.py` both summed `row.get("usd") or 0.0`, silently billing an unpriced success
+at zero — the identical shape to upstream's `get_response_cost()` returning `0.0` on exception,
+and the fourth instance of [D-020](DECISIONS.md). Both now count unpriced successes and mark any
+total containing one a **LOWER BOUND**. The ledger prints the warning rather than a clean number.
+
+Magnitude is small (cents) but the *claim* was wrong: Phase C's "$7.33 measured" was a lower bound
+presented as a measurement.
+
+## D-L5 — Re-grading reproduces the incumbent's own verdicts at **99.1%**, and the incumbent is the only judge that flips
+
+**Mechanism validation at full scale.** Replaying each trajectory to `gpt-4.1-2025-04-14` — the
+model tau2 itself used — reproduces tau2's recorded verdict on **317 of 320** trajectories
+(**99.1%**). Prompt identity by capture ([B-L16](FINDINGS.md)) holds at n=320, so a cross-judge
+difference is attributable to the judge and not to a reconstructed prompt.
+
+| Judge | Agrees with tau2's recorded verdict |
+| --- | ---: |
+| `gpt-4.1-2025-04-14` (the model tau2 used) | **317/320 (99.1%)** |
+| `gpt-4.1-mini` | 298/320 (93.1%) |
+| `gemini/gemini-3.1-flash-lite` | 295/320 (92.2%) |
+| `gemini/gemini-3.8-flash` | 290/320 (90.6%) |
+
+**§6.3 noise floor — and an independent replication of [C-L2](FINDINGS.md).** 256 repeated-grading
+pairs over the pre-drawn 20% sample:
+
+| Judge | Flipped | Of | Rate |
+| --- | ---: | ---: | ---: |
+| `gpt-4.1-2025-04-14` | **1** | 64 | 0.016 |
+| `gpt-4.1-mini` | 0 | 64 | 0.000 |
+| `gemini/gemini-3.8-flash` | 0 | 64 | 0.000 |
+| `gemini/gemini-3.1-flash-lite` | 0 | 64 | 0.000 |
+| **Overall** | **1** | **256** | **0.004** |
+
+0.4%, far inside [B-L13](FINDINGS.md)'s <9% bound, so no downgrade to a bounded null is triggered.
+
+The single flip is the **incumbent**: `phaseC_t1_gem` task 105, graded **1.0 / 0.0 / 1.0** across
+three byte-identical requests at temperature 0. All three non-incumbent judges flipped zero times.
+
+C-L2 found `gpt-4.1-nano` nondeterministic and `gemini-3.1-flash-lite` deterministic at temperature
+0 **in the agent role**. This reproduces that asymmetry **in the judge role**, on a different task
+set, with a different instrument — the same 3/320 residual disagreement in the table above is the
+same phenomenon. **The benchmark's official grader is not reproducible**, and its own
+irreproducibility is the floor under every score it assigns.

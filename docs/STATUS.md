@@ -6,8 +6,9 @@
 > [PLAN.md](PLAN.md).
 
 **Last updated:** 22 September 2026
-**Phase:** A ✅ · B ✅ · C ✅ (320/320 sims, 0 infra errors) · **Phase D RUNNING — 1,792 evaluations**
-**Cumulative API spend: USD 8.35 of 75.00** — USD 66.65 remaining
+**Phase:** A ✅ · B ✅ · C ✅ · **D ✅ COMPLETE (1,792/1,792 evaluations, 0 anomalies)** · Phase E next
+**Cumulative API spend: USD 13.76 of 75.00** — USD 61.24 remaining
+*(a lower bound: 32 successful calls carried no cost from LiteLLM — [D-L4](FINDINGS.md))*
 **Ledger of record:** `results/spend_ledger.json` (regenerated from run artifacts)
 
 ---
@@ -77,34 +78,31 @@ and `scripts/phase_a/01` regenerates the headline Phase A numbers with **no setu
 
 ## Next executable task
 
-**Phase D is in flight** — **1,792** evaluations (1,280 base + 512 §6.3 replicates), ~USD 5.93.
+**Phase E — analysis and release.** All measurement is done; no further spend is required.
 
 ```bash
-cd vendor/tau2-bench && uv run python ../../scripts/phase_d/run_phase_d.py          # resumes
-cd vendor/tau2-bench && uv run python ../../scripts/phase_d/run_phase_d.py --dry-run
+python3 scripts/phase_d/analyze_phase_d.py     # regenerates every Phase D number
+make verify                                     # all offline gates
 ```
 
-**Resume is safe and free.** A unit is journaled the moment it settles, so re-running never repeats
-settled work. An evaluation whose retries were exhausted is recorded `settled: false` and
-**re-attempted**, never banked as missing data.
+The confirmatory result is in [D-L1..D-L5](FINDINGS.md):
 
-Mechanism validated at **20/20** in [B-L16](FINDINGS.md) and confirmed live on the first 20 units:
-prompt identity by capturing tau2's own constructed prompt, parsed through the fail-closed adapter.
-`gemini-3.8-flash` fenced **4 of 4** responses — it would crash the raw upstream parser every time,
-so the adapter is not optional.
+| | |
+| --- | --- |
+| **§6.1 primary** | FamilyBias **+0.0063**, 95% CI **[−0.0875, +0.1062]**, n=40 tasks |
+| **§6.5 TOST (±5pp)** | **Not equivalent** — realized MDE 0.1367; rules out \|effect\| > 0.1062 |
+| **§6.2 S1 tier control** | high +0.0063, low +0.0000 — both null, mutually corroborating |
+| **§6.3 noise floor** | 1 flip / 256 pairs (0.004), inside B-L13's <9% bound |
 
-Before dispatch the runner was hardened under [A-005](PREREGISTRATION_AMENDMENTS.md): the previous
-harness performed **zero retries** (litellm's default), which in a paired design unpairs whole
-trajectories rather than losing single observations. Four gates now precede any spend — freeze,
-provenance, **input-corpus integrity**, budget.
-
-**Carry into Phase D and E:**
-- **`pass^k` is not comparable across arms** ([C-L2](FINDINGS.md)). Gemini's `pass^4` = `pass^1`
-  by construction; report it as determinism, never as reliability.
-- **The OpenAI arm is floor-bound** at pass^1 0.138 vs 0.675 ([C-L3](FINDINGS.md)). Capability is
-  confounded with family — state it before any family attribution.
-- **Infrastructure-error trajectories are missing data, not scored zeros**, for the within-trajectory
-  judge contrast ([A-004](PREREGISTRATION_AMENDMENTS.md)). Phase C has none, so n = 40 per cell.
+**What Phase E must carry, non-negotiably:**
+- The headline is **not** "no bias". It is **"no family bias detectable between these two agents,
+  at a design that could only have seen a ~14-point effect"** ([D-L1](FINDINGS.md)).
+- The OpenAI arm is **floor-bound** (0.138 vs 0.675) — capability is confounded with family
+  ([C-L3](FINDINGS.md)). State it before any family claim.
+- The **positive** findings are the stronger deliverable: a 9.1-point judge-leniency spread
+  ([D-L2](FINDINGS.md)), a 100% fence-crash rate ([D-L3](FINDINGS.md)), and the incumbent judge's
+  own irreproducibility ([D-L5](FINDINGS.md)).
+- `pass^k` is not comparable across arms ([C-L2](FINDINGS.md)).
 
 ## Blockers
 

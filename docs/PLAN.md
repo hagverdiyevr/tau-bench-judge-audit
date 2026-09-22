@@ -88,7 +88,7 @@ the 2×2 control costs ~USD 2.
 
 ## Budget — measured
 
-USD 75 ceiling · **USD 8.35 spent** · **USD 66.65 remaining**. Source of truth:
+USD 75 ceiling · **USD 13.76 spent** · **USD 61.24 remaining**. Source of truth:
 `results/spend_ledger.json` (regenerated from run artifacts, not maintained by hand).
 
 | Phase | Work | Status | Cost |
@@ -97,9 +97,9 @@ USD 75 ceiling · **USD 8.35 spent** · **USD 66.65 remaining**. Source of truth
 | **B** | 11 verification gates | ✅ complete | **$0.47** |
 | **B9** | Run-to-run noise floor (#540) | ✅ complete | **$0.42** |
 | **C** | 320 trajectories | ✅ **complete** | **$7.33** (measured) |
-| **D** | **1,792** judge evaluations (1,280 base + 512 §6.3 replicates) | running | ~$5.93 |
+| **D** | **1,792** judge evaluations (1,280 base + 512 §6.3 replicates) | ✅ complete | **$5.41** |
 | **E** | Analysis and release | pending | $0.00 |
-| | **Spent to date** | | **$8.35** |
+| | **Spent to date** | | **$13.76** |
 | | **Projected remaining** | | **~$11.00** |
 
 Per-trajectory cost **measured at $0.0212** (mean; 0.0137–0.0300) for the Gemini arm — the v3.0
@@ -190,9 +190,20 @@ Two invocations were discarded before the final set and retained as evidence in
 `results/discarded/`: one whose data our own test destroyed, one degraded by a rate-limit ceiling.
 See [A-003](PREREGISTRATION_AMENDMENTS.md) Disclosure.
 
-### Phase D — Judge re-grading · ~$5.93 · **RUNNING**
+### Phase D — Judge re-grading · **$5.41** · ✅ **COMPLETE**
 
-**1,792 evaluations**, not the 1,280 quoted until now. That figure counted only the base pass
+**1,792 evaluations**, not the 1,280 originally quoted. Executed 22 Sep 2026:
+**1,792/1,792 settled, 0 unsettled, 0 anomalies, 0 truncations, every call priced.** The journal
+matches the manifest exactly. Results in [D-L1..D-L5](FINDINGS.md); spend **$5.41**, against a
+$5.93 pre-dispatch estimate.
+
+**Headline:** the incumbent judge shows **no detectable family bias**
+(FamilyBias +0.0063, 95% CI [−0.0875, +0.1062]) — but the design's realized MDE is **0.1367**, so
+this is an underpowered null, not equivalence. The durable findings are the three positives:
+a **9.1-point judge-leniency spread**, a **100% fence-crash rate** on `gemini-3.8-flash`, and the
+official grader's **own irreproducibility**.
+
+ That figure counted only the base pass
 (320 trajectories × 4 judges); [§6.3](PREREGISTRATION.md)'s noise control adds **512** more —
 a pre-specified random 20% of trajectories graded 3× per judge. The replicate sample is
 **pre-drawn from stated seed 20260922** and published in `results/phaseD_regrade_manifest.json`

@@ -85,7 +85,7 @@ and `scripts/phase_a/01` regenerates the headline Phase A numbers with **no setu
 | Evaluator audit suite | `scripts/phase_a/` |
 | Judge-swap re-grading harness | `scripts/phase_d/` |
 | The finding, with CI and MDE | [README.md](../README.md) |
-| 13 upstream contributions | [UPSTREAM_ISSUES.md](UPSTREAM_ISSUES.md) — **drafted, not filed** |
+| 13 upstream contributions | **FILED 22 Sep** — 8 issues ([#553–#560](https://github.com/sierra-research/tau2-bench/issues/553)) + 4 comments. Record: [UPSTREAM_ISSUES.md](UPSTREAM_ISSUES.md) |
 | Reproduction path | `make verify`, offline, no keys |
 
 The pre-registered analysis is **complete**: §6.1 primary, §6.2 S1–S5, §6.3 noise floor, §6.4
@@ -97,9 +97,12 @@ python3 scripts/phase_d/analyze_phase_d.py     # regenerates every published num
 make verify                                     # 99 offline checks, incl. README number-drift
 ```
 
-**The only remaining action requires your authorisation:** filing the 13 upstream issues.
-[CLAUDE.md](../CLAUDE.md) treats publishing as separately authorised, so they stay drafted until
-you say otherwise.
+**Upstream filing is done** (authorised 22 Sep). 8 new issues and 4 comments on existing threads;
+5 drafts became comments after a duplicate check rather than new issues. One claim was withdrawn
+unverified — see [UPSTREAM_ISSUES.md](UPSTREAM_ISSUES.md).
+
+**Nothing else is pending.** No further publishing has been authorised: no posts, no leaderboard
+submission, no PRs. Several issues offer a PR; none has been opened.
 
 **What must never be dropped when this is presented** ([D-021](DECISIONS.md)):
 the primary is an **underpowered null** (MDE 0.1367), the OpenAI arm is **floor-bound**

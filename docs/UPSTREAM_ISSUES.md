@@ -1,7 +1,41 @@
 # Upstream contribution drafts — `sierra-research/tau2-bench`
 
-> **STATUS: PREPARED, NOT FILED.** Filing is a separately authorised action
-> ([CLAUDE.md](../CLAUDE.md) § Non-negotiable operating rules). Nothing here has been submitted.
+> **STATUS: FILED 22 September 2026**, authorised by the project owner, as
+> [@hagverdiyevr](https://github.com/hagverdiyevr).
+>
+> **8 new issues + 4 comments**, not 13 new issues. A duplicate check against the live tracker
+> found that 5 drafts overlapped existing threads; filing those as new issues would have been
+> duplicate noise. They were posted as comments adding evidence instead.
+
+| Filed | Draft | What |
+| --- | --- | --- |
+| [#553](https://github.com/sierra-research/tau2-bench/issues/553) | 1 | Judge prompt is ~20% literal `assistant: None` |
+| [#554](https://github.com/sierra-research/tau2-bench/issues/554) | 2 | `all([])` scores an empty judge response as a full pass |
+| [#555](https://github.com/sierra-research/tau2-bench/issues/555) | 3 | Raw `json.loads`; `gemini-3.8-flash` crashes 448/448 |
+| [#556](https://github.com/sierra-research/tau2-bench/issues/556) | 4 | Judge cost unrecorded; hidden share varies 30–60% by model |
+| [#557](https://github.com/sierra-research/tau2-bench/issues/557) | 5 | ACTION checker order-sensitive (`tasks.py:195`) |
+| [#558](https://github.com/sierra-research/tau2-bench/issues/558) | 11 | `--seed` silently dropped for Gemini |
+| [#559](https://github.com/sierra-research/tau2-bench/issues/559) | 12 | `ToolCall` has no `provider_specific_fields` |
+| [#560](https://github.com/sierra-research/tau2-bench/issues/560) | 13 | Stale `uv.lock` at tag v1.0.1 |
+
+| Comment on | Draft | What it added |
+| --- | --- | --- |
+| [#499](https://github.com/sierra-research/tau2-bench/issues/499#issuecomment-5772485558) | 9 | The 16-read / 2-write split; tasks 64 and 105 have policy-violating gold |
+| [#384](https://github.com/sierra-research/tau2-bench/issues/384#issuecomment-5774383986) | 8 + 10 | 72/114 tasks auto-pass NL; null agent passes DB on 11 |
+| [#540](https://github.com/sierra-research/tau2-bench/issues/540#issuecomment-5774393926) | 7 | Decomposes the noise floor into agent and judge terms |
+| [#474](https://github.com/sierra-research/tau2-bench/issues/474#issuecomment-5774408352) | 6 | Still reproduces; the override is worth 9.1 points |
+
+**One draft was withdrawn, not filed.** Draft 13 originally paired the stale `uv.lock` with a
+claim that `requires-python` is wrong because `tau2` cannot be imported on Python 3.13
+(`audioop`, PEP 594). No Python 3.13 is available on this machine and the `audioop`-importing
+dependency could not be located in the installed venv — it is most likely behind the voice extras,
+which are not installed. **The claim was dropped rather than asserted unverified**, and #560
+carries only the `uv.lock` half, which was reproduced directly. See [D-004](DECISIONS.md).
+
+Two other draft claims were corrected during verification rather than published as written:
+`uv sync --frozen` does **not** fail on the stale lock (tested, it succeeds), and the `--seed`
+mechanism is `litellm.drop_params = True` at `llm_utils.py:71` turning an `UnsupportedParamsError`
+into a silent no-op — not a bare drop as first written.
 
 All against **v1.0.1** (`fc0055dc4e0a316c3f83133267fbd6faaa770992`), Python 3.12.9, retail domain.
 Every claim below was measured on that pin; the evidence entry is linked for each.

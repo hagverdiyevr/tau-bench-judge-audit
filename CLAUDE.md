@@ -56,7 +56,13 @@ All measured and cited. Do not re-derive or contradict without new evidence.
 
 **Environment**
 - **Python 3.12.9 only.** `tau2` v1.0.1 declares `<3.14` but **cannot be imported on 3.13**
-  (`audioop`, PEP 594). Machine default `python3` is 3.14.6. [A0](docs/FINDINGS.md)
+  (`audioop`, PEP 594). [A0](docs/FINDINGS.md)
+- **Two interpreters, and they are not interchangeable.** Bare `python3` is **3.9.6**
+  (`/usr/bin/python3`) — it is what `make verify` and every repo-level script runs on, so those
+  must stay **3.9-compatible** (no `X | Y` unions without `from __future__ import annotations`, no
+  multiline f-string expressions). Anything importing `tau2` must go through
+  `uv run` in `vendor/tau2-bench`, which is **3.12.9**. `python3.14` exists on PATH but is not the
+  default and is out of range. [A0 correction](docs/FINDINGS.md)
 
 **Scoring**
 - **Retail reward is `DB × NL_ASSERTION`, not `DB × COMMUNICATE`.** `COMMUNICATE` appears in the

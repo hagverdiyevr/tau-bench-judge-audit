@@ -45,6 +45,22 @@ defect bites anyone who follows the declared `requires-python` instead — insta
 
 **Consequence for us.** Pin 3.12.9 everywhere. The plan's original 3.13.13 pin was wrong.
 
+**Correction 22 Sep 2026 — the ambient interpreter was misreported.** This finding, and the docs
+quoting it, stated "machine default `python3` is 3.14.6". Measured directly:
+`which python3` → `/usr/bin/python3` → **3.9.6**. `python3.14` is on PATH but is *not* the
+default. The finding's conclusion is unchanged — 3.9.6 is equally outside `>=3.12`, so the pin
+stays mandatory — but the number was wrong and it concealed a live constraint:
+
+| Invocation | Version | Runs |
+| --- | --- | --- |
+| `python3` | **3.9.6** | `make verify`, `check_docs.py`, manifest builders, analysis |
+| `uv run python` in `vendor/tau2-bench` | **3.12.9** | anything importing `tau2` |
+
+So **repo-level scripts must remain 3.9-compatible**. This was found when a multiline f-string
+expression (PEP 701, 3.12+) raised `SyntaxError` in `scripts/phase_d/analyze_phase_d.py` under
+`python3` — a construct that runs fine under `uv run`. Nothing shipped was affected; the failure
+was immediate and loud.
+
 ## A0b — Upstream's committed `uv.lock` is stale at tag v1.0.1
 
 `pyproject.toml` declares `version = "1.0.1"` but the committed `uv.lock` records the `tau2`

@@ -71,7 +71,7 @@ and `scripts/phase_a/01` regenerates the headline Phase A numbers with **no setu
 | | |
 | --- | --- |
 | Upstream | `v1.0.1` @ `fc0055dc4e0a316c3f83133267fbd6faaa770992`, MIT |
-| Python | **3.12.9** — 3.13 is broken ([A0](FINDINGS.md)), machine default 3.14.6 is out of range |
+| Python | **3.12.9** via `uv run` for anything importing `tau2`; bare `python3` is **3.9.6** and runs `make verify` — repo scripts must stay 3.9-compatible. 3.13 is broken ([A0](FINDINGS.md)); `python3.14` is on PATH but out of range |
 | Install | `cd vendor/tau2-bench && uv sync` — verified working, 114 retail tasks load |
 | Credentials | **Gemini + OpenAI keys live** (verified 20 Sep, cost accounting exact for both). `.env` gitignored, mode 0600. ⚠️ OpenAI key was briefly world-readable in a backup — **rotate it**. |
 

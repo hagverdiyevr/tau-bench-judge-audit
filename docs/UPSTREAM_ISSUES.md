@@ -85,6 +85,7 @@ text is checked against the approved text after posting.
 | 5 | 2026-09-27 | [#556 title + description](https://github.com/sierra-research/tau2-bench/issues/556) — **edited** | Estimates replaced by the measured table (32.8%; 20% vs 58%); "65%", "order of magnitude", "roughly fixed" and "enough to reorder" struck and corrected ([R-L4](FINDINGS.md)) | ✅ |
 | 6 | 2026-09-27 | [#557 description](https://github.com/sierra-research/tau2-bench/issues/557) — **edited** | States the bug is latent (no shipped score changes); withdraws the `compare_args: []` "defect"; strikes the comparability caveat ([R-L5](FINDINGS.md), [R-L14](FINDINGS.md)) | ✅ |
 | 7 | 2026-09-27 | [#559 description](https://github.com/sierra-research/tau2-bench/issues/559) — **edited** | Sample size corrected to one 40-run per arm, with the full-arm table (1,104/1,280); the untested "degrades with no error" claims struck ([R-L7](FINDINGS.md), [R-L15](FINDINGS.md)) | ✅ |
+| 8 | 2026-09-26 22:06 | [#540 follow-up](https://github.com/sierra-research/tau2-bench/issues/540#issuecomment-5850307643) | Keeps the promise: links the public repo, the harness, the manifest and the 1,792-record journal; restates the two gaps | ✅ |
 
 <details><summary>Full text of correction 1, as posted</summary>
 
@@ -178,6 +179,19 @@ For reference, a record carries: `run, task, judge, replicate, utc, settled, ok,
 The harness isn't in a public repository yet; I'll link it here when it is.
 
 And agreed on "seed accepted" vs "seed honoured" — on the Gemini path in #558 it isn't even accepted: the seed is dropped before the request is sent.
+
+</details>
+
+<details><summary>Full text of the #540 follow-up, as posted</summary>
+
+Following up as promised — the harness and the full record are now public: https://github.com/hagverdiyevr/tau-bench-judge-audit
+
+For the two things you asked about:
+
+- **Harness:** [`scripts/phase_d/run_phase_d.py`](https://github.com/hagverdiyevr/tau-bench-judge-audit/blob/main/scripts/phase_d/run_phase_d.py) re-grades saved trajectories under any number of judges. It captures the prompt tau2's own evaluator builds (`capture_prompt`), so every judge receives the identical request, and parses replies through a fail-closed adapter ([`scripts/grading/judge_adapter.py`](https://github.com/hagverdiyevr/tau-bench-judge-audit/blob/main/scripts/grading/judge_adapter.py)). The pre-drawn work units, including the 20% replicate sample, are in [`results/phaseD_regrade_manifest.json`](https://github.com/hagverdiyevr/tau-bench-judge-audit/blob/main/results/phaseD_regrade_manifest.json).
+- **Journal:** all 1,792 records are in [`results/phase_d/regrade_journal.jsonl`](https://github.com/hagverdiyevr/tau-bench-judge-audit/blob/main/results/phase_d/regrade_journal.jsonl), in the format I listed above — so the same two gaps apply: no request hash, no raw completion.
+
+The re-graded trajectories themselves are in `results/artifacts/`, and `make setup && make verify` reproduces the checks without API keys or spend.
 
 </details>
 

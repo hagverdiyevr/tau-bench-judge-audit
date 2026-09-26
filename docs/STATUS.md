@@ -93,7 +93,7 @@ Three replies arrived after filing, and a claim-by-claim review of all 12 posts 
 | ~~**Reply on #540**~~ | ✅ **Posted 26 Sep 20:46 UTC** — [comment](https://github.com/sierra-research/tau2-bench/issues/540#issuecomment-5849746351); verified identical. **Open commitment:** it promises to link the harness in that thread once the repo is public | Done |
 | ~~**Correct #554, #556, #557, #559**~~ | ✅ **All four edited 27 Sep** — dated note at top, wrong sentences struck through, each approved word for word | Done |
 | ~~**Make the repo public**~~ | ✅ **Published 27 Sep** — [hagverdiyevr/tau-bench-judge-audit](https://github.com/hagverdiyevr/tau-bench-judge-audit); GitHub verified identical to local (35 commits, personal email only, MIT detected, no `.env`) | Done |
-| **Post the repo link on #540** | One short reply linking the repo | The #540 reply **promised** it; needs its own go-ahead |
+| ~~**Post the repo link on #540**~~ | ✅ **Posted** — [comment](https://github.com/sierra-research/tau2-bench/issues/540#issuecomment-5850307643); verified identical. The promise is kept | Done |
 | **Repo description and topics** | Fill GitHub's About box and topics | Suggested text in the session; you can do it on GitHub or approve me doing it |
 | **Open PRs** | One-line fixes for #553 / #555 | Still unauthorised |
 
@@ -187,3 +187,4 @@ flip in 256** — a floor, not a pattern ([R-L8](FINDINGS.md)).
 | 2026-09-27 | **Correction 7 of 7**: [#559](https://github.com/sierra-research/tau2-bench/issues/559) description edited. **All 7 corrections done**, each shown word for word and approved. Preparing them surfaced three more corrections of our own record: R-L13 (task 64), R-L14 (ACTION latent), R-L15 (signature loss untested) | $0.00 |
 | 2026-09-27 | **Work email removed from history** before first publication: 32 commits rewritten to the personal address, verified identical otherwise; old→new IDs in `results/commit_id_map.json` ([D-024](DECISIONS.md)). Local `user.email` set | $0.00 |
 | 2026-09-27 | **Repository published**: [hagverdiyevr/tau-bench-judge-audit](https://github.com/hagverdiyevr/tau-bench-judge-audit). MIT LICENSE added, README clone URL filled; pushed after owner approval; GitHub verified identical to local | $0.00 |
+| 2026-09-27 | **#540 follow-up posted** ([comment](https://github.com/sierra-research/tau2-bench/issues/540#issuecomment-5850307643)): repo, harness, manifest and journal linked — the promise from the #540 reply is kept | $0.00 |

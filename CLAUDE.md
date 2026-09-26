@@ -216,7 +216,8 @@ Inherited from v1.0 §1 and still binding:
   **Replies received:** Universeyi on #540 (23 Sep), justavibedev (23 Sep) and Ruler4396 (26 Sep) on
   #499 — two of them correct us, and every claim in all three was verified. **Public corrections:**
   posted one at a time after an explicit yes on the exact text — #499, #384 and #540 replies and
-  edits to #554, #556, #557, #559 — **all 7 done (26–27 Sep)**. The #540 reply **promises a link to the harness** once the repo is public — an open commitment. Note: Claude drafted and posted
+  edits to #554, #556, #557, #559 — **all 7 done (26–27 Sep)**. The #540 reply promised a link to the harness; **kept** with a follow-up on 26 Sep once the repo
+  was public. Note: Claude drafted and posted
   all 12 under the owner's name — the owner did not write them, but readers cannot tell.
 
 ## Phases

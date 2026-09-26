@@ -1,0 +1,167 @@
+{
+ "note": "On 27 Sep 2026 every commit's author/committer email was rewritten from a work address to the owner's personal address before the repository was first published. Nothing else changed: for all 32 commits the tree, message, names and dates are identical (verified pair by pair). Commit IDs therefore changed. Records written before the rewrite -- the Phase C/D manifests (provenance.superproject_head), results/artifacts/*.json and spend_ledger.json (git_commit), and session-log citations -- keep the OLD IDs on purpose; resolve them here. See DECISIONS D-024.",
+ "rewritten_utc": "2026-09-27",
+ "commits": 32,
+ "map": [
+  {
+   "old": "24aa2182556007a8da95bc8834595fd4ae84c6db",
+   "new": "03fff9061a898b54bd293082f98a8a63b4c58146",
+   "subject": "Phase A+B complete: tau3-retail evaluator audit and judge-bias study setup"
+  },
+  {
+   "old": "19e174c6dc42e67d3b41dfb66e16b2a40947dd37",
+   "new": "66e2dfbff7f0c5af99c0419499aebba533d97e66",
+   "subject": "docs: record commit, submodule pin, and verified fresh-clone reproducibility"
+  },
+  {
+   "old": "acc89b743bfee2d79c1c045820e7aff2a7a6e2a9",
+   "new": "cb4a4f491b48656f1ca4b22025731c67a8762838",
+   "subject": "Freeze pre-registration (sha256 a917984e) and add its verifier"
+  },
+  {
+   "old": "4f458ab879d2f47d10afeb8b2043def841e897ed",
+   "new": "32883325176cd3229eed4c8f1d5590137a4333c0",
+   "subject": "B9: run-to-run noise floor measured; determinism differs by model family"
+  },
+  {
+   "old": "c9bb2d2ac2ef444e47c7435d710204c643aaece8",
+   "new": "a4ffaf7ce84049bb977a0a2eb9b3ed70f4d604fb",
+   "subject": "Align doc system after B9; add automated alignment checker"
+  },
+  {
+   "old": "b3bcdc56c5814476773ee62b2068bb0281d10235",
+   "new": "fb3eb1108209eee76f510e246de638b81728e5e4",
+   "subject": "Pre-registration amendments A-001/A-002 with an append-only hash chain"
+  },
+  {
+   "old": "90c86a9125f49eb438bd7a2dff45311b9391b3e8",
+   "new": "980bef854708ccaa7a8f0d4bf307560c0b26658b",
+   "subject": "Phase C execution machinery: manifest, budget-aware runner, real spend ledger"
+  },
+  {
+   "old": "679f251ce27c80288c0e9aa29824a18ed5b84f63",
+   "new": "b5105da91c8fec5023e02278244b7aca611f4585",
+   "subject": "Correct the byte-identical error; harden checker; sync all docs"
+  },
+  {
+   "old": "42e177153361e5a7bc74570c4bc64fc9cbb638ee",
+   "new": "4cb6b6eb4356226886c74d9e3602e4bd5d3e79d2",
+   "subject": "Scope the stale-commit check to current-state sections"
+  },
+  {
+   "old": "d56ed425dd3714d633b390bfc10f5f7f1adb5b64",
+   "new": "7afa9499591585279a2cdc6bca77ba99deb27ed0",
+   "subject": "Fail-closed judge adapter, regression tests, artifact export, Makefile"
+  },
+  {
+   "old": "ac1b2443561c42d3c50e0ded6f1996249c56333a",
+   "new": "867e15f843536bdff66d84bb29dc07ded89af338",
+   "subject": "Phase C smoke (1/8) + Phase A regression locks + doc realignment"
+  },
+  {
+   "old": "62d57aefffbef036d6f30ff1727419079807a72e",
+   "new": "1c0e68469613d68c48050e6404fea9a6781bee5d",
+   "subject": "A-003: bounded retries with every attempt logged; discard 2 contaminated invocations"
+  },
+  {
+   "old": "c1813d7a37a64daa861d581ed4245a7982d9d407",
+   "new": "a9cf0abe81938f5f6c80d6fec49fac94ef2b91b2",
+   "subject": "A-004: retries 2->4 after the attempt log identified a 200k TPM ceiling"
+  },
+  {
+   "old": "e45f72e4908c2e5c1a94a743d4f7886b1694af80",
+   "new": "a47bc92d23a75977ed33962aa75ddeb381a90205",
+   "subject": "Harden resume: prove completion instead of assuming it; archive orphaned t2_oai"
+  },
+  {
+   "old": "2d94c7ea37fb9039bf3b5d8f456ab3cfbd3cc01e",
+   "new": "f4dabad33b1d8e676a804e3f8ca4de3a4e6e9aea",
+   "subject": "Phase C complete: 320 simulations, 0 infrastructure errors, determinism replicated at n=40"
+  },
+  {
+   "old": "6fd40914f445980ae1f94ffc501a928c11341b74",
+   "new": "628a276cb0deede931720696822749c77a7e4920",
+   "subject": "Align all docs with Phase C results, section by section"
+  },
+  {
+   "old": "4f189d4c06b8cb5e23e093996b77be72cdcaf940",
+   "new": "3e18fdfa16e435b74fc9c2171c9765dcbf4dbaf5",
+   "subject": "A-005: harden Phase D before dispatch; 1,792 evaluations, not 1,280"
+  },
+  {
+   "old": "7c5963f8edb2249b4dadc71701c627d4b862341a",
+   "new": "4161c2753e3fe5efc97eef7cf48775008b447cfb",
+   "subject": "Phase D analyzer; correct a misreported interpreter version"
+  },
+  {
+   "old": "309c26393e8919f81d5835aedc7f42532f1a459c",
+   "new": "0798e895561bf80cabb105a8ff9c7f0d39fa14c7",
+   "subject": "Phase D complete: 1,792 evaluations, 0 anomalies, $5.41"
+  },
+  {
+   "old": "0e705e36cde87c02c3aec311a21f7dbeaf2cea3e",
+   "new": "171607b265661c1d61507641264ca39f74ef46c7",
+   "subject": "Phase E: complete the pre-registered analysis; README and 13 upstream drafts"
+  },
+  {
+   "old": "b89d215d5c87eec955b9c5a728a0f805330c954a",
+   "new": "7c68814d6ae5af9d19fdf529a87d2f82aa8b6b6e",
+   "subject": "File upstream contributions: 8 issues + 4 comments (#553-#560)"
+  },
+  {
+   "old": "cb38e167c8ee4113d279bd8a5e22d3afd93c6b02",
+   "new": "0d3f1247f25bddd7b10df156ffa9a1b44004f38f",
+   "subject": "Align all docs with Phase D/E results and the upstream filing"
+  },
+  {
+   "old": "1c48468219efcd6a9aeb0d387f7c88b739f181b7",
+   "new": "d74f2ebc0625465a02ac844b24557a8b78fd61e9",
+   "subject": "Post-release review: correct 7 of 12 public posts in our own records; pin the gate"
+  },
+  {
+   "old": "9a5327a1d89da5f14f89117bffa07bd859d862b2",
+   "new": "5bd0a3587181646c03e0c092b5237a80f477730c",
+   "subject": "R-L13: task 64's target is correct; only 105 is a scoring defect"
+  },
+  {
+   "old": "f4f62eb0dff9b91fa351e6c7a7a7ddb5cd82f762",
+   "new": "ec0f5ba62e1522ed2eff5935e5b8e5be58694ce8",
+   "subject": "Record correction 1 of 7: #499 reply posted after owner approval"
+  },
+  {
+   "old": "90c48ac4a41a7118d34db52ee7f4d3aeb18fdf51",
+   "new": "2ca9fcf11269487cdd9a9da17a09d4a6ad58ab9f",
+   "subject": "Record correction 2 of 7: #384 reply posted after owner approval"
+  },
+  {
+   "old": "8098b9b6413325f900af44b7c0667dec220b2901",
+   "new": "996eef5b03ffb168bcf724aa6cb43a093394605e",
+   "subject": "Record correction 3 of 7: #540 reply posted after owner approval"
+  },
+  {
+   "old": "d83793243a9d46204b6cb0c1b9ba15ced76d4065",
+   "new": "568ac0c14988a4b6de64ae7ba18f0705eb0e9224",
+   "subject": "Record correction 4 of 7: #554 description edited after owner approval"
+  },
+  {
+   "old": "2203708ff396018d0bae0588f72d98b002042523",
+   "new": "38f0ca0c7bce66af50dcd23247d766b65095c1b0",
+   "subject": "Record correction 5 of 7: #556 title and description edited after approval"
+  },
+  {
+   "old": "927a2ccca23657067124ae87acfe35eb19d074ff",
+   "new": "3c773980b074929c411d17ff32707c622c3c1da5",
+   "subject": "R-L14: the ACTION order bug changes no score in the shipped benchmark"
+  },
+  {
+   "old": "b6f8dd2089a4ae3b66d142a4c7e0068d8c2e32b3",
+   "new": "3153528fa4effc784eb1f242d97154ccf87f9ffc",
+   "subject": "Record correction 6 of 7: #557 description edited after owner approval"
+  },
+  {
+   "old": "68c3d7497c830c988ccbde30ddb40f3e642a61fe",
+   "new": "7239e70bfc1fbf076f2f6fcd2a05ceb385846cfb",
+   "subject": "Record correction 7 of 7: #559 edited; R-L15 (signature loss never tested)"
+  }
+ ]
+}

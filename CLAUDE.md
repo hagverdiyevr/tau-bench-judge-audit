@@ -199,6 +199,10 @@ Inherited from v1.0 §1 and still binding:
   offline work and report the exact remaining setup action.
 - **Negative results are retained.** No score, savings, production-impact or hiring claim without a
   linked run artifact. A well-specified null with a stated MDE is a valid outcome.
+- **Commit only as the personal address.** This repo's local `user.email` is
+  `hagverdiyev.r.99@gmail.com`. The machine's *global* git email is a work address and must never
+  appear in this repository — history was rewritten on 27 Sep to remove it ([D-024](docs/DECISIONS.md)).
+  Commit IDs recorded before that date resolve through `results/commit_id_map.json`.
 - Secrets live in a gitignored `.env`; `.env.example` carries names only. **Never `cp .env.example
   .env` over a live file.** Never print or commit a key.
 - **Publishing is separately authorised** — posting, messages, deployment, leaderboard submission,

@@ -525,3 +525,32 @@ applied to the gate: it now proves the property instead of assuming it.
 **Consequence.** Both confirmatory manifests record `superproject_dirty=True`. That is disclosed in
 R-L11 rather than rewritten: the only change was a one-line version label, and the pinned commit
 never moved. Manifests built from now on start from a tree the gate has proven clean.
+
+## D-024 — Rewrite the commit email before first publication; keep old IDs in records and map them
+
+**Date:** 27 September 2026 · **Context:** preparing to make the repository public
+
+**The fork.** All 32 commits carried the owner's **work** email (`git config --global user.email`),
+because that is the machine-wide setting. The repository had never been pushed, and the owner wants
+no work address anywhere in it.
+
+| Option | Why not |
+| --- | --- |
+| **A. Publish as is.** | Permanently exposes a work address on a personal project. |
+| **B. Rewrite to GitHub's noreply address.** | Offered and recommended; the owner chose a personal address instead. |
+| **C. Rewrite to the owner's personal address.** | **Chosen**, by the owner. |
+
+**Decision.** `git filter-branch --env-filter` rewrote author and committer email only, on all 32
+commits, **before** the first push — the only point at which a rewrite breaks no one's clone.
+Verified pair by pair: tree, message, names and dates identical for 32/32; zero commits reachable
+from any ref still carry the work address. This repository's local `user.email` is now the personal
+address; the owner's global setting is untouched, so work repositories are unaffected. A full
+pre-rewrite bundle was taken first.
+
+**Provenance.** Commit IDs changed. Records written before the rewrite — the Phase C and Phase D
+manifests (`provenance.superproject_head`), `results/artifacts/*.json` and `spend_ledger.json`
+(`git_commit`), and session-log citations — **keep the old IDs**. Editing them would be rewriting
+history of a different kind. `results/commit_id_map.json` maps every old ID to its new one.
+
+**Consequence.** Any future commit in this repository must use the personal address; a work address
+appearing in `git log` is a defect.

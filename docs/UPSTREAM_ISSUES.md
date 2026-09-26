@@ -37,6 +37,45 @@ Two other draft claims were corrected during verification rather than published 
 mechanism is `litellm.drop_params = True` at `llm_utils.py:71` turning an `UnsupportedParamsError`
 into a silent no-op — not a bare drop as first written.
 
+## Post-filing audit — 26–27 September 2026
+
+**Who wrote the posts.** Claude drafted and posted all 12 through the GitHub CLI, which is signed in as
+`@hagverdiyevr`; the account owner chose the filing plan but did not write the text. On GitHub they
+read as the owner's own words. Nothing else has been posted from the account.
+
+Three replies arrived, and every claim in every post was then re-checked against v1.0.1 and the
+committed artifacts ([FINDINGS R-L1–R-L12](FINDINGS.md); offline script
+`scripts/review/verify_post_claims.py`). **No reported bug turned out not to exist.** Seven posts
+contain at least one claim that goes further than its evidence.
+
+| Post | Verdict | What is wrong, and the evidence |
+| --- | --- | --- |
+| #553 | Holds · slip | "Line 79 expresses the same intent" — the intent is documented in a different function |
+| #554 | **Correct** | "A fenced/truncated/refused reply converts into a silent full pass" — it raises; only valid-but-incomplete JSON passes ([R-L6](FINDINGS.md)) |
+| #555 | Holds | — |
+| #556 | **Correct** | Figures were estimates: measured 32.8%, 20% vs 58% by arm; "65%", "order of magnitude" (3.9×) and "roughly fixed per task" are wrong ([R-L4](FINDINGS.md)) |
+| #557 | **Correct** | Omits that `ACTION` is scored on zero retail tasks; wrongly says no retail task sets `compare_args: []` (4 do) and calls it a defect (all 56 are deliberate hand-offs) ([R-L5](FINDINGS.md)) |
+| #558 | Holds · slip | Cites `llm_config.py:47`; the assignment is on line 48 |
+| #559 | **Correct** | "320 trajectories per arm" was one 40-trajectory run; full arms: 1,104/1,280 ([R-L7](FINDINGS.md)) |
+| #560 | Holds | Re-verified on a real fresh clone |
+| #499 comment | **Correct** | Task 64 is half-applied, not untouched; 67/68 need no writes ([R-L1](FINDINGS.md), [R-L3](FINDINGS.md)) |
+| #384 comment | **Correct** | One #499 false positive (105), not three; "remaining 8" is 10 ([R-L1](FINDINGS.md)) |
+| #540 comment | **Correct** | "Family asymmetry in the judge role" rests on one flip (p = 0.50); "3 residual disagreements are the same effect" unverified ([R-L8](FINDINGS.md)) |
+| #474 comment | Holds · slip | "Two of four are aliases" — three of four names are undated |
+
+**Replies received** (verified in [REFERENCE](REFERENCE.md#replies-to-our-posts--what-others-established-verified-2627-sep-2026)):
+Universeyi on #540 (23 Sep) — agrees, and asks whether the journal stores a request hash and the raw
+judge reply (it stores **neither**, [R-L9](FINDINGS.md)); justavibedev on #499 (23 Sep) — corrects
+task 64, right; Ruler4396 on #499 (26 Sep) — independently reproduces the finding and confirms both
+corrections.
+
+**Public corrections: identified, not posted.** Each needs its own go-ahead ([STATUS](STATUS.md)).
+
+**Note on the drafts below.** The numbered sections are the pre-filing drafts. The posted text was
+rewritten during filing and differs; the posted versions are the record, and the audit above is
+about them. Commands in the drafts use plain `uv run`, which modifies upstream — use
+`uv run --frozen` ([R-L11](FINDINGS.md)).
+
 All against **v1.0.1** (`fc0055dc4e0a316c3f83133267fbd6faaa770992`), Python 3.12.9, retail domain.
 Every claim below was measured on that pin; the evidence entry is linked for each.
 

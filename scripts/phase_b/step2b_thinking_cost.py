@@ -7,7 +7,7 @@ Reasoning bills at the OUTPUT rate. Our Phase C estimate assumed ~550 output tok
 If a real retail turn burns far more, the generation budget is wrong by a large factor.
 Measure before committing money.
 
-Run:  cd vendor/tau2-bench && uv run python ../../scripts/phase_b/step2b_thinking_cost.py
+Run:  cd vendor/tau2-bench && uv run --frozen python ../../scripts/phase_b/step2b_thinking_cost.py
 """
 
 import json

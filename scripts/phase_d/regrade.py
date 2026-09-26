@@ -8,7 +8,7 @@ Parsing goes through scripts/grading/judge_adapter.py, not upstream's raw json.l
 gemini-3.8-flash fences its JSON (J1) and because upstream scores an empty result set as a full
 pass (J2). Anomalies are recorded with reward withheld, never silently granted.
 
-Run:  cd vendor/tau2-bench && uv run python ../../scripts/phase_d/regrade.py --run step5_judge_gated
+Run:  cd vendor/tau2-bench && uv run --frozen python ../../scripts/phase_d/regrade.py --run step5_judge_gated
       ... --judges gpt-4.1-2025-04-14 gpt-4.1-mini gemini/gemini-3.8-flash gemini/gemini-3.1-flash-lite
 """
 

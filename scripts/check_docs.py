@@ -90,6 +90,29 @@ for bad, why in STALE.items():
                 hits.append(f"{f.name}:{i}")
     check(f"no stale claim ASSERTED: {bad!r}", not hits, f"at {hits} — {why}")
 
+# 4a — claims corrected by the post-release review must not be re-asserted in the LIVE docs.
+# The append-only records (FINDINGS, DECISIONS) and the filing record (UPSTREAM_ISSUES) keep the
+# original wording beside its correction on purpose, so they are out of scope here, as are dated
+# session-log rows, which are history by construction.
+LIVE = [REPO / "CLAUDE.md", REPO / "README.md", REPO / "docs/STATUS.md", REPO / "docs/PLAN.md",
+        REPO / "docs/REFERENCE.md"]
+STALE_LIVE = {
+    "~40% understatement": "an estimate; measured judge share is 32.8% (R-L4)",
+    "python3` is **3.9.6**": "bare python3 is not a fixed interpreter here (R-L10)",
+    "reproduces, in the *judge* role": "one flip in 256 is not an asymmetry (R-L8)",
+    "4–11 literal": "measured at n=320: 19.9% of lines, 0–15 per trajectory (B4, #553)",
+    "uv run python ": "plain `uv run` rewrites upstream's uv.lock; use --frozen (R-L11)",
+}
+for bad, why in STALE_LIVE.items():
+    hits = []
+    for f in LIVE:
+        if not f.exists():
+            continue
+        for i, line in enumerate(f.read_text().splitlines(), 1):
+            if bad in line and not line.startswith("| 20") and not any(e in line.lower() for e in EXEMPT):
+                hits.append(f"{f.name}:{i}")
+    check(f"live docs do not re-assert a corrected claim: {bad!r}", not hits, f"at {hits} — {why}")
+
 # 4b — git provenance: STATUS must not claim a stale commit or a clean tree when it is dirty
 head = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=REPO,
                       capture_output=True, text=True).stdout.strip()

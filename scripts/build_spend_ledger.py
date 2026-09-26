@@ -9,7 +9,7 @@ carries only agent_cost and user_cost, so any ledger built from those alone unde
 on judge-gated tasks. Judge cost is computed from the judge's ACTUAL serialization of each
 trajectory, not a flat per-call guess.
 
-Run:  cd vendor/tau2-bench && uv run python ../../scripts/build_spend_ledger.py
+Run:  cd vendor/tau2-bench && uv run --frozen python ../../scripts/build_spend_ledger.py
 """
 
 import glob
@@ -35,7 +35,7 @@ JUDGE_OUTPUT_TOKENS = 300             # measured typical verdict length
 try:
     from litellm import token_counter
 except ImportError:
-    sys.exit("run under the tau2 venv: cd vendor/tau2-bench && uv run python ../../scripts/build_spend_ledger.py")
+    sys.exit("run under the tau2 venv: cd vendor/tau2-bench && uv run --frozen python ../../scripts/build_spend_ledger.py")
 
 
 def judge_input_tokens(sim):

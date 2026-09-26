@@ -5,8 +5,8 @@
 > [FINDINGS.md](FINDINGS.md), rationale in [DECISIONS.md](DECISIONS.md), the route in
 > [PLAN.md](PLAN.md).
 
-**Last updated:** 22 September 2026
-**Phase:** A ✅ · B ✅ · C ✅ · D ✅ · **E ✅ COMPLETE — analysis published, upstream filed**
+**Last updated:** 27 September 2026
+**Phase:** A ✅ · B ✅ · C ✅ · D ✅ · E ✅ · **post-release review ✅ — 7 of 12 public posts need a correction, none posted yet**
 **Cumulative API spend: USD 13.76 of 75.00** — USD 61.24 remaining
 *(a lower bound: 32 successful calls carried no cost from LiteLLM — [D-L4](FINDINGS.md))*
 **Ledger of record:** `results/spend_ledger.json` (regenerated from run artifacts)
@@ -44,7 +44,8 @@ t-bench/
 ├── tests/                         4 files, 75 checks (phase_a, judge adapter, runner guards, phase_d guards)
 ├── scripts/grading/               fail-closed judge adapter
 ├── scripts/phase_c/               build_manifest.py, run_phase_c.py
-├── scripts/phase_d/               build_manifest.py, run_phase_d.py, pricing.py, regrade.py
+├── scripts/phase_d/               build_manifest.py, run_phase_d.py, pricing.py, regrade.py, analyze_phase_d.py
+├── scripts/review/                verify_post_claims.py — post-release corrections, offline
 ├── scripts/build_spend_ledger.py  ledger generator (incl. judge cost)
 ├── scripts/export_artifacts.py    lifts runs out of the gitignored submodule
 ├── scripts/check_docs.py          doc alignment — run every iteration
@@ -72,41 +73,50 @@ and `scripts/phase_a/01` regenerates the headline Phase A numbers with **no setu
 | | |
 | --- | --- |
 | Upstream | `v1.0.1` @ `fc0055dc4e0a316c3f83133267fbd6faaa770992`, MIT |
-| Python | **3.12.9** via `uv run` for anything importing `tau2`; bare `python3` is **3.9.6** and runs `make verify` — repo scripts must stay 3.9-compatible. 3.13 is broken ([A0](FINDINGS.md)); `python3.14` is on PATH but out of range |
-| Install | `cd vendor/tau2-bench && uv sync` — verified working, 114 retail tasks load |
+| Python | **3.12.9**, the pinned venv at `vendor/tau2-bench/.venv/bin/python` — **every gate step runs on it**. Bare `python3` is unreliable: Anaconda 3.13.5, Homebrew 3.14.6 or system 3.9.6 depending on shell startup ([R-L10](FINDINGS.md)) |
+| Install | `make setup` (= `uv sync --frozen`) — leaves `uv.lock` untouched. **Never plain `uv run`/`uv sync`**: they rewrite upstream's stale lock ([R-L11](FINDINGS.md)) |
 | Credentials | **Gemini + OpenAI keys live** (verified 20 Sep, cost accounting exact for both). `.env` gitignored, mode 0600. ⚠️ OpenAI key was briefly world-readable in a backup — **rotate it**. |
 
 ## Next executable task
 
-**Nothing is blocking and no spend remains.** All five [PLAN](PLAN.md) Phase E deliverables exist:
+**The study is complete and no spend remains. What is open is a set of decisions, all yours,
+because each one posts under your name.**
+
+Three replies arrived after filing, and a claim-by-claim review of all 12 posts followed
+([post-release review](FINDINGS.md), R-L1–R-L12). Review page: *Twelve Posts, Audited*
+(private artifact). **7 of 12 posts need a correction; no reported bug turned out not to exist.**
+
+| Decision | What it would post | Why |
+| --- | --- | --- |
+| **Reply on #499** | Thank justavibedev and Ruler4396; confirm task 64; correct 67/68 | Both corrections are right and verified ([R-L1](FINDINGS.md), [R-L3](FINDINGS.md)) |
+| **Reply on #384** | One #499 false positive (105), not three; the other 10 need no writes; 6 tasks give a do-nothing agent full reward | [R-L1](FINDINGS.md), [R-L2](FINDINGS.md) |
+| **Reply on #540** | Answer both of Universeyi's questions (no request hash, no raw reply); withdraw "family asymmetry"; say the harness is not public yet | [R-L8](FINDINGS.md), [R-L9](FINDINGS.md) |
+| **Correct #554, #556, #557, #559** | A dated correction note on each (edit, or a follow-up comment) | [R-L6](FINDINGS.md), [R-L4](FINDINGS.md), [R-L5](FINDINGS.md), [R-L7](FINDINGS.md) |
+| **Make the repo public** | Push to a public remote | Universeyi asked for the harness; nothing can be shared until this. History is clean of secrets (checked 22 Sep) |
+| **Open PRs** | One-line fixes for #553 / #555 | Still unauthorised |
+
+**Suggested order:** the three replies first — people are waiting in those threads — then the issue
+corrections, then publishing the repo so the replies can link to it.
 
 | Deliverable | Where |
 | --- | --- |
 | Evaluator audit suite | `scripts/phase_a/` |
 | Judge-swap re-grading harness | `scripts/phase_d/` |
 | The finding, with CI and MDE | [README.md](../README.md) |
-| 13 upstream contributions | **FILED 22 Sep** — 8 issues ([#553–#560](https://github.com/sierra-research/tau2-bench/issues/553)) + 4 comments. Record: [UPSTREAM_ISSUES.md](UPSTREAM_ISSUES.md) |
-| Reproduction path | `make verify`, offline, no keys |
-
-The pre-registered analysis is **complete**: §6.1 primary, §6.2 S1–S5, §6.3 noise floor, §6.4
-ITT/per-protocol, and the §4.3 sensitivity analysis. See [D-L1..D-L5](FINDINGS.md) and
-[E-L1..E-L4](FINDINGS.md).
+| 13 upstream contributions | **Filed 22 Sep** — 8 issues ([#553–#560](https://github.com/sierra-research/tau2-bench/issues/553)) + 4 comments. Record and audit: [UPSTREAM_ISSUES.md](UPSTREAM_ISSUES.md) |
+| Post-release corrections, offline | `scripts/review/verify_post_claims.py` → `results/review/post_claims.json` |
+| Reproduction path | `make setup && make verify` — offline, no keys, ends by proving upstream untouched |
+| Beginner explainer | *Who Grades the Grader?* (private artifact) |
 
 ```bash
-python3 scripts/phase_d/analyze_phase_d.py     # regenerates every published number
-make verify                                     # 99 offline checks, incl. README number-drift
+make setup && make verify                                           # the gate, on 3.12.9
+vendor/tau2-bench/.venv/bin/python scripts/phase_d/analyze_phase_d.py  # every Phase D/E number
 ```
-
-**Upstream filing is done** (authorised 22 Sep). 8 new issues and 4 comments on existing threads;
-5 drafts became comments after a duplicate check rather than new issues. One claim was withdrawn
-unverified — see [UPSTREAM_ISSUES.md](UPSTREAM_ISSUES.md).
-
-**Nothing else is pending.** No further publishing has been authorised: no posts, no leaderboard
-submission, no PRs. Several issues offer a PR; none has been opened.
 
 **What must never be dropped when this is presented** ([D-021](DECISIONS.md)):
 the primary is an **underpowered null** (MDE 0.1367), the OpenAI arm is **floor-bound**
-(0.138 vs 0.675), and `pass^k` is not comparable across arms.
+(0.138 vs 0.675), `pass^k` is not comparable across arms, and the judge's irreproducibility is **one
+flip in 256** — a floor, not a pattern ([R-L8](FINDINGS.md)).
 
 ## Blockers
 
@@ -130,6 +140,15 @@ the primary is an **underpowered null** (MDE 0.1367), the OpenAI arm is **floor-
 - **New, open:** the OpenAI arm's floor-bound baseline ([C-L3](FINDINGS.md)) constrains what a
   Phase D interaction can be attributed to. Not fixable without changing frozen arms; to be
   declared as a limitation.
+- **Open, 27 Sep:** why 3 of 320 incumbent re-grades differ from tau2's recorded verdict. One was
+  re-graded 3× with the same answer each time, so it is not a flip ([R-L8](FINDINGS.md)).
+- **Open, 27 Sep:** task 105's only gold action is labelled `106_0` — possibly a data labelling
+  slip; not investigated ([R-L3](FINDINGS.md)).
+- **Open, 27 Sep:** the Python 3.13 import failure ([A0](FINDINGS.md)) could not be reproduced in
+  this environment and was withdrawn from #560. Anaconda 3.13.5 is now available to test it.
+- **Unknown, 27 Sep:** whether the OpenAI account is rate-limited or out of quota — an unintended
+  call returned 429 and the body was not captured ([R-L12](FINDINGS.md)). Matters only before any
+  future spend.
 
 ## Session log
 
@@ -152,3 +171,7 @@ the primary is an **underpowered null** (MDE 0.1367), the OpenAI arm is **floor-
 | 2026-09-22 | **Phase D complete** — 1,792/1,792 settled, 0 anomalies, journal matches manifest exactly. **FamilyBias +0.0063 [−0.0875, +0.1062]**, an underpowered null (MDE 0.1367). Positives: 9.1pp leniency spread, 448/448 fence crash, incumbent judge not reproducible | $5.41 |
 | 2026-09-22 | **Phase E** — §6.2 audit found a mislabelled secondary and two missing ones; added true S3, S5, §4.3 sensitivity. **E-L1**: DB/judge disagree on 31.2%. **E-L2**: cheaper agent costs **10× more per reliable task**. README published with machine-checked numbers | $0.00 |
 | 2026-09-22 | **Upstream filed** — 8 issues (#553–#560) + 4 comments, after a duplicate check moved 5 drafts to existing threads. One claim **withdrawn** as unreproducible, two corrected under verification ([D-022](DECISIONS.md)) | $0.00 |
+| 2026-09-23 | Replies on our posts: **Universeyi** on #540 (agrees; independent data fits; asks 2 questions) and **justavibedev** on #499 (corrects task 64 — right) | $0.00 |
+| 2026-09-26 | Reply from **Ruler4396** on #499: independently reproduces 18/15/16/2, confirms 67/68 need no writes, adds 11/16 shipped runs of 64 matching a half-applied target. All verified | $0.00 |
+| 2026-09-26 | **Post-release review** of all 12 posts, claim by claim: 2 hold, 3 small slips, **7 need correction**. New finding: a do-nothing agent scores **full reward on 6 of 114** tasks ([R-L2](FINDINGS.md)) | $0.00 |
+| 2026-09-27 | **Gate fixed** ([D-023](DECISIONS.md)): every step on the pinned 3.12.9 venv; no plain `uv run`; `make pristine` added — `make verify` had modified upstream on every run ([R-L11](FINDINGS.md)). One **unintended live judge call**, rejected 429, not billed ([R-L12](FINDINGS.md)). All docs aligned with R-L1–R-L12 | $0.00 |

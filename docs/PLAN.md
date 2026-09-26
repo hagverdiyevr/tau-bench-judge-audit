@@ -63,9 +63,9 @@ The control term is mandatory; without it the quantity is judge *leniency*, not 
 | Re-grade saved runs | **Works**, 11/11 fidelity (B-L13) |
 | Call granularity | **One judge call per trajectory** — assertions batched in, verdicts batched out |
 | Judge input size | **3,409 tokens** mean (1,668–5,853), measured on real trajectories (B-L10) |
-| Judge input content | Trajectory as `f"{role}: {content}"` — **tool calls invisible**; 4–11 literal `content: None` lines per trajectory (B4, corroborated in production) |
+| Judge input content | Trajectory as `f"{role}: {content}"` — **tool calls invisible**; literal `None` lines — **19.9% of all lines** at n=320, 0–15 per trajectory, median 5 (B4; filed as #553) |
 | Judge temperature | **0.0** (verified). Self-consistency 11/11; flip rate bounded **<9%** (B-L13) |
-| Judge cost | **Not accounted by tau2 at all** — ~40% understatement of true run cost (B-L14) |
+| Judge cost | **Not accounted by tau2 at all** — measured **32.8%** of true cost, **20% vs 58%** by agent arm, so cross-model cost comparisons are biased ([B-L14](FINDINGS.md), [R-L4](FINDINGS.md)) |
 | Attempt visibility | **Every API attempt logged** at the LiteLLM boundary (A-003), failures included. This is how the 200k TPM ceiling was identified and how true spend is now measured rather than estimated |
 
 ## Design
@@ -201,7 +201,17 @@ $5.93 pre-dispatch estimate.
 (FamilyBias +0.0063, 95% CI [−0.0875, +0.1062]) — but the design's realized MDE is **0.1367**, so
 this is an underpowered null, not equivalence. The durable findings are the three positives:
 a **9.1-point judge-leniency spread**, a **100% fence-crash rate** on `gemini-3.8-flash`, and the
-official grader's **own irreproducibility**.
+official grader's **own irreproducibility** — one flip in 256, a floor rather than a pattern
+([R-L8](FINDINGS.md)).
+
+### Post-release review · $0.00 · ✅ 26–27 Sep
+
+Three public replies prompted a claim-by-claim re-check of all 12 posts. **7 of 12 need a
+correction; no reported bug turned out not to exist** — the errors are prose that went further than
+its repro ([R-L1–R-L12](FINDINGS.md)). One new result: a do-nothing agent scores **full reward on 6 of
+114** retail tasks ([R-L2](FINDINGS.md)). The gate was also found to modify upstream on every run and
+is fixed ([D-023](DECISIONS.md)). **Public corrections are identified, not posted** — see
+[STATUS](STATUS.md).
 
  That figure counted only the base pass
 (320 trajectories × 4 judges); [§6.3](PREREGISTRATION.md)'s noise control adds **512** more —
@@ -237,23 +247,27 @@ Analysis per [PREREGISTRATION §6](PREREGISTRATION.md).
 3. **The finding** — one sentence, with a CI and a stated MDE.
 4. **13 upstream contributions** ([FINDINGS](FINDINGS.md) §Upstream) — **filed 22 Sep 2026** as
    8 issues (#553–#560) + 4 comments; record in [UPSTREAM_ISSUES.md](UPSTREAM_ISSUES.md).
-5. Reproduction path: `make verify` offline, zero API keys.
+5. Reproduction path: `make setup && make verify` — offline, zero API keys, pinned 3.12.9, ends by
+   proving upstream untouched.
 
 ## Verification
 
 Offline, no API keys — this is what makes the artifact reviewable by a stranger.
 
 ```bash
-make verify      # the single pre-spend gate: docs + freeze + chain + all tests
+make setup       # pinned venv, uv sync --frozen (leaves upstream's uv.lock untouched)
+make verify      # the single pre-spend gate: docs + all tests + freeze/chain + upstream pristine
 ```
 
 | Test | Asserts | Status |
 | --- | --- | --- |
-| `tests/test_phase_a_regression.py` | Every Phase A number: 114 tasks, 112 `[DB,NL_ASSERTION]`, 2 `[DB]`, **0 COMMUNICATE**, 40 live judge, 74 DB-only, 104 mutating, splits 74/40/114; judge identity + temperature; B1 patch target *and* that `tau2.config` is a no-op; #514 and B-L7 order sensitivity; A4's 18-action/15-task allowlist; A5's 11-task null-agent set | **18 checks, passing** |
+| `tests/test_phase_a_regression.py` | Every Phase A number: 114 tasks, 112 `[DB,NL_ASSERTION]`, 2 `[DB]`, **0 COMMUNICATE**, 40 live judge, 74 DB-only, 104 mutating, splits 74/40/114; judge identity + temperature; B1 patch target *and* that `tau2.config` is a no-op; #514 and B-L7 order sensitivity; A4's 18-action/15-task allowlist; A5's 11-task null-agent set | **19 checks, passing** |
 | `tests/test_judge_adapter.py` | Fenced JSON parses; empty / partial / duplicate / extra / mismatched / malformed / non-bool responses all **reject with reward withheld**; explicit upstream contrast (`all([])` is `True`) | **21 checks, passing** |
-| `tests/test_runner_guards.py` | Guards **fire**: tampered amendment chain blocks dispatch, budget floor blocks dispatch, existing artifact is skipped, unknown `--only` rejected, manifest 2:2 balanced with pinned snapshot and retries disabled | **8 checks, passing** |
+| `tests/test_runner_guards.py` | Guards **fire**: tampered amendment chain blocks dispatch, budget floor blocks dispatch, an invalid artifact is refused rather than skipped, unknown `--only` rejected, manifest 2:2 balanced with pinned snapshot, bounded retries (4), attempt logging records failures | **13 checks, passing** |
+| `tests/test_phase_d_guards.py` | §6.3 replicate design pre-drawn and reproducible; retries not zero; unpriced calls are `None`, never `0.0`; unsettled units re-dispatched on resume; a changed input corpus blocks dispatch | **29 checks, passing** |
 | `scripts/verify_preregistration.py` | Frozen hash intact; amendment chain links verified. Tamper-tested both directions | **passing** |
-| `scripts/check_docs.py` | Cross-links; spend matches the generated ledger; no stale claim *asserted*; git provenance not misstated | **passing** |
+| `scripts/check_docs.py` | Cross-links; spend matches the generated ledger; no stale claim *asserted*; git provenance not misstated; README numbers match `analysis.json` | **26 checks, passing** |
+| `make pristine` | Upstream at the pinned commit with no modified files — fails on a rewritten `uv.lock`, tested both ways ([D-023](DECISIONS.md)) | **passing** |
 
 > Earlier revisions of this table named nine test files that did not exist. The table now lists
 > only what runs, and `make verify` executes exactly these.

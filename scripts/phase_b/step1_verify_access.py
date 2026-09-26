@@ -2,7 +2,7 @@
 
 COST: USD 0.00 — the models-list endpoint is free. No generation happens here.
 
-Run:  cd vendor/tau2-bench && uv run python ../../scripts/phase_b/step1_verify_access.py
+Run:  cd vendor/tau2-bench && uv run --frozen python ../../scripts/phase_b/step1_verify_access.py
 """
 
 import json

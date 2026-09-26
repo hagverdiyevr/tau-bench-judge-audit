@@ -13,7 +13,7 @@ If this bug reaches a real run, it looks exactly like "this model is bad at mult
 i.e. it would masquerade as our research result. Hence: >=6 forced tool-call turns, and the
 assertion is STRUCTURAL (is the signature present and unchanged), never behavioural.
 
-Run:  cd vendor/tau2-bench && uv run python ../../scripts/phase_b/step3_thought_signature.py
+Run:  cd vendor/tau2-bench && uv run --frozen python ../../scripts/phase_b/step3_thought_signature.py
 """
 
 import json

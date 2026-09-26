@@ -15,9 +15,9 @@ Resume granularity is ONE EVALUATION, not one run. A crash loses at most the in-
 Following D-020, a unit counts as done only when a journal line proves it, never because a file
 exists.
 
-Run:  cd vendor/tau2-bench && uv run python ../../scripts/phase_d/run_phase_d.py --dry-run
-      cd vendor/tau2-bench && uv run python ../../scripts/phase_d/run_phase_d.py --limit 20
-      cd vendor/tau2-bench && uv run python ../../scripts/phase_d/run_phase_d.py
+Run:  cd vendor/tau2-bench && uv run --frozen python ../../scripts/phase_d/run_phase_d.py --dry-run
+      cd vendor/tau2-bench && uv run --frozen python ../../scripts/phase_d/run_phase_d.py --limit 20
+      cd vendor/tau2-bench && uv run --frozen python ../../scripts/phase_d/run_phase_d.py
 """
 
 import argparse

@@ -4,7 +4,7 @@ Was missing from the repo: the B-L15 finding was published without the code that
 violating the project's own D-004 lesson. This reconstructs it and additionally reports the
 fields the original inline check did NOT compare — which is how "byte-identical" got asserted.
 
-Run:  cd vendor/tau2-bench && uv run python ../../scripts/phase_b/b9_determinism.py
+Run:  cd vendor/tau2-bench && uv run --frozen python ../../scripts/phase_b/b9_determinism.py
 """
 import hashlib, json, pathlib
 

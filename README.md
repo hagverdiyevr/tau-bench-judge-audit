@@ -34,15 +34,15 @@ favouritism until you notice it grades the *Google* arm **+0.050** higher too. I
 more lenient judge, not a biased one. Without the difference-in-differences control term, this
 would have been published as bias.
 
-### 2. The official grader is not reproducible
+### 2. The official grader gave different verdicts to identical requests
 
 At temperature 0, across byte-identical repeated requests, the **incumbent `gpt-4.1` was the only
 judge of four to flip a verdict** — task 105, graded `1.0 / 0.0 / 1.0`. The three others flipped
 zero times in 64 pairs each.
 
-This independently reproduces, in the *judge* role, a determinism asymmetry first measured in the
-*agent* role on a different task set. The benchmark's own grader has an irreproducibility floor
-under every score it assigns.
+That is **one flip in 256**. It shows the default grader's irreproducibility floor is not zero; it
+does **not** show that one model family is less reproducible than the other (Fisher p = 0.50).
+An earlier version of this README said it did — see *Corrections* below.
 
 ### 3. Pointing the judge at `gemini-3.8-flash` crashes it 100% of the time
 
@@ -109,15 +109,18 @@ actually measure?"* before you spend anything. Here it killed the project's orig
 
 ```bash
 git clone --recurse-submodules <repo> && cd t-bench
-make verify        # every offline gate: docs, frozen hash, amendment chain, 99 checks. No API keys.
+make setup         # pinned venv, Python 3.12.9 (uv sync --frozen)
+make verify        # every offline check, then proves upstream untouched. No API keys.
 ```
 
 ```bash
-python3 scripts/phase_d/analyze_phase_d.py      # regenerates every number above from raw artifacts
+vendor/tau2-bench/.venv/bin/python scripts/phase_d/analyze_phase_d.py   # every number above, from raw artifacts
 ```
 
 Upstream is a pinned submodule at **v1.0.1** (`fc0055dc`), byte-untouched — our code registers from
-outside, so "the baseline is stock" is provable rather than asserted.
+outside, and `make verify` ends by **failing** if upstream has moved or been modified. Until 27 Sep
+the gate itself modified upstream's `uv.lock` on every run; that is fixed and disclosed in
+[FINDINGS R-L11](docs/FINDINGS.md).
 
 ---
 
@@ -125,7 +128,7 @@ outside, so "the baseline is stock" is provable rather than asserted.
 
 The design was **frozen and SHA-256 sealed** before confirmatory data existed
 (`a917984e…`), with deviations appended to a hash-chained amendment log rather than edited in.
-`python3 scripts/verify_preregistration.py` verifies both.
+`make verify` checks both.
 
 Three habits did the real work:
 
@@ -155,7 +158,10 @@ success by default.
   arguments are dropped and literal `"assistant: None"` lines reach the judge prompt
 - **`all([])` scores an empty judge response as a full pass**
 - The judge path **ignores upstream's own fence stripper**, crashing on fenced JSON
-- **Judge cost is entirely unaccounted** — ~40% understatement on judge-gated tasks
+- **Judge cost is entirely unaccounted** — measured at a third of true cost on judge-gated tasks, and
+  20% vs 58% depending on the agent model, so cost comparisons between models are skewed
+- **A do-nothing agent scores full reward on 6 of 114 retail tasks** — no writes needed, and no
+  assertions for the judge to check *(found in the post-release review; not yet reported)*
 - The **ACTION checker is order-sensitive on list arguments**, a false-negative sibling of #514
 - LiteLLM **silently drops `seed` for the `gemini` provider**, so seeded reproducibility is
   unavailable without the caller knowing
@@ -172,6 +178,26 @@ so those were posted as comments adding evidence instead. One draft was **withdr
 filed** — a Python 3.13 import claim that could not be reproduced on this machine. Full record and
 the three claims that verification corrected before publication:
 [`docs/UPSTREAM_ISSUES.md`](docs/UPSTREAM_ISSUES.md).
+
+---
+
+## Corrections since release
+
+Three people replied to our upstream posts within four days; two corrected us, and both were right.
+A claim-by-claim re-check of all 12 posts followed. **No reported bug turned out not to exist**, but
+**7 of the 12 contain a claim that goes further than the evidence under it**:
+
+- Tasks 67 and 68 pass for a do-nothing agent because they need no writes — **not** because the gold
+  replay failed. Only task 105 is that case.
+- Task 64's target is half-applied, not untouched: a do-nothing agent *fails* it. (Most of the
+  benchmark's own published runs still match that half-applied target — 11 of 16.)
+- The judge-cost figure near 40% was an **estimate**; measured, it is 32.8%.
+- The ACTION order bug changes **no retail score** — ACTION isn't scored in retail.
+- "A family asymmetry in the judge" rested on a **single flip**.
+
+The corrections, each with its evidence, are in [FINDINGS R-L1–R-L12](docs/FINDINGS.md) and re-derive
+offline from `scripts/review/verify_post_claims.py`. Public corrections to the posts themselves are
+pending.
 
 ---
 

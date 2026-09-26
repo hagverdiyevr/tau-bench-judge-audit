@@ -1,0 +1,401 @@
+{
+ "R-L1": {
+  "tasks": {
+   "10": {
+    "matches": true,
+    "gold_writes": 0,
+    "failed": [],
+    "cause": "gold makes no writes"
+   },
+   "12": {
+    "matches": true,
+    "gold_writes": 0,
+    "failed": [],
+    "cause": "gold makes no writes"
+   },
+   "24": {
+    "matches": true,
+    "gold_writes": 0,
+    "failed": [],
+    "cause": "gold makes no writes"
+   },
+   "25": {
+    "matches": true,
+    "gold_writes": 0,
+    "failed": [],
+    "cause": "gold makes no writes"
+   },
+   "50": {
+    "matches": true,
+    "gold_writes": 0,
+    "failed": [],
+    "cause": "gold makes no writes"
+   },
+   "57": {
+    "matches": true,
+    "gold_writes": 0,
+    "failed": [],
+    "cause": "gold makes no writes"
+   },
+   "62": {
+    "matches": true,
+    "gold_writes": 0,
+    "failed": [],
+    "cause": "gold makes no writes"
+   },
+   "65": {
+    "matches": true,
+    "gold_writes": 0,
+    "failed": [],
+    "cause": "gold makes no writes"
+   },
+   "67": {
+    "matches": true,
+    "gold_writes": 0,
+    "failed": [
+     {
+      "action_id": "67_0",
+      "name": "find_user_id_by_name_zip",
+      "write": false,
+      "error": "User not found"
+     },
+     {
+      "action_id": "67_1",
+      "name": "find_user_id_by_name_zip",
+      "write": false,
+      "error": "User not found"
+     }
+    ],
+    "cause": "gold makes no writes"
+   },
+   "68": {
+    "matches": true,
+    "gold_writes": 0,
+    "failed": [
+     {
+      "action_id": "68_0",
+      "name": "find_user_id_by_name_zip",
+      "write": false,
+      "error": "User not found"
+     }
+    ],
+    "cause": "gold makes no writes"
+   },
+   "105": {
+    "matches": true,
+    "gold_writes": 1,
+    "failed": [
+     {
+      "action_id": "106_0",
+      "name": "exchange_delivered_order_items",
+      "write": true,
+      "error": "Insufficient gift card balance to pay for the price difference"
+     }
+    ],
+    "cause": "failed gold write"
+   }
+  },
+  "by_cause": {
+   "gold makes no writes": 10,
+   "failed gold write": 1
+  }
+ },
+ "R-L2": {
+  "evaluations": {
+   "10": {
+    "reward": 1.0,
+    "breakdown": {
+     "DB": 1.0,
+     "NL_ASSERTION": 1.0
+    },
+    "judge_gated": false
+   },
+   "12": {
+    "reward": 1.0,
+    "breakdown": {
+     "DB": 1.0,
+     "NL_ASSERTION": 1.0
+    },
+    "judge_gated": false
+   },
+   "25": {
+    "reward": 1.0,
+    "breakdown": {
+     "DB": 1.0,
+     "NL_ASSERTION": 1.0
+    },
+    "judge_gated": false
+   },
+   "50": {
+    "reward": 1.0,
+    "breakdown": {
+     "DB": 1.0,
+     "NL_ASSERTION": 1.0
+    },
+    "judge_gated": false
+   },
+   "57": {
+    "reward": 1.0,
+    "breakdown": {
+     "DB": 1.0,
+     "NL_ASSERTION": 1.0
+    },
+    "judge_gated": false
+   },
+   "65": {
+    "reward": 1.0,
+    "breakdown": {
+     "DB": 1.0,
+     "NL_ASSERTION": 1.0
+    },
+    "judge_gated": false
+   },
+   "24": {
+    "reward": null,
+    "breakdown": {
+     "DB": 1.0
+    },
+    "judge_gated": true
+   },
+   "62": {
+    "reward": null,
+    "breakdown": {
+     "DB": 1.0
+    },
+    "judge_gated": true
+   },
+   "67": {
+    "reward": null,
+    "breakdown": {
+     "DB": 1.0
+    },
+    "judge_gated": true
+   },
+   "68": {
+    "reward": null,
+    "breakdown": {
+     "DB": 1.0
+    },
+    "judge_gated": true
+   },
+   "64": {
+    "reward": 0.0,
+    "breakdown": {
+     "DB": 0.0,
+     "NL_ASSERTION": 1.0
+    },
+    "judge_gated": false
+   },
+   "105": {
+    "reward": null,
+    "breakdown": {
+     "DB": 1.0
+    },
+    "judge_gated": true
+   }
+  },
+  "full_reward_tasks": [
+   "10",
+   "12",
+   "25",
+   "50",
+   "57",
+   "65"
+  ],
+  "full_reward_in_test_split": [
+   "12",
+   "65"
+  ]
+ },
+ "R-L3": {
+  "task64_writes": [
+   {
+    "action_id": "64_6",
+    "name": "exchange_delivered_order_items",
+    "changed_db": false
+   },
+   {
+    "action_id": "64_7",
+    "name": "modify_pending_order_items",
+    "changed_db": true
+   }
+  ],
+  "task64_failed": [
+   {
+    "action_id": "64_6",
+    "name": "exchange_delivered_order_items",
+    "write": true,
+    "error": "Non-delivered order cannot be exchanged"
+   }
+  ],
+  "shipped": {
+   "64": {
+    "sims": 16,
+    "db_match_true": 11,
+    "reward_1": 11
+   },
+   "105": {
+    "sims": 16,
+    "db_match_true": 10,
+    "reward_1": 10
+   }
+  },
+  "task105_action_ids": [
+   "106_0"
+  ]
+ },
+ "R-L4": {
+  "by_arm": {
+   "google": {
+    "agent_user_usd": 3.3866,
+    "judge_usd_measured": 0.8673,
+    "judge_share": 0.2039
+   },
+   "openai": {
+    "agent_user_usd": 0.8791,
+    "judge_usd_measured": 1.2183,
+    "judge_share": 0.5809
+   }
+  },
+  "judge_usd_measured": 2.0855,
+  "judge_usd_estimated": 2.7898,
+  "judge_share_measured": 0.3284,
+  "mean_completion_tokens": 147.6,
+  "agent_cost_ratio": 3.85
+ },
+ "R-L5": {
+  "airline": {
+   "tasks": 50,
+   "action_in_basis": 0,
+   "empty_compare_args": 1,
+   "empty_compare_args_names": {
+    "transfer_to_human_agents": 1
+   },
+   "empty_compare_args_arg_keys": [
+    "summary"
+   ]
+  },
+  "banking_knowledge": {
+   "tasks": 97,
+   "action_in_basis": 9,
+   "empty_compare_args": 18,
+   "empty_compare_args_names": {
+    "transfer_to_human_agents": 6,
+    "request_human_agent_transfer": 12
+   },
+   "empty_compare_args_arg_keys": [
+    "summary"
+   ]
+  },
+  "mock": {
+   "tasks": 10,
+   "action_in_basis": 2,
+   "empty_compare_args": 1,
+   "empty_compare_args_names": {
+    "transfer_to_human_agents": 1
+   },
+   "empty_compare_args_arg_keys": [
+    "summary"
+   ]
+  },
+  "retail": {
+   "tasks": 114,
+   "action_in_basis": 0,
+   "empty_compare_args": 4,
+   "empty_compare_args_names": {
+    "transfer_to_human_agents": 4
+   },
+   "empty_compare_args_arg_keys": [
+    "summary"
+   ]
+  },
+  "telecom": {
+   "tasks": 2285,
+   "action_in_basis": 32,
+   "empty_compare_args": 32,
+   "empty_compare_args_names": {
+    "transfer_to_human_agents": 32
+   },
+   "empty_compare_args_arg_keys": [
+    "summary"
+   ]
+  }
+ },
+ "R-L6": {
+  "fenced_reply": "raised JSONDecodeError"
+ },
+ "R-L7": {
+  "gem": {
+   "tool_calls": 1280,
+   "with_thought": 1104,
+   "max_id_len": 4572
+  },
+  "oai": {
+   "tool_calls": 1351,
+   "with_thought": 0,
+   "max_id_len": 29
+  }
+ },
+ "R-L8": {
+  "fisher_one_sided_p": 0.5,
+  "incumbent_disagreements": [
+   {
+    "run": "phaseC_t1_oai",
+    "task": "105",
+    "in_replicate_sample": true,
+    "gradings": [
+     1.0,
+     1.0,
+     1.0
+    ]
+   },
+   {
+    "run": "phaseC_t2_oai",
+    "task": "60",
+    "in_replicate_sample": false,
+    "gradings": [
+     1.0
+    ]
+   },
+   {
+    "run": "phaseC_t4_oai",
+    "task": "59",
+    "in_replicate_sample": false,
+    "gradings": [
+     0.0
+    ]
+   }
+  ],
+  "undated_judge_names": [
+   "gpt-4.1-mini",
+   "gemini/gemini-3.8-flash",
+   "gemini/gemini-3.1-flash-lite"
+  ]
+ },
+ "R-L9": {
+  "fields": [
+   "completion_tokens",
+   "error",
+   "error_kind",
+   "fenced",
+   "finish_reason",
+   "judge",
+   "matches_incumbent",
+   "model_returned",
+   "nl_reward",
+   "ok",
+   "prompt_tokens",
+   "replicate",
+   "run",
+   "settled",
+   "task",
+   "usd",
+   "usd_source",
+   "utc",
+   "verdicts"
+  ],
+  "has_request_hash": false,
+  "has_raw_completion": false,
+  "has_judge_reasoning": false
+ }
+}

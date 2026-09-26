@@ -8,8 +8,8 @@
 
 **Target under measurement:** `sierra-research/tau2-bench` @ tag `v1.0.1`,
 commit `fc0055dc4e0a316c3f83133267fbd6faaa770992`, MIT.
-**Cumulative API spend represented in this file: ~USD 0.85 of 75.00** — Phase A is entirely
-static/replay (USD 0.00); all spend is Phase B gates.
+**Cumulative API spend represented in this file: USD 13.76 of 75.00** — Phase A and the
+post-release review are static/replay (USD 0.00); spend is Phase B gates, Phase C and Phase D.
 
 ---
 
@@ -60,6 +60,10 @@ So **repo-level scripts must remain 3.9-compatible**. This was found when a mult
 expression (PEP 701, 3.12+) raised `SyntaxError` in `scripts/phase_d/analyze_phase_d.py` under
 `python3` — a construct that runs fine under `uv run`. Nothing shipped was affected; the failure
 was immediate and loud.
+
+> **Superseded, 27 Sep 2026 → [R-L10](FINDINGS.md).** Bare `python3` is not a fixed interpreter here:
+> it resolved to 3.14.6, 3.9.6 and 3.13.5 in different sessions depending on which shell startup files
+> loaded. The gate no longer uses it.
 
 ## A0b — Upstream's committed `uv.lock` is stale at tag v1.0.1
 
@@ -169,6 +173,9 @@ own rules**:
 **This is sharper than the issue title.** "18 failures" is mostly stale data; the real defect is
 two tasks whose gold answer violates the policy the agent is graded against.
 
+> **Superseded in part, 27 Sep 2026 → [R-L3](FINDINGS.md).** For task 64 the failed exchange is
+> followed by a write that succeeds, so its target is half-applied, not the untouched database.
+
 ## A5 — Null-agent baseline: 10% of tasks pass DB by doing nothing
 
 **Claim.** An agent taking no actions matches the gold DB hash on 11 of 114 tasks — and on 3 of
@@ -191,6 +198,11 @@ replay failed (A4), leaving the target DB unchanged, which a do-nothing agent tr
 false positive that the database check admits. **Benchmark validity here depends materially on the
 component its own source marks least trustworthy.** This is the observation the current research
 question is built on.
+
+> **Corrected, 27 Sep 2026 → [R-L1](FINDINGS.md), [R-L2](FINDINGS.md).** 67 and 68 pass because
+> their gold makes no writes, not because replay failed — only 105 is a #499 artifact. And on six
+> other null-pass tasks (10, 12, 25, 50, 57, 65) nothing blocks the false positive: a do-nothing
+> agent scores full reward.
 
 ## A6 — Upstream #514 confirmed: the DB hash is order-sensitive on lists
 
@@ -241,13 +253,13 @@ Two contributions filed were **not** in the original 13 and are appended below a
 | --- | --- | --- | --- |
 | 1 | Py3.13 import failure; one-line root cause, three fix options | A0 | **WITHDRAWN** — unreproducible |
 | 2 | #499 characterization: the 16/2 stale-data vs hash-corrupting split, with task IDs; tasks 64 and 105 have logically impossible gold actions | A4 | comment on [#499](https://github.com/sierra-research/tau2-bench/issues/499#issuecomment-5772485558) |
-| 3 | Null-agent baseline as a reusable validity check; the 67/68/105 × #499 false-positive mechanism | A5 | comment on [#384](https://github.com/sierra-research/tau2-bench/issues/384#issuecomment-5774383986) |
+| 3 | Null-agent baseline as a reusable validity check; the 67/68/105 × #499 false-positive mechanism *(corrected: 105 only — [R-L1](FINDINGS.md))* | A5 | comment on [#384](https://github.com/sierra-research/tau2-bench/issues/384#issuecomment-5774383986) |
 | 4 | Docs/schema mismatch: `communicate_info` populated on 36 tasks, scored on none | A1 | comment on [#384](https://github.com/sierra-research/tau2-bench/issues/384#issuecomment-5774383986) |
 | 5 | **NL-assertion judge cannot see tool calls** — `tool_calls` dropped by the `message.content` serialization; empty assistant turns leak as literal `"assistant: None"` into the judge prompt | B4 | **[#553](https://github.com/sierra-research/tau2-bench/issues/553)** |
 | 6 | **`ToolCall` cannot carry `provider_specific_fields`**, so Gemini thought signatures survive only via LiteLLM's id-packing fallback (litellm#41534). A transport change breaks tau2's Gemini multi-turn tool calling silently | B-L6 | **[#559](https://github.com/sierra-research/tau2-bench/issues/559)** |
 | 7 | Models-list endpoint advertises models the account cannot call (`gemini-2.5-flash-lite`, `gemini-3.1-flash-lite-preview`) — availability needs a real call | B-L1 | **not filed** — not a tau2 defect |
-| 8 | **ACTION checker is order-sensitive on list arguments** — a call identical to gold except list order scores `action_match: false`. Sibling of #514; a false-negative mechanism wherever `ACTION` gates reward | B-L7 | **[#557](https://github.com/sierra-research/tau2-bench/issues/557)** |
-| 9 | **Judge cost is entirely unaccounted** — no cost/usage field exists for the NL-assertion judge; measured ~40% understatement of true run cost on judge-gated tasks | B-L14 | **[#556](https://github.com/sierra-research/tau2-bench/issues/556)** |
+| 8 | **ACTION checker is order-sensitive on list arguments** — a call identical to gold except list order scores `action_match: false`. Sibling of #514; a false-negative mechanism wherever `ACTION` gates reward *(zero retail/airline tasks — [R-L5](FINDINGS.md))* | B-L7 | **[#557](https://github.com/sierra-research/tau2-bench/issues/557)** |
+| 9 | **Judge cost is entirely unaccounted** — no cost/usage field exists for the NL-assertion judge; measured ~40% understatement of true run cost on judge-gated tasks *(an estimate; measured 32.8% — [R-L4](FINDINGS.md))* | B-L14 | **[#556](https://github.com/sierra-research/tau2-bench/issues/556)** |
 | 10 | **Run-to-run noise floor for #540**, plus a reproducibility asymmetry: at temperature 0 one model family reproduces identical message contents/tool calls/rewards across repeat invocations and another does not | B-L15 | comment on [#540](https://github.com/sierra-research/tau2-bench/issues/540#issuecomment-5774393926) |
 | 11 | **LiteLLM silently drops `seed` for the `gemini` provider** (`llm_utils.py:71`), so seeded reproducibility is unavailable for Gemini arms without the caller knowing | B-L15 correction | **[#558](https://github.com/sierra-research/tau2-bench/issues/558)** |
 | 12 | **NL-judge path does not use upstream's own fence stripper** — `evaluator_nl_assertions.py:127` calls raw `json.loads` while `llm_utils.py:509` provides `extract_json_from_llm_response`; `gemini-3.8-flash` therefore crashes the evaluator. One-line wiring fix | B-L16 | **[#555](https://github.com/sierra-research/tau2-bench/issues/555)** |
@@ -423,6 +435,9 @@ Gate B8 tested the raw path; Phase C runs through tau2's models. Re-tested with 
 
 ### B-L7 — The ACTION checker is order-sensitive on list arguments · **NEW DEFECT**
 
+> **Qualified, 27 Sep 2026 → [R-L5](FINDINGS.md).** `ACTION` is in the reward basis of **zero** retail
+> and airline tasks, so this changes no retail score. It is live on 32 telecom and 9 banking tasks.
+
 **Claim.** A tool call identical to the gold action except for the *order* of a list-valued
 argument is scored `action_match: false`.
 
@@ -579,6 +594,9 @@ zero flips across 33 observations.
 > bound.
 
 ### B-L14 — tau2 does not account for judge cost at all
+
+> **Magnitude superseded, 27 Sep 2026 → [R-L4](FINDINGS.md).** The figures below are estimates that
+> assume 300 output tokens. Measured in Phase D the judge is **32.8%** of true cost (20% vs 58% by arm).
 
 `SimulationRun` carries only `agent_cost` and `user_cost`. There is **no cost or usage field
 anywhere** for the NL-assertion judge — not on the run, not in `reward_info`, not in `info`.
@@ -926,6 +944,10 @@ set, with a different instrument — the same 3/320 residual disagreement in the
 same phenomenon. **The benchmark's official grader is not reproducible**, and its own
 irreproducibility is the floor under every score it assigns.
 
+> **Qualified, 27 Sep 2026 → [R-L8](FINDINGS.md).** One flip in 256 does not establish an asymmetry
+> (Fisher p = 0.50), and the 3 residual disagreements are not shown to be the same effect. What stands:
+> the default judge flipped once on identical requests, so its floor is not zero.
+
 # Phase E — Completing the pre-registered analysis
 
 *22 Sep 2026. **USD 0.00** — no new data; these are the [§6.2](PREREGISTRATION.md) secondaries
@@ -1001,3 +1023,226 @@ contain zero; **the conclusion is unchanged**, as §4.3 required.
 trajectories**, so there is nothing to exclude and the two analyses coincide at **n = 40 per
 cell**. The distinction was not idle: [A-004](PREREGISTRATION_AMENDMENTS.md) had to settle whether
 such trajectories are scored zeros or missing data, and an earlier discarded invocation had 6.
+
+# Post-release review — what our public posts got wrong, and what others found
+
+*26–27 Sep 2026. **USD 0.00** (one unintended judge call was rejected unbilled — R-L12). Prompted by
+three replies to the 12 posts filed as `@hagverdiyevr` on 22 Sep. Every claim in all 12 was
+re-checked against v1.0.1 (`fc0055dc`) and this study's committed artifacts.
+Script: `scripts/review/verify_post_claims.py` (offline; the judge is patched to raise if called).
+Raw: `results/review/post_claims.json`.*
+
+**Verdict on the 12 posts.** 2 hold fully (#555, #560); 3 hold with a small slip (#553, #558,
+#474); **7 need correction** (#554, #556, #557, #559, and the comments on #499, #384, #540).
+**No reported bug turned out not to exist** — the mechanism behind all eight issues re-verified.
+The errors are in scope and precision, and nearly all have one shape: **prose that went further
+than the repro under it.** The repros were run before filing ([D-022](DECISIONS.md)); the
+sentences around them were not checked against them.
+
+| Shape of the error | Where |
+| --- | --- |
+| A co-occurrence read as a cause | R-L1 — A5, #499, #384 |
+| "One write failed" read as "nothing changed" | R-L3 — #499 |
+| An estimate reported as a measurement | R-L4 — B-L14, #556, CLAUDE.md, README |
+| A single observation read as a pattern | R-L8 — D-L5, D-021, #540, README |
+| A subset described as the whole | R-L7 — #559 |
+| An outcome asserted without tracing the code path | R-L6 — #554 |
+
+These are the [D-020](DECISIONS.md) pattern — a weak signal treated as proof — turned on our own
+prose rather than our code.
+
+## R-L1 — The null agent passes 67 and 68 because they need no writes, not because replay failed
+
+*Supersedes the causal claim in [A5](FINDINGS.md) ("67, 68, 105 pass because their gold replay
+failed"), repeated in the public comments on #499 and #384.*
+
+Replaying the full gold sequence of all 11 tasks a null agent passes:
+
+| Cause of the null-agent match | Tasks | n |
+| --- | --- | ---: |
+| **Gold makes no writes** — "nothing changed" is the correct end state | 10, 12, 24, 25, 50, 57, 62, 65, **67, 68** | **10** |
+| **A failed gold write** — the target is the untouched database | **105** | **1** |
+
+67 and 68 do have failing gold actions, but they are **reads** (`find_user_id_by_name_zip`), which
+change nothing; they would be null-passable if every read succeeded. So A5's "three #499 false
+positives" is **one**.
+
+**Why the test did not catch it.** `test_phase_a_regression.py` asserts that three tasks *both*
+pass with a null agent *and* have replay failures. That is true. The prose read the co-occurrence
+as causation. Independently confirmed by Ruler4396 on #499 (26 Sep): "Tasks 67/68 have no
+reference writes."
+
+## R-L2 — A do-nothing agent scores **full reward** on 6 of 114 retail tasks
+
+*New. A5 checked only the three tasks it believed were #499 artifacts, and concluded that the judge
+blocks the null agent's false positive. For those three it does; for six others nothing does.*
+
+tau2's **own evaluator** (`EvaluationType.ALL`) on a two-message conversation in which the agent
+calls no tool and says only "Sorry, I can't help with that. Goodbye.":
+
+| Task | DB | NL_ASSERTION | **Reward** | Split |
+| --- | ---: | ---: | ---: | --- |
+| 10, 25, 50, 57 | 1.0 | 1.0 | **1.0** | train |
+| **12, 65** | 1.0 | 1.0 | **1.0** | **test** |
+| 24, 62, 67, 68, 105 | 1.0 | judge-gated | not free | — |
+
+DB passes because the gold makes no writes; NL passes because these six list `NL_ASSERTION` in their
+basis but carry no assertions, so `evaluator_nl_assertions.py:38` returns `1.0` without calling the
+judge. On 10, 12 and 50 the gold's intended behaviour is a hand-off (`transfer_to_human_agents`);
+because `ACTION` is not scored in retail (R-L5), declining to hand off scores the same.
+
+**A5's "inversion" survives, narrowed:** on 5 of the 11 null-pass tasks the judge is what stops a
+do-nothing agent collecting full reward. On the other 6, nothing does.
+
+## R-L3 — Task 64: a do-nothing agent fails it, but its target is still half-applied
+
+*Supersedes the mechanism [A4](FINDINGS.md) and the #499 comment gave for task 64. A4's row
+"WRITE · 2 · target DB hash is wrong" stands for both tasks.*
+
+| Step | Action | Result |
+| --- | --- | --- |
+| `64_6` | `exchange_delivered_order_items` | **fails** — "Non-delivered order cannot be exchanged" |
+| `64_7` | `modify_pending_order_items` | **succeeds, changes the DB** |
+
+So 64's target is *not* the untouched database, and tau2's evaluator scores an empty conversation
+**DB 0.0** on it (R-L2 run). Our comment's "the target hash is computed from an un-mutated
+database" is true for **105 only** — corrected by justavibedev (23 Sep), verified here.
+
+The underlying problem is real, though. The target includes `64_7` and omits the impossible exchange,
+and in the benchmark's **own shipped results** (`data/tau2/results`):
+
+| Task | Stored simulations | `db_match = true`, reward 1.0 |
+| --- | ---: | ---: |
+| 64 | 16 | **11** |
+| 105 | 16 | **10** |
+
+Most published runs of both tasks match a gold state whose reference never fully applied. Added by
+Ruler4396 (26 Sep); reproduced here on our pin.
+
+*Aside, unverified:* task 105's only gold action is labelled `106_0`. Possibly a labelling slip in
+the task data; not investigated.
+
+## R-L4 — Judge cost, measured: **32.8%** of true cost, not ~40%
+
+*Supersedes the magnitude in [B-L14](FINDINGS.md) and in #556; the direction is unchanged.*
+
+B-L14 priced the judge from its serialized prompt with an **assumed** 300 output tokens. Phase D
+measured the same default judge over the same 320 base trajectories:
+
+| | Estimated (B-L14, #556) | **Measured (Phase D)** |
+| --- | ---: | ---: |
+| Judge cost | $2.7898 | **$2.0855** (mean 148 output tokens) |
+| Judge share of true cost | 39.5% | **32.8%** |
+| … Gemini arm | 30% | **20.4%** |
+| … OpenAI arm | 60–61% | **58.1%** |
+
+The argument #556 makes — the hidden share differs by agent model, so cost *comparisons* are
+biased — **gets stronger** (20% vs 58%). Three sentences in #556 are wrong: "understates true cost
+by 65%" (tau2 reports 67% of true cost), "agent cost varies by an order of magnitude" (**3.9×**), and
+"judge cost is roughly fixed per task" (measured, **40% higher** on the OpenAI arm).
+
+The spend ledger is **not** affected: Phase C totals come from measured attempt logs, and the
+estimate applies only to pre-Phase-C runs. This corrects an analytic claim, not money.
+
+## R-L5 — ACTION is scored on zero retail tasks, and `compare_args: []` is deliberate
+
+*Qualifies [B-L7](FINDINGS.md) and corrects #557.*
+
+| Domain | Tasks | `ACTION` in `reward_basis` | `compare_args: []` actions |
+| --- | ---: | ---: | ---: |
+| retail | 114 | **0** | 4 |
+| airline | 50 | **0** | 1 |
+| telecom | 2,285 | 32 | 32 |
+| banking_knowledge | 97 | 9 | 18 |
+| mock | 10 | 2 | 1 |
+
+- The order-sensitivity in B-L7 is real but **changes no retail or airline score**. It is live on
+  32 telecom and 9 banking tasks. #557 used a retail example and never said so.
+- **All 56** `compare_args: []` actions are human hand-offs (`transfer_to_human_agents`,
+  `request_human_agent_transfer`) whose only argument is a free-text `summary`. Not grading
+  free text is intended. #557 wrongly said no retail task sets it (there are four: 10, 12, 26, 50)
+  and wrongly called it an auto-pass defect.
+
+## R-L6 — A malformed judge reply fails the task; it does not pass silently
+
+*Corrects one sentence in #554.* The NL evaluator call is not wrapped in `try` in
+`evaluate_simulation`. A fenced reply raises `JSONDecodeError` (reproduced), the exception
+propagates, and the batch runner records the task as `infrastructure_error`. Only **valid JSON with
+missing, empty or too few verdicts** reaches `all([])` — which is what #554's repro shows. Its line
+"truncation, a refusal, a fenced body … converts into a silent full pass" is wrong, and contradicts
+#555.
+
+## R-L7 — Thought signatures, measured over the full arms
+
+*Corrects #559's sample label ("320 trajectories per arm": it was one 40-trajectory run per arm).*
+
+| Arm (160 trajectories each) | Tool calls | Id carries `__thought__` | Max id length |
+| --- | ---: | ---: | ---: |
+| `gemini-3.1-flash-lite` | 1,280 | **1,104** | **4,572** |
+| `gpt-4.1-nano` | 1,351 | 0 | 29 |
+
+The conclusion holds and is stronger.
+
+## R-L8 — One flip does not establish an asymmetry
+
+*Qualifies [D-L5](FINDINGS.md) and [D-021](DECISIONS.md); corrects #540 and the README.*
+
+D-L5 said the judge result "reproduces" C-L2's determinism asymmetry "in the judge role". It rests
+on **one flip in 256**: OpenAI judges 1/128, Google judges 0/128 — **Fisher exact one-sided
+p = 0.50**. Consistent with an asymmetry, and no evidence for one. What stands is narrower: the
+default judge flipped once on byte-identical requests, so its irreproducibility floor is **not zero**.
+
+D-L5 also called the 3 residual disagreements (317/320) "the same phenomenon". **Unverified.** One
+(`phaseC_t1_oai` task 105) was re-graded three times with `1.0` each time yet differs from tau2's
+record — not a flip, cause unknown. 317/320 remains strong evidence that prompt capture works; it
+is not proof that the remainder is judge noise.
+
+Also: #474 said two of the four judge names are aliases. **Three** carry no date; only
+`gpt-4.1-2025-04-14` is a dated snapshot.
+
+## R-L9 — The re-grade journal cannot answer two reuse questions
+
+*Prompted by Universeyi on #540 (23 Sep).* Each record carries the requested judge and the
+resolved `model_returned` snapshot. It does **not** carry a request hash, the judge's raw reply, or
+its reasoning. So a re-grade can be matched to its trajectory only by `(run, task)`, and the judge
+term cannot be re-read from the record — only re-measured. A real limitation of the harness as a
+reusable tool.
+
+## R-L10 — Three `python3` interpreters; the results do not depend on which one runs
+
+*Supersedes the [A0](FINDINGS.md) correction ("bare `python3` is 3.9.6").*
+
+| Interpreter | Version | Resolves as `python3` when |
+| --- | --- | --- |
+| `/opt/anaconda3/bin/python3` | 3.13.5 | `~/.zshrc` is loaded (conda init, since 2025-07-04) |
+| `/opt/homebrew/bin/python3` | 3.14.6 | only `~/.zprofile` is loaded |
+| `/usr/bin/python3` | 3.9.6 | neither is loaded |
+
+Nothing on the machine changed; the tool shell loaded different startup files in different
+sessions. That is why this project recorded 3.14.6, then 3.9.6, then 3.13.5 as "the default".
+The previously unpinned gate steps produce **identical** results under all three (26 / 22 / 13
+checks, exit 0). The gate now runs every step on the venv's **3.12.9** ([D-023](DECISIONS.md)).
+
+## R-L11 — `make verify` modified upstream on every run
+
+Plain `uv run` rewrites upstream's stale `uv.lock` (the #560 defect): one line, `tau2`
+`1.0.0 → 1.0.1`, no dependency changes. The gate used plain `uv run`, so the check meant to prove
+"upstream is untouched" modified it every time — and both manifests recorded
+`superproject_dirty=True` (Phase C, 21 Sep; Phase D, 22 Sep, which also had uncommitted new files).
+
+**No result is affected:** the submodule commit was `fc0055dc` throughout, and the only change is
+that version label. But the manifests cannot prove that on their own, so it is disclosed here.
+Fixed in [D-023](DECISIONS.md): the gate calls the venv's Python directly, runners use
+`uv run --frozen`, and `make pristine` now **fails** if upstream moved or is modified — tested in
+both directions.
+
+## R-L12 — An unintended live judge call during this review
+
+An ad-hoc first version of R-L2 ran tau2's full evaluator on task 105, which carries an assertion,
+so it called `gpt-4.1-2025-04-14`. The request was rejected with `RateLimitError` (HTTP 429), retried
+by LiteLLM, and returned nothing. Rejected 429s are not billed; **USD 0.00**. The error body was not
+captured, so whether it was a per-minute limit or an exhausted quota is unknown, and no further call
+was made to find out.
+
+**Lesson:** `EvaluationType.ALL` is not offline for any task with assertions. The committed script
+patches the judge to raise and scores judge-gated tasks on DB only.

@@ -5,7 +5,7 @@ If upstream drifts, or one of our own scripts changes behaviour, this fails loud
 the docs silently becoming wrong. Each assertion cites the finding it pins.
 
 Requires the tau2 venv (it replays the real environment):
-  cd vendor/tau2-bench && uv run python ../../tests/test_phase_a_regression.py
+  cd vendor/tau2-bench && uv run --frozen python ../../tests/test_phase_a_regression.py
 """
 
 import json

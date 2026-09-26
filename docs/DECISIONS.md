@@ -413,6 +413,10 @@ not depend on it:
    the *only* judge of four that flipped a verdict across byte-identical requests at temperature 0,
    independently reproducing [C-L2](FINDINGS.md)'s agent-role asymmetry in the judge role.
 
+   > **Qualified, 27 Sep 2026 → [R-L8](FINDINGS.md).** It is one flip in 256 (Fisher p = 0.50): the
+   > default judge's floor is not zero, but no asymmetry is shown. Positive 3 is the weakest of the
+   > three and must be stated as a single observation, never as a pattern.
+
 **Rationale.** The null is real and must be published, but it is the *weakest* thing measured here.
 The three positives are direct measurements with no power caveat — and the leniency result is what
 gives the null its value: it shows the instrument **can** detect large judge differences, so the
@@ -476,9 +480,44 @@ is the first time that rule was applied to **our own documentation**, and it cos
 contribution. That is the correct trade: a public claim we cannot reproduce on demand would
 discredit the twelve we can.
 
+> **Qualified, 27 Sep 2026 → [post-release review](FINDINGS.md).** Every *repro* was run before
+> filing; the *prose* around them was not checked against them. Seven of the twelve posts contain at
+> least one claim that goes further than its repro — including the task 64 and 67/68 claims, caught
+> in public by two other contributors. Checking the repro is not the same as checking the sentence.
+
 **One further exclusion.** Contribution #7 (the models-list endpoint advertising uncallable models)
 was not filed at all — it is an observation about provider account provisioning, not a tau2 defect,
 and has no honest home in that tracker. Retained in [FINDINGS](FINDINGS.md) as evidence.
 
 **Still unauthorised:** social posts, leaderboard submission, and **PRs**. Several issues offer a
 PR; none is open. Each needs its own go-ahead.
+
+## D-023 — Run the gate on one pinned interpreter, and make it prove upstream is untouched
+
+**Date:** 27 September 2026 · **Context:** [R-L10](FINDINGS.md), [R-L11](FINDINGS.md)
+
+**The fork.** Two defects in the gate itself surfaced together. Half its steps ran on bare `python3`,
+which on this machine is Anaconda 3.13, Homebrew 3.14 or the system's 3.9 depending on which shell
+startup files load. And every run modified upstream: plain `uv run` rewrites the stale `uv.lock`.
+
+| Option | Why not |
+| --- | --- |
+| **A. Keep bare `python3` and document the three interpreters.** | The results happen to be identical today, because those scripts use only the standard library. Nothing enforces that, and a gate whose interpreter depends on the shell cannot claim to be reproducible. |
+| **B. `uv run --frozen` for every step.** | Correct, but it still routes through the resolver on every call and depends on each caller remembering the flag. |
+| **C. Call the venv's Python directly in the gate, `uv run --frozen` in runners, and check the result.** | **Chosen.** |
+
+**Decision.**
+1. The `Makefile` runs **every** step on `vendor/tau2-bench/.venv/bin/python` (3.12.9) and prints it.
+   `make setup` (`uv sync --frozen`) creates the venv without touching the lock.
+2. The Phase C runner and every documented command use `uv run --frozen`.
+3. `make verify` ends with `make pristine`, which **fails** unless upstream is at the pinned commit
+   with no modified files. Tested both ways: it fails on a deliberately rewritten lock and passes once
+   restored.
+
+**Rationale.** [D-007](DECISIONS.md) says "the baseline is stock" must be provable, not audited. The
+gate was the thing modifying the baseline, and nothing checked. Rule 3 is [D-020](DECISIONS.md)
+applied to the gate: it now proves the property instead of assuming it.
+
+**Consequence.** Both confirmatory manifests record `superproject_dirty=True`. That is disclosed in
+R-L11 rather than rewritten: the only change was a one-line version label, and the pinned commit
+never moved. Manifests built from now on start from a tree the gate has proven clean.

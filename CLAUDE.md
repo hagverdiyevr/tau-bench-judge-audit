@@ -29,7 +29,13 @@ Two distinctions that keep this system honest:
 
 **All phases (A–E) complete. USD 13.76 spent of 75.00; USD 61.24 remaining.**
 Every mechanism the study depends on is verified. The pre-registration is **frozen**
-(`a917984e…`, 2026-09-20T10:54:29Z). **320 confirmatory trajectories exist** (8/8 invocations, 0 infrastructure errors). Phase D is next.
+(`a917984e…`, 2026-09-20T10:54:29Z). **320 confirmatory trajectories and 1,792 judge evaluations
+exist**, both with zero infrastructure errors.
+
+**Post-release review (26–27 Sep).** Three replies to our public posts prompted a claim-by-claim
+re-check of all 12. **7 of 12 need a correction; no reported bug turned out not to exist.** The
+corrections are recorded in FINDINGS [R-L1–R-L12](docs/FINDINGS.md) and **not yet posted** — each
+public correction needs its own go-ahead.
 
 Spend is tracked in `results/spend_ledger.json`, regenerated from run artifacts — never by hand.
 
@@ -49,7 +55,8 @@ confounded with family. **Never state it as "the judge is unbiased"** — [D-021
 forbids it and `scripts/check_docs.py` fails the build on that phrasing.
 The durable results are the three positives: a **9.1-point judge-leniency spread**
 ([D-L2](docs/FINDINGS.md)), a **100% fence-crash rate** ([D-L3](docs/FINDINGS.md)), and the
-official grader's **own irreproducibility** ([D-L5](docs/FINDINGS.md)).
+official grader's **own irreproducibility** — one flip in 256 on identical requests, a floor that
+is not zero, **not** an asymmetry ([D-L5](docs/FINDINGS.md), qualified by [R-L8](docs/FINDINGS.md)).
 
 **Method:** generate each trajectory once, then re-grade the *same saved trajectory* under four
 judges (2 families × 2 capability tiers). The contrast is within-trajectory and paired, so it costs
@@ -66,12 +73,14 @@ All measured and cited. Do not re-derive or contradict without new evidence.
 **Environment**
 - **Python 3.12.9 only.** `tau2` v1.0.1 declares `<3.14` but **cannot be imported on 3.13**
   (`audioop`, PEP 594). [A0](docs/FINDINGS.md)
-- **Two interpreters, and they are not interchangeable.** Bare `python3` is **3.9.6**
-  (`/usr/bin/python3`) — it is what `make verify` and every repo-level script runs on, so those
-  must stay **3.9-compatible** (no `X | Y` unions without `from __future__ import annotations`, no
-  multiline f-string expressions). Anything importing `tau2` must go through
-  `uv run` in `vendor/tau2-bench`, which is **3.12.9**. `python3.14` exists on PATH but is not the
-  default and is out of range. [A0 correction](docs/FINDINGS.md)
+- **Never rely on bare `python3`.** Three are installed — Anaconda 3.13.5, Homebrew 3.14.6, system
+  3.9.6 — and which one wins depends on which shell startup files load; this project has recorded all
+  three as "the default". **Every gate step runs on the pinned venv,
+  `vendor/tau2-bench/.venv/bin/python` (3.12.9)**; create it with `make setup`. Repo scripts give
+  identical results on 3.9, 3.13 and 3.14 (verified), but nothing guarantees that. [R-L10](docs/FINDINGS.md)
+- **Never run plain `uv run`.** It rewrites upstream's stale `uv.lock` and so modifies the submodule —
+  `make verify` did this on every run until 27 Sep. Use `uv run --frozen`, or the venv's Python
+  directly. `make pristine` fails the gate if upstream is touched. [R-L11](docs/FINDINGS.md)
 
 **Scoring**
 - **Retail reward is `DB × NL_ASSERTION`, not `DB × COMMUNICATE`.** `COMMUNICATE` appears in the
@@ -89,11 +98,15 @@ All measured and cited. Do not re-derive or contradict without new evidence.
   `tau2.config` is a **silent no-op** — no error, no effect. Verified both directions. [B1](docs/FINDINGS.md)
 - **The judge cannot see tool calls.** It receives `f"{role}: {content}"`, and `content` is `None` on
   a tool-calling turn, so names and arguments are dropped. It grades narration plus tool results,
-  with 4–11 literal `"assistant: None"` lines per trajectory. [B4](docs/FINDINGS.md)
+  with literal `"assistant: None"` lines — at n=320, **19.9% of all lines**, 0–15 per trajectory
+  (median 5). Filed as #553. [B4](docs/FINDINGS.md)
 - **Judge temperature is 0.0** and self-consistency measured 11/11; flip rate bounded **<9%**
-  (0/33, rule of three). Not zero — a bound. [B-L13](docs/FINDINGS.md)
-- **tau2 does not account for judge cost at all** — ~40% understatement of true run cost on
-  judge-gated tasks. Our ledger must add it. [B-L14](docs/FINDINGS.md)
+  (0/33, rule of three). Not zero — a bound. Phase D then measured **1 flip in 256**, on the default
+  judge only. One flip is a floor, not a pattern. [B-L13](docs/FINDINGS.md), [R-L8](docs/FINDINGS.md)
+- **tau2 does not account for judge cost at all.** Measured, the judge is **32.8%** of true cost on
+  judge-gated tasks — **20% vs 58%** by agent arm, so cross-model cost comparisons are biased, not
+  just low. (An earlier figure near 40% was an estimate assuming 300 output tokens; the real mean is
+  148.) Our ledger must add it. [B-L14](docs/FINDINGS.md), [R-L4](docs/FINDINGS.md)
 
 **Reproducibility — the two arms differ, verified at n=40**
 - **At temperature 0, `gemini-3.1-flash-lite` is deterministic and `gpt-4.1-nano` is not.**
@@ -136,10 +149,20 @@ the property instead of assuming it:
   from a killed run. Resume now requires a journal entry **and** the full simulation count **and**
   zero infra errors.
 
+**The same shape in our own prose.** The post-release review found 7 of our 12 public posts with a
+claim that went further than the repro under it: a co-occurrence read as a cause (67/68), "one write
+failed" read as "nothing changed" (task 64), an estimate reported as a measurement (~40% judge cost),
+a single flip read as a pattern, a 40-trajectory subset labelled as the whole arm. Every repro had
+been run; the sentences around them had not been checked against them. **Check each sentence
+against its evidence, not just the evidence.** [post-release review](docs/FINDINGS.md)
+
 **Known defects — document, do not patch**
 - **#514**: DB hash is order-sensitive on lists. [D-011](docs/DECISIONS.md)
 - **B-L7**: the ACTION checker is order-sensitive on list arguments — a call identical to gold except
-  list order scores `action_match: false`. [D-017](docs/DECISIONS.md)
+  list order scores `action_match: false`. [D-017](docs/DECISIONS.md) **`ACTION` is scored on zero
+  retail tasks**, so this changes no retail score (live on 32 telecom, 9 banking). And
+  `compare_args: []` is deliberate — all 56 are human hand-offs whose free-text `summary` is not
+  graded. [R-L5](docs/FINDINGS.md)
 - Fixing either breaks comparability with official v1.0.1 numbers. Compute both variants, report both.
 - **`get_response_cost()` returns `0.0` on exception** — an unpriced model reports as free.
 - **litellm#25322**: Gemini thought signatures survive tau2's path **only** because LiteLLM packs
@@ -162,6 +185,8 @@ Inherited from v1.0 §1 and still binding:
   Unknown pricing or missing usage is **never** zero. A timed-out request may still have cost.
 - **Upstream stays byte-untouched.** It is a pinned, read-only checkout; our code registers from
   outside. "The baseline is stock" must be provable, not audited. [D-007](docs/DECISIONS.md)
+  **Enforced:** `make verify` ends with `make pristine`, which fails unless upstream is at the pinned
+  commit with no modified files. [D-023](docs/DECISIONS.md)
 - **Never leak evaluation state into the agent.** `HalfDuplexAgent.__init__(tools, domain_policy)`
   enforces this architecturally — do not weaken it.
 - **Pre-registration is frozen before Phase C.** Anything outside it is exploratory and reported
@@ -179,6 +204,10 @@ Inherited from v1.0 §1 and still binding:
   (#553–#560) + 4 comments, as `@hagverdiyevr`. That authorisation covered *those* filings only.
   **Still unauthorised:** social posts, leaderboard submission, and **PRs** — several issues offer
   one; none is open. A new go-ahead is required for each.
+  **Replies received:** Universeyi on #540 (23 Sep), justavibedev (23 Sep) and Ruler4396 (26 Sep) on
+  #499 — two of them correct us, and every claim in all three was verified. **Public corrections to
+  7 posts are identified but not posted**; each also needs a go-ahead. Note: Claude drafted and posted
+  all 12 under the owner's name — the owner did not write them, but readers cannot tell.
 
 ## Phases
 
@@ -195,8 +224,8 @@ submission, no PRs).
 **Phase D is 1,792 evaluations, not 1,280.** The smaller figure counted only the base pass;
 [§6.3](docs/PREREGISTRATION.md)'s noise control adds 512 replicates on a pre-drawn 20% sample
 ([A-005](docs/PREREGISTRATION_AMENDMENTS.md)).
-Verify the freeze and the 4-amendment chain any time with
-`python scripts/verify_preregistration.py`.
+Verify the freeze and the 5-amendment chain (A-001–A-005) any time with `make verify`, or alone with
+`vendor/tau2-bench/.venv/bin/python scripts/verify_preregistration.py`.
 
 Surplus budget buys trials and judge replicates only. Tasks are hard-capped at 40 by the benchmark;
 spare money is not a licence to widen scope.
@@ -232,11 +261,12 @@ Documentation drifts silently. This is mechanical on purpose.
 Then, always:
 
 ```bash
-python scripts/check_docs.py          # links, frozen hash, spend agreement, stale claims
+make docs          # links, frozen hash, spend agreement, stale claims, README numbers
 ```
 
 It must print **DOCS ALIGNED** before moving on. Before any *spend*, `make verify` must pass —
-that adds the judge-adapter and runner-guard tests to the doc check. A failure is drift, not noise — fix the document,
+that adds the judge-adapter, runner-guard, Phase D and Phase A tests to the doc check, and ends by
+proving upstream untouched. A failure is drift, not noise — fix the document,
 do not silence the check. If a check is wrong rather than the docs, fix the *check* and say so.
 
 **Two invariants that outrank convenience:**
@@ -249,13 +279,14 @@ do not silence the check. If a check is wrong rather than the docs, fix the *che
 ## Commands
 
 ```bash
-make verify                                                      # ALL offline gates — run before any spend
-make dry-run                                                     # validate Phase C manifest, dispatch nothing
-python scripts/check_docs.py                                     # doc alignment (run every iteration)
-python scripts/verify_preregistration.py                         # freeze + amendment chain integrity
-cd vendor/tau2-bench && uv sync --frozen                         # pinned harness, Python 3.12.9
-uv run python ../../scripts/phase_a/03_replay_and_null_agent.py  # reproduce Phase A
-uv run python ../../scripts/phase_b/step5_judge_noise.py         # re-grade saved trajectories
+make setup                        # create the pinned venv (uv sync --frozen; lock untouched)
+make verify                       # ALL offline gates, on 3.12.9, then prove upstream untouched
+make docs                         # doc alignment (run every iteration)
+make pristine                     # fail unless upstream is at the pin with no modified files
+make dry-run / make dry-run-d     # validate the Phase C / Phase D manifest, dispatch nothing
+cd vendor/tau2-bench && .venv/bin/python ../../scripts/review/verify_post_claims.py   # R-L1–R-L9, offline
+cd vendor/tau2-bench && uv run --frozen python ../../scripts/phase_a/03_replay_and_null_agent.py
+vendor/tau2-bench/.venv/bin/python scripts/phase_d/analyze_phase_d.py                # every Phase D/E number
 ```
 
 Read actual `--help` output before wrapping any CLI flag. Never invent one.

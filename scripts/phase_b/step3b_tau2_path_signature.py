@@ -14,7 +14,7 @@ survives IFF it travels via the id rather than via provider_specific_fields.
 
 This test answers that empirically, using the real retail tools and tau2's own generate().
 
-Run:  cd vendor/tau2-bench && uv run python ../../scripts/phase_b/step3b_tau2_path_signature.py
+Run:  cd vendor/tau2-bench && uv run --frozen python ../../scripts/phase_b/step3b_tau2_path_signature.py
 """
 
 import json

@@ -82,8 +82,9 @@ swallowed as warnings (upstream #499 — see [FINDINGS A4](FINDINGS.md)).
 - ⚠️ `get_response_cost()` in `utils/llm_utils.py` **catches exceptions and returns `0.0`**, so an
   unpriced model silently reports as free. Compute cost independently and cross-check.
 - ⚠️ **No judge cost is recorded anywhere.** `SimulationRun` has only `agent_cost` / `user_cost`;
-  `reward_info` and `info` carry none. NL-assertion judge spend is invisible — measured ~40%
-  understatement on judge-gated tasks ([B-L14](FINDINGS.md)).
+  `reward_info` and `info` carry none. NL-assertion judge spend is invisible — measured at
+  **32.8%** of true cost on judge-gated tasks, 20% vs 58% by agent arm ([B-L14](FINDINGS.md),
+  [R-L4](FINDINGS.md)).
 
 ### CLI
 
@@ -106,21 +107,21 @@ non-editable installs.
 
 | Issue | Defect | Our stance |
 | --- | --- | --- |
-| **#499** | 18 retail golden actions raise during gold replay, silently swallowed | Reproduced and characterized — [A4](FINDINGS.md). **Evidence posted 22 Sep**: the 16-read / 2-write split; tasks 64 and 105 have policy-violating gold |
+| **#499** | 18 retail golden actions raise during gold replay, silently swallowed | Reproduced and characterized — [A4](FINDINGS.md). **Evidence posted 22 Sep**: the 16-read / 2-write split; tasks 64 and 105 have policy-violating gold. **Replies:** justavibedev and Ruler4396 corrected our task 64 claim — right; 67/68 also corrected ([R-L1](FINDINGS.md), [R-L3](FINDINGS.md)) |
 | **#514** | DB hash order-sensitive on lists | Confirmed [A6](FINDINGS.md); **do not fix** (D-011), report both hashes |
-| **#384 / #327** | No-op / missing reward checks permit false-positive rewards | Quantified via null-agent baseline [A5](FINDINGS.md). **Evidence posted 22 Sep**: 72/114 retail tasks auto-pass the NL component; null agent passes DB on 11 |
-| **#540** | Run-to-run noise floor of published baselines unknown | **Evidence posted 22 Sep** decomposing the floor into agent and judge terms. | **Answered** by [C-L2](FINDINGS.md) at **n=40**: not one number — at temperature 0 `gemini-3.1-flash-lite` reproduces identical rewards 40/40 across four invocations while `gpt-4.1-nano` reproduces 32/40. Supersedes the 5-task pilot in [B-L15](FINDINGS.md) |
+| **#384 / #327** | No-op / missing reward checks permit false-positive rewards | Quantified via null-agent baseline [A5](FINDINGS.md). **Evidence posted 22 Sep**: 72/114 retail tasks auto-pass the NL component; null agent passes DB on 11. **Correction pending:** only 105 is a #499 artifact, not 67/68; and 6 tasks give a do-nothing agent full reward ([R-L2](FINDINGS.md)) |
+| **#540** | Run-to-run noise floor of published baselines unknown | **Evidence posted 22 Sep** decomposing the floor into agent and judge terms. | **Answered** by [C-L2](FINDINGS.md) at **n=40**: not one number — at temperature 0 `gemini-3.1-flash-lite` reproduces identical rewards 40/40 across four invocations while `gpt-4.1-nano` reproduces 32/40. Supersedes the 5-task pilot in [B-L15](FINDINGS.md). **Reply:** Universeyi agrees and asked two questions — see replies below; our "family asymmetry" line is withdrawn ([R-L8](FINDINGS.md)) |
 | **#224** | "Airline domain may NOT be a reliable benchmark" | Context only; we use retail |
 | **#474** (closed) | NL-assertion judge hardcoded, no override mechanism | Still reproduces on v1.0.1. **Evidence posted 22 Sep**: the override is worth **9.1 points** of leniency ([D-L2](FINDINGS.md)) |
 | — | Py3.13 import failure | Ours, [A0](FINDINGS.md). **NOT filed** — could not be reproduced (no 3.13 available; `audioop` dependency not locatable). Withdrawn rather than asserted, [D-022](DECISIONS.md) |
 | **#553** | Judge prompt is ~20% literal `assistant: None`; line 79 ignores its own documented intent | Ours, [B4](FINDINGS.md) — **filed 22 Sep** |
-| **#554** | `all([])` scores an empty or short judge response as a full pass | Ours, [B-L16](FINDINGS.md) — **filed 22 Sep** |
+| **#554** | `all([])` scores an empty or short judge response as a full pass | Ours, [B-L16](FINDINGS.md) — **filed 22 Sep**. One sentence is wrong: malformed replies *crash*, they do not pass ([R-L6](FINDINGS.md)) |
 | **#555** | Judge parses with raw `json.loads`; `gemini-3.8-flash` crashes 448/448 | Ours, [B-L16](FINDINGS.md), [D-L3](FINDINGS.md) — **filed 22 Sep** |
 | **#558** | `--seed` silently dropped for Gemini via `litellm.drop_params = True` | Ours, [B-L15 correction](FINDINGS.md) — **filed 22 Sep** |
-| **#559** | `ToolCall` has no `provider_specific_fields`; signatures ride in the `id` (4,572 chars observed) | Ours, [B-L6](FINDINGS.md) — **filed 22 Sep** |
+| **#559** | `ToolCall` has no `provider_specific_fields`; signatures ride in the `id` (4,572 chars observed) | Ours, [B-L6](FINDINGS.md) — **filed 22 Sep**. **Correction pending:** the posted table was one 40-trajectory run, not 320 per arm; full arms give 1,104/1,280 ([R-L7](FINDINGS.md)) |
 | **#560** | Committed `uv.lock` stale at tag v1.0.1 | Ours, [A0b](FINDINGS.md) — **filed 22 Sep**. `uv sync --frozen` still succeeds (tested) |
-| **#557** | ACTION checker order-sensitive on lists | Ours, [B-L7](FINDINGS.md) — **filed 22 Sep**; **do not fix locally** ([D-017](DECISIONS.md)) |
-| **#556** | Judge cost unaccounted; hidden share varies 30–60% by agent model | Ours, [B-L14](FINDINGS.md) — **filed 22 Sep** |
+| **#557** | ACTION checker order-sensitive on lists | Ours, [B-L7](FINDINGS.md) — **filed 22 Sep**; **do not fix locally** ([D-017](DECISIONS.md)). **Scope correction pending:** `ACTION` is scored on zero retail tasks, and `compare_args: []` is deliberate ([R-L5](FINDINGS.md)) |
+| **#556** | Judge cost unaccounted; hidden share varies by agent model | Ours, [B-L14](FINDINGS.md) — **filed 22 Sep**. Posted figures were estimates; measured **32.8%**, **20% vs 58%** by arm ([R-L4](FINDINGS.md)) — correction not yet posted |
 | — | **NL-judge path ignores upstream's own fence stripper** — `evaluator_nl_assertions.py:127` calls raw `json.loads` while `llm_utils.py:509` provides `extract_json_from_llm_response`, so `gemini-3.8-flash` crashes the evaluator | Ours, [B-L16](FINDINGS.md); one-line wiring fix, **do not patch our vendored copy** |
 | — | **`all([])` scores an empty judge response as a full pass**; duplicate, extra and mismatched verdicts equally silent | Ours, [B-L16](FINDINGS.md); mitigated by our fail-closed adapter, not by patching upstream |
 | — | Committed `uv.lock` stale at v1.0.1 (records `1.0.0`) | Ours, [A0b](FINDINGS.md); cosmetic, but it dirties every working tree |
@@ -163,6 +164,18 @@ So an expensive *simulator* is affordable where an expensive *agent* is not.
 - Context caching could cut input cost substantially (input is ~95% of spend; the workload — fixed
   system prompt + tool schemas + growing prefix re-sent ~30× — is the ideal case).
 - Batch mode is 50% off at Google/OpenAI/Anthropic but is async; unusable for live multi-turn.
+
+### Replies to our posts — what others established (verified 26–27 Sep 2026)
+
+External contributors, not maintainers (`author_association: NONE`). Every factual claim below was
+re-run on our pin before being recorded; our own resulting corrections are in FINDINGS R-L1–R-L12.
+
+| When | Who | Where | What they established | Verified |
+| --- | --- | --- | --- | --- |
+| 23 Sep | **Universeyi** (opened #540) | #540 | On the 8 current retail submissions, NL-gated tasks flip between identical runs at **0.24** vs **0.26** for DB-only — so the published noise floor is almost entirely agent + user simulator; "the judge is real but small". Per-configuration MDD spans 5.5–10.7 pts on airline, 3.8–9.1 on a 108-config set elsewhere. Two endpoints that advertise `seed` returned three different completions to three identical seeded requests: **"seed accepted" ≠ "seed honoured"**. | Consistent with our 1/256 — their data not re-run here |
+| 23 Sep | **justavibedev** | #499 | Task 64's gold continues with `64_7 modify_pending_order_items`, which lands; an empty trajectory scores DB `0.0` on 64 and `1.0` on 105 | **Yes** — [R-L3](FINDINGS.md) |
+| 26 Sep | **Ruler4396** | #499 | Independent reproduction (branch on `b7ea907`): 114 tasks, 550 actions, **18 failures = 16 read + 2 mutating**, same 15 ids; 2,546 tasks domain-wide with all failures in retail. 67/68 have no reference writes. In shipped results **11/16** runs of 64 and **10/16** of 105 match a half-applied target at reward 1.0. Preparing a PR that sets `db_check=None` when a reference write cannot apply (no reward values change) | **Yes** for 67/68 and 11/16, 10/16 — [R-L1](FINDINGS.md), [R-L3](FINDINGS.md). Their branch counts not re-run |
+
 
 ### Adapter hazards (LiteLLM)
 

@@ -9,7 +9,7 @@ Does two jobs:
   B5 — measures the judge's self-disagreement at its pinned temperature 0.0. Temperature 0
        is NOT determinism for remote inference, so this is measured, not assumed.
 
-Run:  cd vendor/tau2-bench && uv run python ../../scripts/phase_b/step5_judge_noise.py
+Run:  cd vendor/tau2-bench && uv run --frozen python ../../scripts/phase_b/step5_judge_noise.py
 """
 
 import json

@@ -11,8 +11,8 @@ Guarantees:
   * pre-dispatch budget check against the regenerated ledger; stops rather than overrunning
   * every invocation's stdout/stderr tee'd to results/phase_c/logs/<save_to>.log
 
-Run:  cd vendor/tau2-bench && uv run python ../../scripts/phase_c/run_phase_c.py --dry-run
-      cd vendor/tau2-bench && uv run python ../../scripts/phase_c/run_phase_c.py
+Run:  cd vendor/tau2-bench && uv run --frozen python ../../scripts/phase_c/run_phase_c.py --dry-run
+      cd vendor/tau2-bench && uv run --frozen python ../../scripts/phase_c/run_phase_c.py
 """
 
 import argparse
@@ -132,7 +132,8 @@ for inv in todo:
     # A-003: delegate via tau2_with_logging.py so litellm.callbacks is live in the SAME
     # interpreter that issues the requests (D-007). A plain subprocess(["tau2", ...]) cannot
     # see them, which is why retried/rate-limited attempts were previously invisible.
-    cmd = ["uv", "run", "--project", str(REPO / "vendor/tau2-bench"),
+    # --frozen: plain `uv run` rewrites upstream's stale uv.lock, modifying the submodule (R-L11).
+    cmd = ["uv", "run", "--frozen", "--project", str(REPO / "vendor/tau2-bench"),
            "python", str(REPO / "scripts/phase_c/tau2_with_logging.py"),
            "--attempt-log", str(attempts), "--invocation", tag, "--", *inv["argv"]]
     with open(logf, "w") as fh:

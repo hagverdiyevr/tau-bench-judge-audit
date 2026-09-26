@@ -7,7 +7,7 @@ unpriced model silently reports as FREE. If we trusted that, the budget ledger w
 would discover it only from a surprise invoice. This verifies the number is real before anything
 else depends on it.
 
-Run:  cd vendor/tau2-bench && uv run python ../../scripts/phase_b/step2_verify_billing.py
+Run:  cd vendor/tau2-bench && uv run --frozen python ../../scripts/phase_b/step2_verify_billing.py
 """
 
 import json

@@ -3,7 +3,7 @@
 B1: can the NL-assertion judge model be swapped, and is our patch target the right one?
 B4: does the judge actually see tool calls, or only natural-language content?
 
-Run:  cd vendor/tau2-bench && uv run python ../../scripts/phase_b/b1_b4_judge_gates.py
+Run:  cd vendor/tau2-bench && uv run --frozen python ../../scripts/phase_b/b1_b4_judge_gates.py
 """
 
 import json

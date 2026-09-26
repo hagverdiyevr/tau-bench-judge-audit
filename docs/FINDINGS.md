@@ -1172,7 +1172,12 @@ estimate applies only to pre-Phase-C runs. This corrects an analytic claim, not 
 
 *Corrects one sentence in #554.* The NL evaluator call is not wrapped in `try` in
 `evaluate_simulation`. A fenced reply raises `JSONDecodeError` (reproduced), the exception
-propagates, and the batch runner records the task as `infrastructure_error`. Only **valid JSON with
+propagates, and the batch runner records the task as `infrastructure_error`.
+
+> **Precision, 27 Sep 2026.** The conversion happens in `runner/progress.py`: the retry wrapper
+> re-runs the **whole simulation** on any exception and, once retries are exhausted, returns a
+> `SimulationRun` with `termination_reason=infrastructure_error`, `messages=[]` and no reward. So a
+> malformed judge reply also discards the conversation and re-runs the agent. Only **valid JSON with
 missing, empty or too few verdicts** reaches `all([])` — which is what #554's repro shows. Its line
 "truncation, a refusal, a fenced body … converts into a silent full pass" is wrong, and contradicts
 #555.

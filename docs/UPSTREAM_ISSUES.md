@@ -81,6 +81,7 @@ text is checked against the approved text after posting.
 | 1 | 2026-09-26 20:36 | [#499 reply](https://github.com/sierra-research/tau2-bench/issues/499#issuecomment-5849678221) | Withdraws the task 64 claim (its target is correct — PR #571) and the 67/68 causal claim; confirms 105 | ✅ |
 | 2 | 2026-09-26 20:43 | [#384 reply](https://github.com/sierra-research/tau2-bench/issues/384#issuecomment-5849720653) | Only 105 is a #499 false positive (not 67/68); adds that a do-nothing agent scores **full reward on 6 tasks**, two in `test` ([R-L2](FINDINGS.md)) | ✅ |
 | 3 | 2026-09-26 20:46 | [#540 reply](https://github.com/sierra-research/tau2-bench/issues/540#issuecomment-5849746351) | Withdraws "family asymmetry" (one flip, p = 0.50) and "same effect"; answers Universeyi: model id yes, request hash **no**, raw completion **no**; **promises to link the harness when public** | ✅ |
+| 4 | 2026-09-27 | [#554 description](https://github.com/sierra-research/tau2-bench/issues/554) — **edited** | Dated correction note at top; the "malformed reply converts into a silent full pass" sentence struck through and corrected ([R-L6](FINDINGS.md)) | ✅ |
 
 <details><summary>Full text of correction 1, as posted</summary>
 

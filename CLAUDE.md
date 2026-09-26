@@ -160,10 +160,12 @@ against its evidence, not just the evidence.** [post-release review](docs/FINDIN
 - **#514**: DB hash is order-sensitive on lists. [D-011](docs/DECISIONS.md)
 - **B-L7**: the ACTION checker is order-sensitive on list arguments — a call identical to gold except
   list order scores `action_match: false`. [D-017](docs/DECISIONS.md) **`ACTION` is scored on zero
-  retail tasks**, so this changes no retail score (live on 32 telecom, 9 banking). And
+  retail tasks**, and no task that scores it compares a reorderable list — so this changes **no
+  shipped score anywhere**; it is latent, and only mis-reports `action_match` diagnostics ([R-L14](docs/FINDINGS.md)). And
   `compare_args: []` is deliberate — all 56 are human hand-offs whose free-text `summary` is not
   graded. [R-L5](docs/FINDINGS.md)
-- Fixing either breaks comparability with official v1.0.1 numbers. Compute both variants, report both.
+- Fixing #514 breaks comparability with official v1.0.1 numbers — compute both variants, report both.
+  Fixing B-L7 changes no shipped score ([R-L14](docs/FINDINGS.md)); it stays unpatched only under D-007.
 - **`get_response_cost()` returns `0.0` on exception** — an unpriced model reports as free.
 - **litellm#25322**: Gemini thought signatures survive tau2's path **only** because LiteLLM packs
   them into the tool-call `id`, which tau2 preserves. `ToolCall` cannot carry

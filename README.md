@@ -192,7 +192,8 @@ A claim-by-claim re-check of all 12 posts followed. **No reported bug turned out
 - Of the two tasks we said had impossible answer keys, only **task 105** does. Task 64's failing step
   duplicates the next step with the wrong tool, so its target is correct — as PR #571 showed.
 - The judge-cost figure near 40% was an **estimate**; measured, it is 32.8%.
-- The ACTION order bug changes **no retail score** — ACTION isn't scored in retail.
+- The ACTION order bug changes **no score anywhere** in the shipped benchmark — no task that scores
+  ACTION compares a list that could be reordered. It is real, but latent.
 - "A family asymmetry in the judge" rested on a **single flip**.
 
 The corrections, each with its evidence, are in [FINDINGS R-L1–R-L12](docs/FINDINGS.md) and re-derive

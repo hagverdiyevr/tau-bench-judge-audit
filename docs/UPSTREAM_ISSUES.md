@@ -54,7 +54,7 @@ contain at least one claim that goes further than its evidence.
 | #554 | **Correct** | "A fenced/truncated/refused reply converts into a silent full pass" — it raises; only valid-but-incomplete JSON passes ([R-L6](FINDINGS.md)) |
 | #555 | Holds | — |
 | #556 | **Correct** | Figures were estimates: measured 32.8%, 20% vs 58% by arm; "65%", "order of magnitude" (3.9×) and "roughly fixed per task" are wrong ([R-L4](FINDINGS.md)) |
-| #557 | **Correct** | Omits that `ACTION` is scored on zero retail tasks; wrongly says no retail task sets `compare_args: []` (4 do) and calls it a defect (all 56 are deliberate hand-offs) ([R-L5](FINDINGS.md)) |
+| #557 | **Correct** | The bug is **latent**: no task that scores `ACTION` compares a reorderable list, so no shipped score changes and the comparability caveat is wrong; wrongly says no retail task sets `compare_args: []` (4 do) and calls it a defect (all 56 are deliberate hand-offs) ([R-L5](FINDINGS.md), [R-L14](FINDINGS.md)) |
 | #558 | Holds · slip | Cites `llm_config.py:47`; the assignment is on line 48 |
 | #559 | **Correct** | "320 trajectories per arm" was one 40-trajectory run; full arms: 1,104/1,280 ([R-L7](FINDINGS.md)) |
 | #560 | Holds | Re-verified on a real fresh clone |

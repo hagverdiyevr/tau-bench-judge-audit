@@ -215,6 +215,23 @@ for d in sorted(p for p in DOMAINS.iterdir() if (p / "tasks.json").exists()):
         f"compare_args=[]: {len(empties):>3} {act[d.name]['empty_compare_args_names']}")
 out["R-L5"] = act
 
+# R-L14: order-sensitivity only bites on a compared list with >1 element. Does any scored task have one?
+exposed = {}
+for d in sorted(p for p in DOMAINS.iterdir() if (p / "tasks.json").exists()):
+    n = 0
+    for t in json.loads((d / "tasks.json").read_text()):
+        ec = t.get("evaluation_criteria") or {}
+        if "ACTION" not in (ec.get("reward_basis") or []):
+            continue
+        for a in ec.get("actions") or []:
+            args = a.get("arguments") or {}
+            keys = list(args) if a.get("compare_args") is None else a["compare_args"]
+            if any(isinstance(args.get(k), list) and len(args[k]) > 1 for k in keys):
+                n += 1
+    exposed[d.name] = n
+out["R-L14"] = {"action_scored_actions_comparing_a_list_of_2_or_more": exposed}
+say(f"      R-L14 scored actions that compare a >1-element list: {exposed}")
+
 # ---------------------------------------------------------------- R-L6: malformed replies raise
 say("\nR-L6  a fenced judge reply: silent pass, or failure?")
 t = next(t for t in TASKS.values() if t.evaluation_criteria.nl_assertions)

@@ -328,6 +328,15 @@
    ]
   }
  },
+ "R-L14": {
+  "action_scored_actions_comparing_a_list_of_2_or_more": {
+   "airline": 0,
+   "banking_knowledge": 0,
+   "mock": 0,
+   "retail": 0,
+   "telecom": 0
+  }
+ },
  "R-L6": {
   "fenced_reply": "raised JSONDecodeError"
  },

@@ -204,6 +204,10 @@ payment orderings flip the verdict.
 the raw and an order-canonicalized hash for every run and report both; the delta is a diagnostic and
 a reportable finding, not a bug to patch mid-study.
 
+> **Rationale corrected, 27 Sep 2026 → [R-L14](FINDINGS.md).** For *this* defect, fixing it would
+> change no shipped score: no task that scores `ACTION` compares a reorderable list. The decision
+> not to patch still stands, under [D-007](DECISIONS.md) (upstream stays byte-untouched).
+
 ## D-012 — Pre-register before the confirmatory run · `ACTIVE` · 19 Sep 2026
 
 **Decision.** Before any confirmatory spend, freeze and `sha256`-commit: the primary contrast, the

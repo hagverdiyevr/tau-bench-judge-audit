@@ -438,6 +438,9 @@ Gate B8 tested the raw path; Phase C runs through tau2's models. Re-tested with 
 
 > **Qualified, 27 Sep 2026 → [R-L5](FINDINGS.md).** `ACTION` is in the reward basis of **zero** retail
 > and airline tasks, so this changes no retail score. It is live on 32 telecom and 9 banking tasks.
+>
+> **Superseded, 27 Sep 2026 → [R-L14](FINDINGS.md).** It is not live anywhere: no task that scores
+> `ACTION` compares a list with more than one element, so this changes **no shipped score**.
 
 **Claim.** A tool call identical to the gold action except for the *order* of a list-valued
 argument is scored `action_match: false`.
@@ -1156,6 +1159,9 @@ estimate applies only to pre-Phase-C runs. This corrects an analytic claim, not 
 
 ## R-L5 — ACTION is scored on zero retail tasks, and `compare_args: []` is deliberate
 
+> **Superseded in part, 27 Sep 2026 → [R-L14](FINDINGS.md).** "Live on 32 telecom and 9 banking
+> tasks" is wrong: ACTION is *scored* there, but none of those tasks compares a reorderable list.
+
 *Qualifies [B-L7](FINDINGS.md) and corrects #557.*
 
 | Domain | Tasks | `ACTION` in `reward_basis` | `compare_args: []` actions |
@@ -1288,3 +1294,35 @@ correction itself, one day later.
 
 **Net effect on the #499 comment.** Of its two "impossible gold" tasks, **105 stands and 64 does
 not**. Of its three null-agent false positives, only 105 stands ([R-L1](FINDINGS.md)).
+
+## R-L14 — The ACTION order bug changes no score in the shipped benchmark
+
+*27 Sep 2026. Supersedes R-L5's "live on 32 telecom and 9 banking tasks" and qualifies
+[B-L7](FINDINGS.md) and [D-017](DECISIONS.md). Found while preparing the #557 correction.
+Reproduced in `scripts/review/verify_post_claims.py`.*
+
+Order can only matter for a compared list argument with **two or more** elements. Counting those
+among the actions of every task whose `reward_basis` includes `ACTION`:
+
+| Domain | Tasks scoring `ACTION` | Scored actions comparing a list of ≥ 2 |
+| --- | ---: | ---: |
+| retail | 0 | 0 |
+| airline | 0 | 0 |
+| telecom | 32 | **0** |
+| banking_knowledge | 9 | **0** |
+| mock | 2 | **0** |
+
+The defect in `tasks.py:195` is real, but **latent**: it changes **no reward** anywhere in the
+shipped data. It does mis-report `action_match` in the per-action diagnostics — which is how B-L7
+found it, in retail, where `ACTION` is computed but not scored — and it would change scores for
+any future task that scores `ACTION` on a list argument.
+
+**Two consequences for our own record.** R-L5 said the bug is "live" on 41 tasks: it is scored
+there, but cannot bite. And D-017's reason for not patching — "fixing it breaks comparability with
+official v1.0.1 numbers" — is wrong for this defect: fixing it changes no shipped number. (Upstream
+stays unpatched regardless, under [D-007](DECISIONS.md).) #557 made the same comparability claim in
+public.
+
+This is the fourth correction of a correction in two days (with R-L8, R-L13 and this one's parent
+R-L5): each time, the check established *where* something is computed and the prose asserted what
+it *does*.

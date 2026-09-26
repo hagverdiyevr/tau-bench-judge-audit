@@ -1149,6 +1149,11 @@ by 65%" (tau2 reports 67% of true cost), "agent cost varies by an order of magni
 The spend ledger is **not** affected: Phase C totals come from measured attempt logs, and the
 estimate applies only to pre-Phase-C runs. This corrects an analytic claim, not money.
 
+> **Added, 27 Sep 2026.** What the hidden share does to a comparison, measured: on tau2's reported
+> cost `gpt-4.1-nano` is **3.9×** cheaper than `gemini-3.1-flash-lite` ($0.8791 vs $3.3866); with the
+> judge included it is **2.0×** cheaper ($2.0974 vs $4.2539). The judge halves the apparent gap
+> here rather than reversing it — #556 had claimed it was "enough to reorder a cost ranking".
+
 ## R-L5 — ACTION is scored on zero retail tasks, and `compare_args: []` is deliberate
 
 *Qualifies [B-L7](FINDINGS.md) and corrects #557.*

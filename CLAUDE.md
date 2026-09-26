@@ -206,8 +206,8 @@ Inherited from v1.0 §1 and still binding:
   one; none is open. A new go-ahead is required for each.
   **Replies received:** Universeyi on #540 (23 Sep), justavibedev (23 Sep) and Ruler4396 (26 Sep) on
   #499 — two of them correct us, and every claim in all three was verified. **Public corrections:**
-  posted one at a time after an explicit yes on the exact text — #499 and #384 done (26 Sep); the
-  rest are in STATUS. Note: Claude drafted and posted
+  posted one at a time after an explicit yes on the exact text — #499, #384 and #540 done (26 Sep).
+  The #540 reply **promises a link to the harness** once the repo is public — an open commitment. Note: Claude drafted and posted
   all 12 under the owner's name — the owner did not write them, but readers cannot tell.
 
 ## Phases

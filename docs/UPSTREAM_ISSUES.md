@@ -80,6 +80,7 @@ text is checked against the approved text after posting.
 | --- | --- | --- | --- | --- |
 | 1 | 2026-09-26 20:36 | [#499 reply](https://github.com/sierra-research/tau2-bench/issues/499#issuecomment-5849678221) | Withdraws the task 64 claim (its target is correct — PR #571) and the 67/68 causal claim; confirms 105 | ✅ |
 | 2 | 2026-09-26 20:43 | [#384 reply](https://github.com/sierra-research/tau2-bench/issues/384#issuecomment-5849720653) | Only 105 is a #499 false positive (not 67/68); adds that a do-nothing agent scores **full reward on 6 tasks**, two in `test` ([R-L2](FINDINGS.md)) | ✅ |
+| 3 | 2026-09-26 20:46 | [#540 reply](https://github.com/sierra-research/tau2-bench/issues/540#issuecomment-5849746351) | Withdraws "family asymmetry" (one flip, p = 0.50) and "same effect"; answers Universeyi: model id yes, request hash **no**, raw completion **no**; **promises to link the harness when public** | ✅ |
 
 <details><summary>Full text of correction 1, as posted</summary>
 
@@ -154,6 +155,25 @@ Output on `fc0055dc`:
 Two of the six (**12** and **65**) are in the `test` split. None of them has `communicate_info`, and `ACTION` is in no retail reward basis, so on these tasks the only thing scored is that the agent didn't change the database. For 10, 12 and 50 the gold behaviour is a hand-off (`transfer_to_human_agents`), so declining to help scores the same as handing off correctly; task 57 has no gold actions at all.
 
 That's the retail form of your airline P0 — tasks scored on inaction only. It also sharpens the null-agent check I suggested: flagging tasks where a no-op agent gets full *reward*, not just a DB match, catches these six directly, and needs no API calls for them because there is no judge to call.
+
+</details>
+
+<details><summary>Full text of correction 3, as posted</summary>
+
+Thanks — and agreed that the two designs meeting in the middle is the useful part. Your released-file comparison (NL-gated tasks flipping at 0.24 vs 0.26 for DB-only) and our direct re-grade (1 flip in 256) point at the same answer from opposite directions: the judge term is real but small, and the pooled floor is mostly agent plus user simulator.
+
+**One correction to my comment.** I wrote that "the same family asymmetry shows up in the judge role". That doesn't survive: it rests on a single flip — OpenAI judges 1/128, Google judges 0/128, one-sided Fisher exact p = 0.50. What stands is narrower: the default judge gave different verdicts to byte-identical requests once, so its floor isn't zero. I also called the 3 re-grades that disagree with tau2's recorded verdict "the same effect", and that isn't shown either — one of them was re-graded three times with the same answer each time, so it isn't a flip, and its cause is unknown.
+
+**Your two questions**, answered from the record format as it stands:
+
+1. **Judge model id — yes. Request hash — no.** Each record stores the judge requested *and* the snapshot the provider returned (e.g. `gpt-4.1-mini` → `gpt-4.1-mini-2025-04-14`). A re-grade is matched to its trajectory by `(run, task, judge, replicate)`. The prompt is reproducible — it is captured from tau2's own prompt construction rather than rebuilt — but no hash of it is stored.
+2. **Raw completion — no.** Only the parsed verdicts (assertion → met), plus `finish_reason`, whether the reply was fenced, token counts and cost. The judge's reasoning text is dropped too. So the judge term can't be read off the record, only re-measured. You've put your finger on the right gap: a request hash and the raw completion are what I'd add.
+
+For reference, a record carries: `run, task, judge, replicate, utc, settled, ok, model_returned, finish_reason, nl_reward, verdicts, matches_incumbent, fenced, prompt_tokens, completion_tokens, usd, usd_source, error_kind, error`.
+
+The harness isn't in a public repository yet; I'll link it here when it is.
+
+And agreed on "seed accepted" vs "seed honoured" — on the Gemini path in #558 it isn't even accepted: the seed is dropped before the request is sent.
 
 </details>
 

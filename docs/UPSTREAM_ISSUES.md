@@ -79,6 +79,7 @@ text is checked against the approved text after posting.
 | # | Posted (UTC) | Where | What it corrects | Live == approved |
 | --- | --- | --- | --- | --- |
 | 1 | 2026-09-26 20:36 | [#499 reply](https://github.com/sierra-research/tau2-bench/issues/499#issuecomment-5849678221) | Withdraws the task 64 claim (its target is correct — PR #571) and the 67/68 causal claim; confirms 105 | ✅ |
+| 2 | 2026-09-26 20:43 | [#384 reply](https://github.com/sierra-research/tau2-bench/issues/384#issuecomment-5849720653) | Only 105 is a #499 false positive (not 67/68); adds that a do-nothing agent scores **full reward on 6 tasks**, two in `test` ([R-L2](FINDINGS.md)) | ✅ |
 
 <details><summary>Full text of correction 1, as posted</summary>
 
@@ -110,6 +111,49 @@ So 64's target is exactly the intended change, and I'd read the 11 of 16 shipped
 **Tasks 67 and 68.** I also wrote that these pass a null agent *because* their gold replay failed. That's wrong too: their gold makes no writes at all, and the failing actions are reads (`find_user_id_by_name_zip`), which change nothing. They would pass a null agent even if every read succeeded — that's #384's territory rather than this issue's. Of the 11 tasks a null agent passes on DB, only 105 is a #499 artifact.
 
 What still stands from my comment is the count: 18 failing actions across the same 15 tasks, 16 reads and 2 writes — which @Ruler4396 reproduced independently.
+
+</details>
+
+<details><summary>Full text of correction 2, as posted</summary>
+
+A correction to my comment above, and one addition that I think is squarely this issue.
+
+**Correction.** I wrote that of the 11 tasks a null agent passes on DB, three (67, 68, 105) match "because the gold replay itself failed". Only **105** does. Tasks 67 and 68 have no gold writes at all — their failing actions are reads, which change nothing — so they belong with the read-only tasks. That makes it **10** tasks where an unchanged database is simply the expected end state, not 8, and **one** #499-corrupted target, not three. (Details in my reply on #499.)
+
+**Addition: on 6 retail tasks, doing nothing scores full reward.** Of those 10, six carry no NL assertions, so the line-38 early return you identified gives `NL_ASSERTION = 1.0`, and DB passes because the gold makes no writes. Scored end to end with tau2's own evaluator, on a two-message conversation in which the agent does nothing:
+
+```python
+from tau2.data_model.message import AssistantMessage, UserMessage
+from tau2.data_model.simulation import SimulationRun
+from tau2.domains.retail.environment import get_tasks
+from tau2.evaluator.evaluator import EvaluationType, evaluate_simulation
+
+tasks = {t.id: t for t in get_tasks("base")}
+do_nothing = [UserMessage(role="user", content="Hi, I need help with my order.", turn_idx=0),
+              AssistantMessage(role="assistant", content="Sorry, I can't help with that. Goodbye.", turn_idx=1)]
+
+for tid in ["10", "12", "25", "50", "57", "65"]:
+    sim = SimulationRun(id=tid, task_id=tid, start_time="", end_time="", duration=0.0,
+                        termination_reason="user_stop", messages=do_nothing)
+    r = evaluate_simulation(simulation=sim, task=tasks[tid], evaluation_type=EvaluationType.ALL,
+                            solo_mode=False, domain="retail")
+    print(tid, r.reward, {k.value: v for k, v in r.reward_breakdown.items()})
+```
+
+Output on `fc0055dc`:
+
+```
+10 1.0 {'DB': 1.0, 'NL_ASSERTION': 1.0}
+12 1.0 {'DB': 1.0, 'NL_ASSERTION': 1.0}
+25 1.0 {'DB': 1.0, 'NL_ASSERTION': 1.0}
+50 1.0 {'DB': 1.0, 'NL_ASSERTION': 1.0}
+57 1.0 {'DB': 1.0, 'NL_ASSERTION': 1.0}
+65 1.0 {'DB': 1.0, 'NL_ASSERTION': 1.0}
+```
+
+Two of the six (**12** and **65**) are in the `test` split. None of them has `communicate_info`, and `ACTION` is in no retail reward basis, so on these tasks the only thing scored is that the agent didn't change the database. For 10, 12 and 50 the gold behaviour is a hand-off (`transfer_to_human_agents`), so declining to help scores the same as handing off correctly; task 57 has no gold actions at all.
+
+That's the retail form of your airline P0 — tasks scored on inaction only. It also sharpens the null-agent check I suggested: flagging tasks where a no-op agent gets full *reward*, not just a DB match, catches these six directly, and needs no API calls for them because there is no judge to call.
 
 </details>
 

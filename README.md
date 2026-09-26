@@ -161,7 +161,7 @@ success by default.
 - **Judge cost is entirely unaccounted** — measured at a third of true cost on judge-gated tasks, and
   20% vs 58% depending on the agent model, so cost comparisons between models are skewed
 - **A do-nothing agent scores full reward on 6 of 114 retail tasks** — no writes needed, and no
-  assertions for the judge to check *(found in the post-release review; not yet reported)*
+  assertions for the judge to check *(found in the post-release review; reported on #384)*
 - The **ACTION checker is order-sensitive on list arguments**, a false-negative sibling of #514
 - LiteLLM **silently drops `seed` for the `gemini` provider**, so seeded reproducibility is
   unavailable without the caller knowing
@@ -197,7 +197,7 @@ A claim-by-claim re-check of all 12 posts followed. **No reported bug turned out
 
 The corrections, each with its evidence, are in [FINDINGS R-L1–R-L12](docs/FINDINGS.md) and re-derive
 offline from `scripts/review/verify_post_claims.py`. Public corrections to the posts themselves are
-pending.
+being posted one at a time, each after the owner approves the exact text.
 
 ---
 

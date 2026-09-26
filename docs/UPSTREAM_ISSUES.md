@@ -58,7 +58,7 @@ contain at least one claim that goes further than its evidence.
 | #558 | Holds · slip | Cites `llm_config.py:47`; the assignment is on line 48 |
 | #559 | **Correct** | "320 trajectories per arm" was one 40-trajectory run; full arms: 1,104/1,280 ([R-L7](FINDINGS.md)) |
 | #560 | Holds | Re-verified on a real fresh clone |
-| #499 comment | **Correct** | Task 64 is half-applied, not untouched; 67/68 need no writes ([R-L1](FINDINGS.md), [R-L3](FINDINGS.md)) |
+| #499 comment | **Correct** | Task 64's target is correct — its failing step duplicates the next with the wrong tool; only 105 is a defect. 67/68 need no writes ([R-L1](FINDINGS.md), [R-L13](FINDINGS.md)) |
 | #384 comment | **Correct** | One #499 false positive (105), not three; "remaining 8" is 10 ([R-L1](FINDINGS.md)) |
 | #540 comment | **Correct** | "Family asymmetry in the judge role" rests on one flip (p = 0.50); "3 residual disagreements are the same effect" unverified ([R-L8](FINDINGS.md)) |
 | #474 comment | Holds · slip | "Two of four are aliases" — three of four names are undated |

@@ -189,8 +189,8 @@ A claim-by-claim re-check of all 12 posts followed. **No reported bug turned out
 
 - Tasks 67 and 68 pass for a do-nothing agent because they need no writes — **not** because the gold
   replay failed. Only task 105 is that case.
-- Task 64's target is half-applied, not untouched: a do-nothing agent *fails* it. (Most of the
-  benchmark's own published runs still match that half-applied target — 11 of 16.)
+- Of the two tasks we said had impossible answer keys, only **task 105** does. Task 64's failing step
+  duplicates the next step with the wrong tool, so its target is correct — as PR #571 showed.
 - The judge-cost figure near 40% was an **estimate**; measured, it is 32.8%.
 - The ACTION order bug changes **no retail score** — ACTION isn't scored in retail.
 - "A family asymmetry in the judge" rested on a **single flip**.

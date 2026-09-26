@@ -244,6 +244,13 @@
    "106_0"
   ]
  },
+ "R-L13": {
+  "task64_6_equals_64_7_arguments": true,
+  "task64_order_status": "pending",
+  "task64_target_unchanged_without_64_6": true,
+  "task105_price_difference": 21.1,
+  "task105_card_balance": 17.0
+ },
  "R-L4": {
   "by_arm": {
    "google": {

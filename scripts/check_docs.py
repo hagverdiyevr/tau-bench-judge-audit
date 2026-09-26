@@ -102,6 +102,7 @@ STALE_LIVE = {
     "reproduces, in the *judge* role": "one flip in 256 is not an asymmetry (R-L8)",
     "4–11 literal": "measured at n=320: 19.9% of lines, 0–15 per trajectory (B4, #553)",
     "uv run python ": "plain `uv run` rewrites upstream's uv.lock; use --frozen (R-L11)",
+    "half-applied target": "task 64's target is correct; only 105 is a defect (R-L13)",
 }
 for bad, why in STALE_LIVE.items():
     hits = []

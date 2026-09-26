@@ -1,4 +1,4 @@
-"""Re-derive every correction from the post-release review (FINDINGS R-L1 .. R-L9). Offline, $0.
+"""Re-derive every correction from the post-release review (FINDINGS R-L1 .. R-L13). Offline, $0.
 
 Written after three public replies showed that some of our published prose went further than the
 repros behind it. Every number in the R-L entries comes from this file, so the corrections are held
@@ -122,7 +122,7 @@ out["R-L2"] = {"evaluations": empty_eval, "full_reward_tasks": free,
                "full_reward_in_test_split": [t for t in free if t in {str(x) for x in split["test"]}]}
 say(f"      full reward for doing nothing: {free}  (test split: {out['R-L2']['full_reward_in_test_split']})")
 
-# shipped results: how many stored runs of 64 / 105 matched their half-applied targets
+# shipped results: how many stored runs of 64 / 105 match their gold targets (R-L13 reads them)
 shipped = collections.defaultdict(collections.Counter)
 for f in glob.glob(str(VENDOR / "data" / "tau2" / "results" / "**" / "*.json"), recursive=True):
     try:
@@ -141,6 +141,42 @@ out["R-L3"] = {"task64_writes": w64, "task64_failed": f64, "shipped": {k: dict(v
                "task105_action_ids": [a.action_id for a in TASKS["105"].evaluation_criteria.actions]}
 say(f"      task 64 writes: {[(w['action_id'], w['changed_db']) for w in w64]}")
 say(f"      shipped results: { {k: dict(v) for k, v in sorted(shipped.items())} }")
+
+# ---------------------------------------------------------------- R-L13: is 64's target actually wrong?
+# Prompted by PR #571 (Ruler4396): 64_6 and 64_7 are the same change, 64_6 with the wrong tool.
+say("\nR-L13  task 64: is the failed step a duplicate? task 105: is it satisfiable?")
+acts64 = {a.action_id: a for a in TASKS["64"].evaluation_criteria.actions}
+ini = TASKS["64"].initial_state
+kw64 = dict(initialization_data=ini.initialization_data if ini else None,
+            initialization_actions=ini.initialization_actions if ini else None)
+
+
+def gold64(skip=()):
+    g = get_environment()
+    g.set_state(**kw64, message_history=(ini.message_history if ini and ini.message_history else []), strict=True)
+    for a in TASKS["64"].evaluation_criteria.actions:
+        if a.action_id in skip:
+            continue
+        try:
+            g.make_tool_call(tool_name=a.name, requestor=a.requestor, **a.arguments)
+        except Exception:
+            pass
+    return g.get_db_hash()
+
+
+db = json.loads((DOMAINS / "retail" / "db.json").read_text())
+a105 = TASKS["105"].evaluation_criteria.actions[0].arguments
+order = db["orders"][a105["order_id"]]
+old = sum(i["price"] for i in order["items"] if i["item_id"] in a105["item_ids"])
+new = sum(p["variants"][n]["price"] for n in a105["new_item_ids"] for p in db["products"].values() if n in p["variants"])
+card = next(m for u in db["users"].values() for k, m in u["payment_methods"].items() if k == a105["payment_method_id"])
+out["R-L13"] = {
+    "task64_6_equals_64_7_arguments": acts64["64_6"].arguments == acts64["64_7"].arguments,
+    "task64_order_status": db["orders"][acts64["64_6"].arguments["order_id"]]["status"],
+    "task64_target_unchanged_without_64_6": gold64() == gold64(skip=("64_6",)),
+    "task105_price_difference": round(new - old, 2), "task105_card_balance": card["balance"],
+}
+say(f"      {out['R-L13']}")
 
 # ---------------------------------------------------------------- R-L4: judge cost, measured
 say("\nR-L4  judge cost: measured Phase D vs the B-L14 estimate")

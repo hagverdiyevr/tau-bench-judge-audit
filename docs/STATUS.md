@@ -88,7 +88,7 @@ Three replies arrived after filing, and a claim-by-claim review of all 12 posts 
 
 | Decision | What it would post | Why |
 | --- | --- | --- |
-| **Reply on #499** | Thank justavibedev and Ruler4396; confirm task 64; correct 67/68 | Both corrections are right and verified ([R-L1](FINDINGS.md), [R-L3](FINDINGS.md)) |
+| **Reply on #499** | Thank justavibedev and Ruler4396; **withdraw our task 64 claim** (its target is correct — PR #571); confirm 105; correct 67/68 | All three corrections are right and verified ([R-L1](FINDINGS.md), [R-L13](FINDINGS.md)) |
 | **Reply on #384** | One #499 false positive (105), not three; the other 10 need no writes; 6 tasks give a do-nothing agent full reward | [R-L1](FINDINGS.md), [R-L2](FINDINGS.md) |
 | **Reply on #540** | Answer both of Universeyi's questions (no request hash, no raw reply); withdraw "family asymmetry"; say the harness is not public yet | [R-L8](FINDINGS.md), [R-L9](FINDINGS.md) |
 | **Correct #554, #556, #557, #559** | A dated correction note on each (edit, or a follow-up comment) | [R-L6](FINDINGS.md), [R-L4](FINDINGS.md), [R-L5](FINDINGS.md), [R-L7](FINDINGS.md) |
@@ -175,3 +175,4 @@ flip in 256** — a floor, not a pattern ([R-L8](FINDINGS.md)).
 | 2026-09-26 | Reply from **Ruler4396** on #499: independently reproduces 18/15/16/2, confirms 67/68 need no writes, adds 11/16 shipped runs of 64 matching a half-applied target. All verified | $0.00 |
 | 2026-09-26 | **Post-release review** of all 12 posts, claim by claim: 2 hold, 3 small slips, **7 need correction**. New finding: a do-nothing agent scores **full reward on 6 of 114** tasks ([R-L2](FINDINGS.md)) | $0.00 |
 | 2026-09-27 | **Gate fixed** ([D-023](DECISIONS.md)): every step on the pinned 3.12.9 venv; no plain `uv run`; `make pristine` added — `make verify` had modified upstream on every run ([R-L11](FINDINGS.md)). One **unintended live judge call**, rejected 429, not billed ([R-L12](FINDINGS.md)). All docs aligned with R-L1–R-L12 | $0.00 |
+| 2026-09-27 | Before drafting the #499 reply: **PR #571** (Ruler4396) shows task 64's failing step duplicates the next with the wrong tool. Verified — **64's target is correct**, only 105 is a defect. Yesterday's R-L3 reading was wrong; superseded by [R-L13](FINDINGS.md) | $0.00 |

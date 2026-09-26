@@ -173,8 +173,9 @@ own rules**:
 **This is sharper than the issue title.** "18 failures" is mostly stale data; the real defect is
 two tasks whose gold answer violates the policy the agent is graded against.
 
-> **Superseded in part, 27 Sep 2026 → [R-L3](FINDINGS.md).** For task 64 the failed exchange is
-> followed by a write that succeeds, so its target is half-applied, not the untouched database.
+> **Superseded in part, 27 Sep 2026 → [R-L3](FINDINGS.md), then [R-L13](FINDINGS.md).** Only task
+> **105**'s target is wrong. Task 64's failing step is a duplicate of the next one with the wrong tool;
+> removing it leaves the target unchanged, so 64's target is **correct**.
 
 ## A5 — Null-agent baseline: 10% of tasks pass DB by doing nothing
 
@@ -1096,6 +1097,10 @@ do-nothing agent collecting full reward. On the other 6, nothing does.
 
 ## R-L3 — Task 64: a do-nothing agent fails it, but its target is still half-applied
 
+> **Superseded, 27 Sep 2026 → [R-L13](FINDINGS.md).** The mechanism below is right (64_7 lands, an
+> empty trajectory scores DB 0.0). The interpretation is **wrong**: 64's target is not half-applied,
+> it is correct, and the 11/16 shipped matches are genuine successes.
+
 *Supersedes the mechanism [A4](FINDINGS.md) and the #499 comment gave for task 64. A4's row
 "WRITE · 2 · target DB hash is wrong" stands for both tasks.*
 
@@ -1246,3 +1251,30 @@ was made to find out.
 
 **Lesson:** `EvaluationType.ALL` is not offline for any task with assertions. The committed script
 patches the judge to raise and scores judge-gated tasks on DB only.
+
+## R-L13 — Task 64's target is correct; only task 105 is a scoring defect
+
+*27 Sep 2026. Supersedes the interpretation in [R-L3](FINDINGS.md) and A4's "target DB hash is wrong"
+for task 64. Prompted by PR #571 (Ruler4396, 26 Sep). Reproduced in
+`scripts/review/verify_post_claims.py`.*
+
+| Check | Result |
+| --- | --- |
+| `64_6` and `64_7` arguments | **identical** — same order `#W7464385`, same item, same replacement, same payment method |
+| Status of `#W7464385` in `db.json` | **pending** — so the exchange tool (`64_6`) is the wrong tool and fails; the modify tool (`64_7`) is the right one |
+| Gold target with `64_6` removed vs as shipped | **identical hash** |
+| Task 105: price difference vs gift card balance | **$21.10 vs $17.00** — the reference cannot apply |
+
+So `64_6` is a **harmless duplicate** of the step that follows it. Task 64's target is exactly the
+intended change, and the **11 of 16** shipped runs that match it are **genuine successes**, not a
+defect being masked. The only failed write that corrupts a target is **105**: its answer key is
+unsatisfiable, the gold stays at the untouched database, and a do-nothing agent matches it
+(10 of 16 shipped runs do).
+
+**How R-L3 got it wrong.** It established that `64_7` lands, then adopted "a gold state whose
+reference never fully applied" without asking what `64_7` does relative to `64_6`. That is the
+same error R-L1–R-L8 correct — the sentence went further than the check under it — committed in the
+correction itself, one day later.
+
+**Net effect on the #499 comment.** Of its two "impossible gold" tasks, **105 stands and 64 does
+not**. Of its three null-agent false positives, only 105 stands ([R-L1](FINDINGS.md)).

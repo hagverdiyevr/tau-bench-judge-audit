@@ -83,6 +83,7 @@ text is checked against the approved text after posting.
 | 3 | 2026-09-26 20:46 | [#540 reply](https://github.com/sierra-research/tau2-bench/issues/540#issuecomment-5849746351) | Withdraws "family asymmetry" (one flip, p = 0.50) and "same effect"; answers Universeyi: model id yes, request hash **no**, raw completion **no**; **promises to link the harness when public** | ✅ |
 | 4 | 2026-09-27 | [#554 description](https://github.com/sierra-research/tau2-bench/issues/554) — **edited** | Dated correction note at top; the "malformed reply converts into a silent full pass" sentence struck through and corrected ([R-L6](FINDINGS.md)) | ✅ |
 | 5 | 2026-09-27 | [#556 title + description](https://github.com/sierra-research/tau2-bench/issues/556) — **edited** | Estimates replaced by the measured table (32.8%; 20% vs 58%); "65%", "order of magnitude", "roughly fixed" and "enough to reorder" struck and corrected ([R-L4](FINDINGS.md)) | ✅ |
+| 6 | 2026-09-27 | [#557 description](https://github.com/sierra-research/tau2-bench/issues/557) — **edited** | States the bug is latent (no shipped score changes); withdraws the `compare_args: []` "defect"; strikes the comparability caveat ([R-L5](FINDINGS.md), [R-L14](FINDINGS.md)) | ✅ |
 
 <details><summary>Full text of correction 1, as posted</summary>
 

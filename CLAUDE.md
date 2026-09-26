@@ -251,6 +251,9 @@ spare money is not a licence to widen scope.
 - Never headline `pass^k` at `k = num_trials` — it degenerates to one Bernoulli draw per task.
 - **Cost per success** = total cost including failures ÷ successes; **undefined**, never 0, at zero
   successes. Include judge cost. Report simulator cost separately as evaluation overhead.
+  **State the boundary.** Any claim about what a model *costs to run* uses tau2's `agent_cost` only;
+  evaluation cost (simulator + judge) is a separate number. E-L2 mixed them and overstated a 1.7×
+  flip as 10× ([R-L16](docs/FINDINGS.md)). Never add this study's own re-grading cost to an agent.
 - Results are a custom subset, not an official τ³ score. Declare the scaffold **"standard"** vs
   **"custom"**; never claim leaderboard comparability without it.
 

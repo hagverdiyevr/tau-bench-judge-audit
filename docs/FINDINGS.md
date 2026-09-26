@@ -991,6 +991,10 @@ narration the assertions demand.
 
 ## E-L2 — The cheaper agent costs **10× more per reliably-completed task**
 
+> **Superseded, 27 Sep 2026 → [R-L16](FINDINGS.md).** The table below double-counts the judge and
+> charges this study's own re-grading and the user simulator to the agent. Agent-only, nano is
+> cheaper per attempt *and* per success, and 1.7× dearer per reliable task — not 10×.
+
 [§6.2](PREREGISTRATION.md) S5, judge cost included ([B-L14](FINDINGS.md): tau2 omits it entirely).
 Phase D's re-grading cost is split evenly across arms — each contributed 160 of 320 trajectories.
 
@@ -1344,3 +1348,38 @@ observed it. It could equally surface as an API error.
 What stands is the structural claim: `ToolCall` has no field for provider metadata, so tau2's
 Gemini multi-turn support depends on an undeclared, accidental transport. #559 was edited to say
 so (27 Sep), keeping its title.
+
+## R-L16 — Cost per success, at the right boundary: the flip is 1.7×, not 10×
+
+*27 Sep 2026. Supersedes [E-L2](FINDINGS.md); found while checking numbers for social posts. The
+analyzer's S5 block is rewritten to report both boundaries (`scripts/phase_d/analyze_phase_d.py`).*
+
+E-L2 made two errors. It added **Phase D's re-grading cost** ($2.7043 per arm — this study's own
+4-judge experiment) on top of Phase C attempt-log totals that **already contain tau2's judge call**
+(160 judge calls on the Gemini arm, 199 on nano, retries included). And it counted the **user
+simulator** and judge as agent cost, which CLAUDE.md forbids ("report simulator cost separately").
+
+| Boundary | Arm | Total | per attempt | per success | per reliable task |
+| --- | --- | ---: | ---: | ---: | ---: |
+| **Agent** (tau2 `agent_cost` — what deployment costs) | `gpt-4.1-nano` | $0.3815 | **$0.0024** | **$0.0173** | $0.1908 |
+| | `gemini-3.1-flash-lite` | $3.0000 | $0.0187 | $0.0278 | **$0.1111** |
+| **Evaluation** (attempt logs: agent + simulator + judge + retries) | `gpt-4.1-nano` | $2.8363 | $0.0177 | $0.1289 | $1.4181 |
+| | `gemini-3.1-flash-lite` | $4.4936 | $0.0281 | $0.0416 | $0.1664 |
+
+Successes: nano 22/160 (2/40 tasks pass all four trials); flash-lite 108/160 (27/40).
+
+| nano ÷ flash-lite | per attempt | per success | per reliable task |
+| --- | ---: | ---: | ---: |
+| Agent | 0.13× | **0.62×** | **1.72×** |
+| Evaluation | 0.63× | 3.10× | 8.52× |
+| *E-L2 as published* | *0.63×* | *3.78×* | *10.4×* |
+
+**What survives, restated.** At the agent boundary nano is **87% cheaper per attempt and still
+cheaper per success**, despite succeeding 14% of the time against 68%. The ranking flips only when
+reliability is demanded — all four trials passing — and then by **1.7×**. The "10×" was mostly
+evaluation overhead: the simulator and judge cost roughly the same per conversation whatever the
+agent, so they swamp a cheap agent's own cost. That is worth knowing in itself — **a benchmark's
+cost-per-success says as much about the harness as about the model** — but it is not a claim
+about what the model costs to run.
+
+No GitHub post carried the E-L2 figure (all 16 checked); the public README did, and is corrected.

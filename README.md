@@ -28,7 +28,7 @@ Same 320 trajectories, same captured prompt, only the judge changes:
 | `gemini-3.1-flash-lite` | 0.597 |
 | `gemini-3.8-flash` | **0.556** |
 
-A 9.1-point spread — wider than most leaderboard gaps. **This is also where the study nearly went
+A 9.1-point spread from the grader alone. **This is also where the study nearly went
 wrong.** The incumbent grades the OpenAI arm **+0.056** above `gemini-3.8-flash`, which reads as
 favouritism until you notice it grades the *Google* arm **+0.050** higher too. It is a uniformly
 more lenient judge, not a biased one. Without the difference-in-differences control term, this
@@ -53,15 +53,21 @@ judge. Separately, `all([])` means an **empty** judge response scores as a **ful
 
 ### And one more, from the cost model
 
-**The cheaper agent costs 10× more per reliably-completed task.**
+**Which model is "cheaper" depends on what you count.** The agent's own cost — what you would pay
+to run it in production, with no simulated customer and no judge:
 
-| Arm | Cost / attempt | Cost / success (k=1) | Cost / reliable task (k=4) |
+| Agent-only cost | per attempt | per success | per reliable task (all 4 trials pass) |
 | --- | ---: | ---: | ---: |
-| `gpt-4.1-nano` | **cheaper** ($2.84 / 160) | $0.2518 | **$2.7703** |
-| `gemini-3.1-flash-lite` | $4.49 / 160 | **$0.0666** | **$0.2666** |
+| `gpt-4.1-nano` | **$0.0024** | **$0.0173** | $0.1908 |
+| `gemini-3.1-flash-lite` | $0.0187 | $0.0278 | **$0.1111** |
 
-The ranking inverts depending on what you count. Reliability compounds — and cost-per-token, the
-default comparison, points at the wrong model here by an order of magnitude.
+`gpt-4.1-nano` is 87% cheaper per attempt, and still cheaper per success — despite succeeding 14%
+of the time against 68%. Demand that a task succeed four times out of four and the ranking flips:
+`gemini-3.1-flash-lite` is 1.7× cheaper per reliable task. Price per token alone cannot see that.
+
+An earlier version of this section said nano cost "10× more per reliably-completed task". That
+figure counted the *evaluation's* costs — the simulated customer, the judge, and this study's own
+re-grading — as the agent's ([R-L16](docs/FINDINGS.md)).
 
 ---
 
@@ -195,6 +201,8 @@ A claim-by-claim re-check of all 12 posts followed. **No reported bug turned out
 - The ACTION order bug changes **no score anywhere** in the shipped benchmark — no task that scores
   ACTION compares a list that could be reordered. It is real, but latent.
 - "A family asymmetry in the judge" rested on a **single flip**.
+- "The cheaper model costs 10× more per reliable task" counted evaluation costs as agent costs;
+  agent-only, the flip is **1.7×**, and only once four-out-of-four reliability is demanded.
 
 The corrections, each with its evidence, are in [FINDINGS R-L1–R-L12](docs/FINDINGS.md) and re-derive
 offline from `scripts/review/verify_post_claims.py`. All seven public corrections have been posted, each after the owner approved the exact text —

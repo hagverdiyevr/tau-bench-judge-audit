@@ -81,7 +81,8 @@ STALE = {
 # A stale claim is only a problem when ASSERTED. Citing it as corrected, rejected or
 # historical is exactly what DECISIONS/FINDINGS are for, so those lines are exempt.
 EXEMPT = ("not ", "no longer", "killed", "reject", "supersede", "falsifi", "was wrong",
-          "the thesis", "historical", "stale", "instead of", "rather than", "~~")
+          "the thesis", "historical", "stale", "instead of", "rather than", "~~",
+          "earlier version")   # "An earlier version said X" cites a corrected claim, it doesn't assert it
 for bad, why in STALE.items():
     hits = []
     for f in DOCS:
@@ -104,6 +105,7 @@ STALE_LIVE = {
     "uv run python ": "plain `uv run` rewrites upstream's uv.lock; use --frozen (R-L11)",
     "half-applied target": "task 64's target is correct; only 105 is a defect (R-L13)",
     "live on 32 telecom": "no ACTION-scored task compares a reorderable list; no score changes (R-L14)",
+    "10× more per reliably": "evaluation cost counted as agent cost; agent-only the flip is 1.7x (R-L16)",
 }
 for bad, why in STALE_LIVE.items():
     hits = []

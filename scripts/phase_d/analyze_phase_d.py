@@ -254,29 +254,39 @@ for label, want in (("openai", "openai"), ("google", "google"), ("both", None)):
 print("       DB+NL- and DB-NL+ are the cells that matter: each is a trajectory ONE instrument")
 print("       scores as a pass and the other as a fail. B-L12 predicted partial independence.")
 
-print("\n  S5 — cost per success, judge cost INCLUDED (§6.2; undefined at zero successes)")
+print("\n  S5 — cost per success at two accounting boundaries (§6.2; undefined at zero successes)")
+# Corrected 27 Sep 2026 (FINDINGS R-L16). The first version added this study's own Phase D
+# re-grading cost to each arm, on top of Phase C attempt-log totals that ALREADY include tau2's
+# judge call -- double-counting the judge and charging an experiment's cost to an agent. It also
+# folded the user simulator into agent cost, which CLAUDE.md forbids. Two boundaries now:
+#   AGENT      -- tau2's agent_cost: what deploying the model costs. No simulator, no judge.
+#   EVALUATION -- measured attempt logs: agent + user simulator + tau2's own judge + retries.
 led = json.loads((REPO / "results" / "spend_ledger.json").read_text())
-runcost = {r["run"]: (r["measured_usd_from_attempts"]
-                      if r["source"] == "attempt_log"
-                      else r["agent_user_usd"] + r["judge_usd_estimated"])
-           for r in led["runs"]}
-phase_d_usd = led.get("components", {}).get("phase_d_regrade_usd", 0.0)
+evalcost = {r["run"]: r["measured_usd_from_attempts"] for r in led["runs"]
+            if r["source"] == "attempt_log"}
+s5 = {}
 for a in ("openai", "google"):
-    runs_a = [r for r in runcost if r.startswith("phaseC_") and arm(r) == a]
-    gen = sum(runcost[r] for r in runs_a)
-    # Phase D re-grading cost is shared evenly across the two arms: each contributed 160 of 320.
-    total = gen + phase_d_usd / 2
+    runs_a = [r for r in evalcost if r.startswith("phaseC_") and arm(r) == a]
+    ev = sum(evalcost[r] for r in runs_a)
+    ag = sum((sim.get("agent_cost") or 0.0)
+             for r in runs_a for sim in json.loads((SIMS / r / "results.json").read_text())["simulations"])
     trials = [(run, task) for (run, task) in comp if arm(run) == a]
     succ1 = sum(1 for k in trials if comp[k]["reward"] == 1.0)
     bytask = {}
     for run, task in trials:
         bytask.setdefault(task, []).append(comp[(run, task)]["reward"] == 1.0)
     succ4 = sum(1 for t, v in bytask.items() if len(v) == 4 and all(v))
-    c1 = f"${total / succ1:.4f}" if succ1 else "UNDEFINED (0 successes)"
-    c4 = f"${total / succ4:.4f}" if succ4 else "UNDEFINED (0 successes)"
-    print(f"    {a:<7} generation ${gen:.4f} + judge ${phase_d_usd / 2:.4f} = ${total:.4f}")
-    print(f"            k=1: {succ1:>3}/{len(trials)} successes -> {c1} per success")
-    print(f"            k=4: {succ4:>3}/{len(bytask)} tasks all-4 -> {c4} per reliably-completed task")
+    per = lambda usd, n: f"${usd / n:.4f}" if n else "UNDEFINED (0 successes)"  # noqa: E731
+    s5[a] = {"agent_usd": ag, "evaluation_usd": ev, "attempts": len(trials), "succ1": succ1, "succ4": succ4}
+    print(f"    {a:<7} {succ1:>3}/{len(trials)} successes; {succ4:>2}/{len(bytask)} tasks pass all 4 trials")
+    print(f"            AGENT       ${ag:.4f}: {per(ag, len(trials))} /attempt  {per(ag, succ1)} /success  {per(ag, succ4)} /reliable task")
+    print(f"            EVALUATION  ${ev:.4f}: {per(ev, len(trials))} /attempt  {per(ev, succ1)} /success  {per(ev, succ4)} /reliable task")
+o, g = s5["openai"], s5["google"]
+for label, key in (("AGENT", "agent_usd"), ("EVALUATION", "evaluation_usd")):
+    r1 = (o[key] / o["succ1"]) / (g[key] / g["succ1"])
+    r4 = (o[key] / o["succ4"]) / (g[key] / g["succ4"])
+    ra = o[key] / g[key]
+    print(f"    {label:<11} openai/google: per attempt {ra:.2f}x   per success {r1:.2f}x   per reliable task {r4:.2f}x")
 
 print("\n  §4.3 SENSITIVITY — re-run the primary excluding the 5 tasks inspected in Phase B")
 DISCLOSED = {"89", "76", "109", "103", "43"}

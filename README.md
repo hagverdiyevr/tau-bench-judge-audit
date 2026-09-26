@@ -108,7 +108,7 @@ actually measure?"* before you spend anything. Here it killed the project's orig
 ## Reproduce it
 
 ```bash
-git clone --recurse-submodules <repo> && cd t-bench
+git clone --recurse-submodules https://github.com/hagverdiyevr/tau-bench-judge-audit && cd tau-bench-judge-audit
 make setup         # pinned venv, Python 3.12.9 (uv sync --frozen)
 make verify        # every offline check, then proves upstream untouched. No API keys.
 ```

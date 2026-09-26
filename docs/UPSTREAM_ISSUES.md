@@ -56,7 +56,7 @@ contain at least one claim that goes further than its evidence.
 | #556 | **Correct** | Figures were estimates: measured 32.8%, 20% vs 58% by arm; "65%", "order of magnitude" (3.9×) and "roughly fixed per task" are wrong ([R-L4](FINDINGS.md)) |
 | #557 | **Correct** | The bug is **latent**: no task that scores `ACTION` compares a reorderable list, so no shipped score changes and the comparability caveat is wrong; wrongly says no retail task sets `compare_args: []` (4 do) and calls it a defect (all 56 are deliberate hand-offs) ([R-L5](FINDINGS.md), [R-L14](FINDINGS.md)) |
 | #558 | Holds · slip | Cites `llm_config.py:47`; the assignment is on line 48 |
-| #559 | **Correct** | "320 trajectories per arm" was one 40-trajectory run; full arms: 1,104/1,280 ([R-L7](FINDINGS.md)) |
+| #559 | **Correct** | "320 trajectories per arm" was one 40-trajectory run; full arms: 1,104/1,280. "Degrades with no error" was never tested ([R-L7](FINDINGS.md), [R-L15](FINDINGS.md)) |
 | #560 | Holds | Re-verified on a real fresh clone |
 | #499 comment | **Correct** | Task 64's target is correct — its failing step duplicates the next with the wrong tool; only 105 is a defect. 67/68 need no writes ([R-L1](FINDINGS.md), [R-L13](FINDINGS.md)) |
 | #384 comment | **Correct** | One #499 false positive (105), not three; "remaining 8" is 10 ([R-L1](FINDINGS.md)) |
@@ -84,6 +84,7 @@ text is checked against the approved text after posting.
 | 4 | 2026-09-27 | [#554 description](https://github.com/sierra-research/tau2-bench/issues/554) — **edited** | Dated correction note at top; the "malformed reply converts into a silent full pass" sentence struck through and corrected ([R-L6](FINDINGS.md)) | ✅ |
 | 5 | 2026-09-27 | [#556 title + description](https://github.com/sierra-research/tau2-bench/issues/556) — **edited** | Estimates replaced by the measured table (32.8%; 20% vs 58%); "65%", "order of magnitude", "roughly fixed" and "enough to reorder" struck and corrected ([R-L4](FINDINGS.md)) | ✅ |
 | 6 | 2026-09-27 | [#557 description](https://github.com/sierra-research/tau2-bench/issues/557) — **edited** | States the bug is latent (no shipped score changes); withdraws the `compare_args: []` "defect"; strikes the comparability caveat ([R-L5](FINDINGS.md), [R-L14](FINDINGS.md)) | ✅ |
+| 7 | 2026-09-27 | [#559 description](https://github.com/sierra-research/tau2-bench/issues/559) — **edited** | Sample size corrected to one 40-run per arm, with the full-arm table (1,104/1,280); the untested "degrades with no error" claims struck ([R-L7](FINDINGS.md), [R-L15](FINDINGS.md)) | ✅ |
 
 <details><summary>Full text of correction 1, as posted</summary>
 

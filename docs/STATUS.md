@@ -91,7 +91,7 @@ Three replies arrived after filing, and a claim-by-claim review of all 12 posts 
 | ~~**Reply on #499**~~ | ✅ **Posted 26 Sep 20:36 UTC** — [comment](https://github.com/sierra-research/tau2-bench/issues/499#issuecomment-5849678221); live text verified identical to the approved draft | Done |
 | ~~**Reply on #384**~~ | ✅ **Posted 26 Sep 20:43 UTC** — [comment](https://github.com/sierra-research/tau2-bench/issues/384#issuecomment-5849720653); live text verified identical | Done |
 | ~~**Reply on #540**~~ | ✅ **Posted 26 Sep 20:46 UTC** — [comment](https://github.com/sierra-research/tau2-bench/issues/540#issuecomment-5849746351); verified identical. **Open commitment:** it promises to link the harness in that thread once the repo is public | Done |
-| **Correct #554, #556, #557, #559** | Owner chose: **edit each description** — dated note at top, wrong sentence struck through. **#554, #556, #557 done** (27 Sep); #559 next | [R-L6](FINDINGS.md), [R-L4](FINDINGS.md), [R-L5](FINDINGS.md), [R-L7](FINDINGS.md) |
+| ~~**Correct #554, #556, #557, #559**~~ | ✅ **All four edited 27 Sep** — dated note at top, wrong sentences struck through, each approved word for word | Done |
 | **Make the repo public** | Push to a public remote, then post the link on #540 | Universeyi asked for the harness, and the #540 reply **promised a link** when it is public. History is clean of secrets (checked 22 Sep) |
 | **Open PRs** | One-line fixes for #553 / #555 | Still unauthorised |
 
@@ -182,3 +182,4 @@ flip in 256** — a floor, not a pattern ([R-L8](FINDINGS.md)).
 | 2026-09-27 | **Correction 4 of 7**: [#554](https://github.com/sierra-research/tau2-bench/issues/554) description edited — approved word for word; only the note and one line changed | $0.00 |
 | 2026-09-27 | **Correction 5 of 7**: [#556](https://github.com/sierra-research/tau2-bench/issues/556) title and description edited — measured figures replace estimates; approved word for word, every struck line verified present | $0.00 |
 | 2026-09-27 | **Correction 6 of 7**: [#557](https://github.com/sierra-research/tau2-bench/issues/557) description edited — latent-bug scope (R-L14) and withdrawn secondary; approved word for word, verified | $0.00 |
+| 2026-09-27 | **Correction 7 of 7**: [#559](https://github.com/sierra-research/tau2-bench/issues/559) description edited. **All 7 corrections done**, each shown word for word and approved. Preparing them surfaced three more corrections of our own record: R-L13 (task 64), R-L14 (ACTION latent), R-L15 (signature loss untested) | $0.00 |

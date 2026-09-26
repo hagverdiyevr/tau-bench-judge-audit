@@ -257,7 +257,7 @@ Two contributions filed were **not** in the original 13 and are appended below a
 | 3 | Null-agent baseline as a reusable validity check; the 67/68/105 × #499 false-positive mechanism *(corrected: 105 only — [R-L1](FINDINGS.md))* | A5 | comment on [#384](https://github.com/sierra-research/tau2-bench/issues/384#issuecomment-5774383986) |
 | 4 | Docs/schema mismatch: `communicate_info` populated on 36 tasks, scored on none | A1 | comment on [#384](https://github.com/sierra-research/tau2-bench/issues/384#issuecomment-5774383986) |
 | 5 | **NL-assertion judge cannot see tool calls** — `tool_calls` dropped by the `message.content` serialization; empty assistant turns leak as literal `"assistant: None"` into the judge prompt | B4 | **[#553](https://github.com/sierra-research/tau2-bench/issues/553)** |
-| 6 | **`ToolCall` cannot carry `provider_specific_fields`**, so Gemini thought signatures survive only via LiteLLM's id-packing fallback (litellm#41534). A transport change breaks tau2's Gemini multi-turn tool calling silently | B-L6 | **[#559](https://github.com/sierra-research/tau2-bench/issues/559)** |
+| 6 | **`ToolCall` cannot carry `provider_specific_fields`**, so Gemini thought signatures survive only via LiteLLM's id-packing fallback (litellm#41534). A transport change breaks tau2's Gemini multi-turn tool calling silently *("silently" untested — [R-L15](FINDINGS.md))* | B-L6 | **[#559](https://github.com/sierra-research/tau2-bench/issues/559)** |
 | 7 | Models-list endpoint advertises models the account cannot call (`gemini-2.5-flash-lite`, `gemini-3.1-flash-lite-preview`) — availability needs a real call | B-L1 | **not filed** — not a tau2 defect |
 | 8 | **ACTION checker is order-sensitive on list arguments** — a call identical to gold except list order scores `action_match: false`. Sibling of #514; a false-negative mechanism wherever `ACTION` gates reward *(zero retail/airline tasks — [R-L5](FINDINGS.md))* | B-L7 | **[#557](https://github.com/sierra-research/tau2-bench/issues/557)** |
 | 9 | **Judge cost is entirely unaccounted** — no cost/usage field exists for the NL-assertion judge; measured ~40% understatement of true run cost on judge-gated tasks *(an estimate; measured 32.8% — [R-L4](FINDINGS.md))* | B-L14 | **[#556](https://github.com/sierra-research/tau2-bench/issues/556)** |
@@ -430,6 +430,9 @@ Gate B8 tested the raw path; Phase C runs through tau2's models. Re-tested with 
 > That hack is itself the subject of litellm#41534 (the packed id leaks into OpenAI's Responses API
 > and causes HTTP 400 on router fallback). If LiteLLM changes that transport, tau2's Gemini
 > multi-turn tool calling breaks **silently**.
+>
+> **Qualified, 27 Sep 2026 → [R-L15](FINDINGS.md).** "Silently" was never tested: we verified that
+> signatures survive, not what happens when one is lost.
 
 **Phase C is safe on the Gemini arm**, with the runtime degradation detector kept on.
 
@@ -1326,3 +1329,18 @@ public.
 This is the fourth correction of a correction in two days (with R-L8, R-L13 and this one's parent
 R-L5): each time, the check established *where* something is computed and the prose asserted what
 it *does*.
+
+## R-L15 — What happens when a thought signature is lost was never tested
+
+*27 Sep 2026. Qualifies [B-L6](FINDINGS.md) and the public #559; found while preparing the #559
+correction.*
+
+B8 and B8b verified that Gemini thought signatures **survive** tau2's path (8/8 multi-turn tool
+calls, no degradation), and R-L7 that they ride inside the tool-call `id` on 1,104 of 1,280 Gemini
+calls. Neither tested the **failure**: no run removed or corrupted a signature. "Breaks silently" /
+"degrades with no error" is the symptom BerriAI/litellm#25322 reports, adopted as though we had
+observed it. It could equally surface as an API error.
+
+What stands is the structural claim: `ToolCall` has no field for provider metadata, so tau2's
+Gemini multi-turn support depends on an undeclared, accidental transport. #559 was edited to say
+so (27 Sep), keeping its title.

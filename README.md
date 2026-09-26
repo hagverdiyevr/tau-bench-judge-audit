@@ -197,8 +197,8 @@ A claim-by-claim re-check of all 12 posts followed. **No reported bug turned out
 - "A family asymmetry in the judge" rested on a **single flip**.
 
 The corrections, each with its evidence, are in [FINDINGS R-L1–R-L12](docs/FINDINGS.md) and re-derive
-offline from `scripts/review/verify_post_claims.py`. Public corrections to the posts themselves are
-being posted one at a time, each after the owner approves the exact text.
+offline from `scripts/review/verify_post_claims.py`. All seven public corrections have been posted, each after the owner approved the exact text —
+three replies and four edited issue descriptions, recorded in [`docs/UPSTREAM_ISSUES.md`](docs/UPSTREAM_ISSUES.md).
 
 ---
 

@@ -169,7 +169,8 @@ against its evidence, not just the evidence.** [post-release review](docs/FINDIN
 - **`get_response_cost()` returns `0.0` on exception** — an unpriced model reports as free.
 - **litellm#25322**: Gemini thought signatures survive tau2's path **only** because LiteLLM packs
   them into the tool-call `id`, which tau2 preserves. `ToolCall` cannot carry
-  `provider_specific_fields`. A transport change breaks this silently. [B-L6](docs/FINDINGS.md)
+  `provider_specific_fields`. A transport change would lose the signature — whether that fails
+  silently or with an error is **untested**. [B-L6](docs/FINDINGS.md), [R-L15](docs/FINDINGS.md)
 
 **Method**
 - **Verify against shipped data, not documentation.** Reading the schema default instead of the task
@@ -208,8 +209,8 @@ Inherited from v1.0 §1 and still binding:
   one; none is open. A new go-ahead is required for each.
   **Replies received:** Universeyi on #540 (23 Sep), justavibedev (23 Sep) and Ruler4396 (26 Sep) on
   #499 — two of them correct us, and every claim in all three was verified. **Public corrections:**
-  posted one at a time after an explicit yes on the exact text — #499, #384 and #540 done (26 Sep).
-  The #540 reply **promises a link to the harness** once the repo is public — an open commitment. Note: Claude drafted and posted
+  posted one at a time after an explicit yes on the exact text — #499, #384 and #540 replies and
+  edits to #554, #556, #557, #559 — **all 7 done (26–27 Sep)**. The #540 reply **promises a link to the harness** once the repo is public — an open commitment. Note: Claude drafted and posted
   all 12 under the owner's name — the owner did not write them, but readers cannot tell.
 
 ## Phases

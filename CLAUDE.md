@@ -199,6 +199,8 @@ Inherited from v1.0 §1 and still binding:
   offline work and report the exact remaining setup action.
 - **Negative results are retained.** No score, savings, production-impact or hiring claim without a
   linked run artifact. A well-specified null with a stated MDE is a valid outcome.
+- **The repo is public** at [hagverdiyevr/tau-bench-judge-audit](https://github.com/hagverdiyevr/tau-bench-judge-audit) (since 27 Sep). **`git push`
+  publishes** — commit locally as usual, but push only when the owner asks.
 - **Commit only as the personal address.** This repo's local `user.email` is
   `hagverdiyev.r.99@gmail.com`. The machine's *global* git email is a work address and must never
   appear in this repository — history was rewritten on 27 Sep to remove it ([D-024](docs/DECISIONS.md)).

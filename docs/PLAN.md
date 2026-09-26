@@ -248,7 +248,7 @@ Analysis per [PREREGISTRATION §6](PREREGISTRATION.md).
 4. **13 upstream contributions** ([FINDINGS](FINDINGS.md) §Upstream) — **filed 22 Sep 2026** as
    8 issues (#553–#560) + 4 comments; record in [UPSTREAM_ISSUES.md](UPSTREAM_ISSUES.md).
 5. Reproduction path: `make setup && make verify` — offline, zero API keys, pinned 3.12.9, ends by
-   proving upstream untouched.
+   proving upstream untouched. **Public at [hagverdiyevr/tau-bench-judge-audit](https://github.com/hagverdiyevr/tau-bench-judge-audit) since 27 Sep.**
 
 ## Verification
 

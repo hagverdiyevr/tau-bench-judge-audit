@@ -69,7 +69,49 @@ judge reply (it stores **neither**, [R-L9](FINDINGS.md)); justavibedev on #499 (
 task 64, right; Ruler4396 on #499 (26 Sep) — independently reproduces the finding and confirms both
 corrections.
 
-**Public corrections: identified, not posted.** Each needs its own go-ahead ([STATUS](STATUS.md)).
+**Public corrections:** posted one at a time, each after an explicit go-ahead — see *Corrections posted* below.
+
+### Corrections posted
+
+Each was shown to the account owner word for word and posted only after an explicit yes. The live
+text is checked against the approved text after posting.
+
+| # | Posted (UTC) | Where | What it corrects | Live == approved |
+| --- | --- | --- | --- | --- |
+| 1 | 2026-09-26 20:36 | [#499 reply](https://github.com/sierra-research/tau2-bench/issues/499#issuecomment-5849678221) | Withdraws the task 64 claim (its target is correct — PR #571) and the 67/68 causal claim; confirms 105 | ✅ |
+
+<details><summary>Full text of correction 1, as posted</summary>
+
+Thanks @justavibedev and @Ruler4396 — both corrections are right. I've re-checked them on `fc0055dc`, and I got two things wrong in my comment above.
+
+**Task 64.** I wrote that its gold write never lands and the target is the untouched database. As @justavibedev showed, `64_7` lands — and #571 goes further: `64_6` and `64_7` are the same change with identical arguments, and `64_6` just uses the exchange tool on an order that is still `pending`. Removing `64_6` leaves the gold hash unchanged:
+
+```python
+from tau2.domains.retail.environment import get_environment, get_tasks
+
+t = {x.id: x for x in get_tasks("base")}["64"]   # task 64 has no initial_state
+
+def gold(skip=()):
+    g = get_environment()
+    for a in t.evaluation_criteria.actions:
+        if a.action_id in skip:
+            continue
+        try:
+            g.make_tool_call(tool_name=a.name, requestor=a.requestor, **a.arguments)
+        except Exception:
+            pass
+    return g.get_db_hash()
+
+print(gold() == gold(skip=("64_6",)))   # True
+```
+
+So 64's target is exactly the intended change, and I'd read the 11 of 16 shipped runs that match it as genuine successes rather than masking. Of the two tasks where I said a failed write corrupts the target, only **105** holds — and the $21.10-vs-$17.00 arithmetic in #571 shows why it can never apply.
+
+**Tasks 67 and 68.** I also wrote that these pass a null agent *because* their gold replay failed. That's wrong too: their gold makes no writes at all, and the failing actions are reads (`find_user_id_by_name_zip`), which change nothing. They would pass a null agent even if every read succeeded — that's #384's territory rather than this issue's. Of the 11 tasks a null agent passes on DB, only 105 is a #499 artifact.
+
+What still stands from my comment is the count: 18 failing actions across the same 15 tasks, 16 reads and 2 writes — which @Ruler4396 reproduced independently.
+
+</details>
 
 **Note on the drafts below.** The numbered sections are the pre-filing drafts. The posted text was
 rewritten during filing and differs; the posted versions are the record, and the audit above is

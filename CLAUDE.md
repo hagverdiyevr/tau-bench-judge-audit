@@ -205,8 +205,9 @@ Inherited from v1.0 §1 and still binding:
   **Still unauthorised:** social posts, leaderboard submission, and **PRs** — several issues offer
   one; none is open. A new go-ahead is required for each.
   **Replies received:** Universeyi on #540 (23 Sep), justavibedev (23 Sep) and Ruler4396 (26 Sep) on
-  #499 — two of them correct us, and every claim in all three was verified. **Public corrections to
-  7 posts are identified but not posted**; each also needs a go-ahead. Note: Claude drafted and posted
+  #499 — two of them correct us, and every claim in all three was verified. **Public corrections:**
+  posted one at a time after an explicit yes on the exact text — #499 done (26 Sep); the rest are
+  in STATUS. Note: Claude drafted and posted
   all 12 under the owner's name — the owner did not write them, but readers cannot tell.
 
 ## Phases
